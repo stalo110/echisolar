@@ -28,27 +28,32 @@ export const HeroSection = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
-    <Box
-      sx={{
-        position: 'relative',
-        background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        overflow: 'hidden',
-        py: 8
-      }}
-    >
+   <Box
+  sx={{
+    position: 'relative',
+    backgroundImage: `
+      linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+      url('/images/heroImage.jpg')
+    `,
+    minHeight: '100vh',
+    height: "100px",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    py: 8,
+    marginTop: '0px',
+    width: "100%",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    color: '#fff', // ensures text on top is visible
+  }}
+>
       <Container maxWidth="lg">
         <Grid container spacing={4} alignItems="center">
           <Grid  size={{xs:12, md:8}}>
-            <Box sx={{ textAlign: isMobile ? 'center' : 'left' }}>
-              <Box sx={{ mb: 2 }}>
-                <Chip icon={<CircleIcon fontSize="small" />} label="Professional" sx={{ mr: 1, mb: 1 }} />
-                <Chip icon={<CircleIcon fontSize="small" />} label="Dedicated" sx={{ mb: 1 }} />
-              </Box>
-              
-              <Typography 
+            <Box sx={{ textAlign: isMobile ? 'center' : 'left' }}>        
+             <Typography 
                 variant="h1" 
                 component="h1" 
                 gutterBottom 
@@ -58,35 +63,32 @@ export const HeroSection = () => {
                   lineHeight: 1.2
                 }}
               >
-                Creative <Box component="span" sx={{ 
-                  background: 'linear-gradient(45deg, #FF6B6B 30%, #FF8E53 90%)',
-                  backgroundClip: 'text',
-                  textFillColor: 'transparent',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent'
-                }}>Magic</Box> in the Digital Space
+                Powering a <Box component="span" sx={{ 
+                  color: '#FFAB46',
+                }}>Brighter Future</Box> with Solar Energy
               </Typography>
-              
-              <Typography variant="h6" color="text.secondary" paragraph sx={{ mb: 3 }}>
-                Transforming your brand with creative strategies, innovative digital solutions, and technology that drive impactful growth and elevate your presence.
+
+              <Typography variant="h6" color="text.light" paragraph sx={{ mb: 3 }}>
+                Delivering reliable solar solutions that reduce costs, promote sustainability, and harness the power of the sun to energize homes, businesses, and communities.
               </Typography>
+
               
               <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: isMobile ? 'center' : 'flex-start' }}>
                 <Button 
                   variant="contained" 
                   size="large" 
                   endIcon={<SendIcon />}
-                  sx={{ borderRadius: 2, px: 4, py: 1 }}
+                  sx={{ borderRadius: 2, px: 4, py: 1, background:"#2E7D4D" }}
                 >
                   Get Started
                 </Button>
                 <Button 
-                  variant="outlined" 
+                  variant="contained"
                   size="large" 
                   endIcon={<ChevronRightIcon />}
-                  sx={{ borderRadius: 2, px: 4, py: 1 }}
+                  sx={{ borderRadius: 2, px: 4, py: 1, background:"#FFAB46" }}
                 >
-                  Our Academy
+                  Our Products
                 </Button>
               </Box>
             </Box>

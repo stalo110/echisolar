@@ -28,13 +28,16 @@ const Footer = () => {
          <Grid 
         size={{xs:12, md:3}}
           >
-            <Typography variant="h6" sx={{ fontWeight: "bold", color: "#1e90ff" }}>
-              PRUTA
-            </Typography>
-            <Typography variant="body2" sx={{ mt: 2, color: "gray" }}>
-              Delivering exceptional media services and fostering tech skills for
-              the future.
-            </Typography>
+          <Box
+            component="img"
+            src="/images/logo2.png" // replace with your actual logo path
+            alt="Logo"
+            sx={{ height: 30 }}
+          />
+              <Typography variant="body2" sx={{ mt: 2, color: "gray" }}>
+            Providing sustainable solar solutions today for a cleaner, brighter tomorrow.
+          </Typography>
+
             <Box sx={{ mt: 2 }}>
               <IconButton color="inherit" href="https://web.facebook.com/prutamagic">
                 <Facebook />
@@ -112,7 +115,7 @@ const Footer = () => {
               />
               <Button
                 variant="contained"
-                color="primary"
+                color="success"
                 sx={{ borderRadius: "0 4px 4px 0" }}
               >
                 <Email />

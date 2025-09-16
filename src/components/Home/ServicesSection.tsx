@@ -114,7 +114,7 @@ export const ServicesSection = () => {
         </Grid>
         
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 6, flexWrap: 'wrap', gap: 2 }}>
-          <Button variant="contained" size="large" startIcon={<SendIcon />} sx={{ borderRadius: 2 }}>
+          <Button variant="contained" size="large" startIcon={<SendIcon />} sx={{ borderRadius: 2 , background:"#2E7D4D"}}>
             CONTACT US
           </Button>
           

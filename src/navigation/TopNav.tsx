@@ -81,7 +81,7 @@ export default function TopNav() {
             component="img"
             src="/images/logo.png" // replace with your actual logo path
             alt="Logo"
-            sx={{ height: 40 }}
+            sx={{ height: 30 }}
           />
         </Box>
 
@@ -105,7 +105,7 @@ export default function TopNav() {
         {/* Right Side Icons */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <IconButton
-            color="primary"
+            color="success"
             href="tel:+2347018090107"
             sx={{
               background: "#f0f4ff",
@@ -120,12 +120,12 @@ export default function TopNav() {
             startIcon={<SendIcon />}
             href="#"
             sx={{
-              background: "#2196f3",
+              background: "#2E7D4D",
               color: "white",
               fontWeight: "bold",
               borderRadius: 2,
               px: 3,
-              "&:hover": { background: "#1976d2" },
+              "&:hover": { background: "#FFAB46" },
               display: { xs: "none", md: "flex" },
             }}
           >
