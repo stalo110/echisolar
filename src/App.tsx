@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import "./App.css"
 import { Navigation } from "./navigation";
-// import ScrollToTop from "./components/ScrollToTop";
+import ScrollToTop from "./components/ScrollToTop";
 // import { ToastContainer } from 'material-react-toastify';
 // import { ConsentBanner } from "./ConsentBanner";
 
@@ -11,7 +11,7 @@ function App() {
     <Box>
       {/* <ToastContainer /> */}
       {/* <ConsentBanner /> */}
-       {/* <ScrollToTop /> */}
+       <ScrollToTop />
       <Navigation />
     </Box>
   )
