@@ -5,27 +5,13 @@ import {
   Typography,
   Grid,
   Button,
-  Chip,
-  useTheme,
   useMediaQuery
 } from '@mui/material';
-import {
-  ExpandMore as ExpandMoreIcon,
-  CheckCircle as CheckCircleIcon,
-  ArrowForward as ArrowForwardIcon,
-  Phone as PhoneIcon,
-  Send as SendIcon,
-  ChevronRight as ChevronRightIcon,
-  Lightbulb as LightbulbIcon,
-  ThumbUp as ThumbUpIcon,
-  Circle as CircleIcon,
-  FormatQuote as QuoteIcon
-} from '@mui/icons-material';
+import { ChevronRight as ChevronRightIcon, Send as SendIcon } from '@mui/icons-material';
 
 // Hero Section Component
 export const HeroSection = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery((theme:any) => theme.breakpoints.down('md'));
 
   return (
    <Box

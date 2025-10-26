@@ -74,3 +74,16 @@
   }
 
   
+
+:root{
+  --brand-amber: #FFAB46;
+  --brand-green: #2E7D4D;
+  --font-sans: 'Just Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+body{
+  font-family: var(--font-sans);
+  color: #111;
+}
+
+

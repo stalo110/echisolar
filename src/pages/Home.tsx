@@ -5,6 +5,7 @@ import { FeaturesSection } from "../components/Home/FeaturesSection";
 import { AboutSection } from "../components/Home/AboutSection";
 import { ServicesSection } from "../components/Home/ServicesSection";
 import { HeroSection } from "../components/Home/HeroSection";
+import LatestArrivals from "../components/LatestArrivals";
 import TopNav from "../navigation/TopNav";
 
 
@@ -13,6 +14,7 @@ const Home = () => {
     <Box>
       <TopNav />
       <HeroSection />
+  <LatestArrivals />
       <FeaturesSection />
       <Box mt={{xs: 4, md: 2}}>
         <AboutSection />

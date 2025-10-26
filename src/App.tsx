@@ -1,19 +1,37 @@
-import { Box } from "@mui/material";
+import { Box, CssBaseline } from "@mui/material";
 import "./App.css"
 import { Navigation } from "./navigation";
-import ScrollToTop from "./components/ScrollToTop";
+import ScrollToTop from "./components/Home/ScrollToTop";
+import { AuthProvider } from "./contexts/AuthContext";
+import { CartProvider } from "./contexts/CartContext";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+const theme = createTheme({
+  palette: {
+    primary: { main: '#2E7D4D' },
+    secondary: { main: '#FFAB46' }
+  },
+  typography: {
+    fontFamily: `var(--font-sans)`,
+  }
+});
 // import { ToastContainer } from 'material-react-toastify';
 // import { ConsentBanner } from "./ConsentBanner";
 
 
 function App() {
   return (
-    <Box>
-      {/* <ToastContainer /> */}
-      {/* <ConsentBanner /> */}
-       <ScrollToTop />
-      <Navigation />
-    </Box>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AuthProvider>
+        <CartProvider>
+          <Box>
+            <ScrollToTop />
+            <Navigation />
+          </Box>
+        </CartProvider>
+      </AuthProvider>
+    </ThemeProvider>
   )
 }
 
