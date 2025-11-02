@@ -74,7 +74,7 @@ const ProductFilter = ({
             </InputLabel>
             <Select
               label="Category"
-              onChange={(e) => setCategory(e.target.value)}
+             onChange={(e) => setCategory(e.target.value as string)}
               sx={{
                 color: "#fff",
                 ".MuiOutlinedInput-notchedOutline": {

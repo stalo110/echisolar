@@ -6,8 +6,8 @@ import Cart from "../pages/Cart";
 import Checkout from "../pages/Checkout";
 import Orders from "../pages/Orders";
 import Profile from "../pages/Profile";
-import AdminProducts from "../pages/AdminProducts";
-import AdminDashboard from "../pages/AdminDashboard";
+// import AdminProducts from "../pages/AdminProducts";
+// import AdminDashboard from "../pages/AdminDashboard";
 import Addresses from "../pages/Addresses";
 import PaymentStatus from "../pages/PaymentStatus";
 import Receipt from "../pages/Receipt";
@@ -16,7 +16,8 @@ import Contact from "../pages/Contact";
 import LoginPage from "../pages/Login";
 import RegisterPage from "../pages/Register";
 import UserDashboardPage from "../pages/UserDashboard";
-import AdminUsers from "../pages/AdminUsers";
+// import AdminUsers from "../pages/AdminUsers";
+import { Subscriptions } from "@mui/icons-material";
 
 
 
@@ -29,17 +30,19 @@ export const Navigation = () => (
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/orders" element={<Orders />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/user/profile" element={<Profile />} />
         <Route path="/addresses" element={<Addresses />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/products" element={<AdminProducts />} />
-        <Route path="/admin/users" element={<AdminUsers />} />
+        {/* <Route path="/admin" element={<AdminDashboard />} /> */}
+        {/* <Route path="/admin/products" element={<AdminProducts />} /> */}
+        {/* <Route path="/admin/users" element={<AdminUsers />} /> */}
         <Route path="/payment/status" element={<PaymentStatus />} />
         <Route path="/receipt/:id" element={<Receipt />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/dashboard" element={<UserDashboardPage />} />
+        <Route path="/user/dashboard" element={<UserDashboardPage />} />
+        <Route path="/user/subscriptions" element={<Subscriptions />} />
+        
         <Route path="*" element={<Home />} />
     </Routes>
 );

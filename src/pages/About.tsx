@@ -49,7 +49,7 @@ const About = () => {
               title: "Our Vision",
               text: "We envision a future where clean energy is accessible to everyone. Through innovation, education, and a commitment to excellence, we aim to be a leading force in the renewable energy sector, driving the transition to a more sustainable and energy-efficient world.",
             },
-          ].map((item, i) => (
+          ].map((item) => (
             <Grid size={{ xs: 12, md: 6 }}>
               <Paper
                 sx={{

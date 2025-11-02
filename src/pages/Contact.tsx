@@ -7,7 +7,7 @@ import {
   Link,
   TextField,
   Button,
-  useTheme
+  // useTheme
 } from "@mui/material";
 import TopNav from "../navigation/TopNav";
 import Footer from "../navigation/Footer";
@@ -15,7 +15,7 @@ import { HeroSection } from "../components/Contact/HeroSection";
 import { useState } from "react";
 
 const Contact = () => {
-  const theme = useTheme();
+  // const theme = useTheme();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');

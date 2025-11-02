@@ -15,13 +15,11 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import PhoneIcon from "@mui/icons-material/Phone";
-import SendIcon from "@mui/icons-material/Send";
 import CloseIcon from "@mui/icons-material/Close";
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ShoppingCart from '@mui/icons-material/ShoppingCart';
 import LogoutIcon from '@mui/icons-material/Logout';
 // import LoginIcon from '@mui/icons-material/Login';
-import PersonAdd from '@mui/icons-material/PersonAdd';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
 
@@ -277,56 +275,6 @@ const drawer = (
 
 
   return (
-    //     <AppBar position="sticky" elevation={0} sx={{ top: 0, zIndex: 1100, background: 'black', color: 'white', px: { xs: 2, md: 6 } }}>      <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
-    //     <Box component="a" href="/" sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-    //       <Box component="img" src="/images/logo.png" alt="Echi Solar" sx={{ height: 36 }} />
-    //     </Box>
-
-    //     <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3, alignItems: 'center' }}>
-    //       {navLinks.map((link) => (
-    //         <Button key={link.label} href={link.href} sx={{ color: 'white', fontWeight: 'bold' }}>
-    //           {link.label}
-    //         </Button>
-    //       ))}
-
-
-
-    //       {!user ? (
-    //         <Button href="/login" startIcon={<AccountCircle sx={{ color: 'white' }} />} sx={{ color: 'white' }}>
-    //           Login
-    //         </Button>
-    //       ) : (
-    //         <>
-    //           <Button href="/profile" startIcon={<AccountCircle sx={{ color: 'white' }} />}>
-    //             {user.name}
-    //           </Button>
-    //           <Button onClick={logout} startIcon={<LogoutIcon sx={{ color: 'white' }} />}>
-    //             Logout
-    //           </Button>
-    //         </>
-    //       )}
-    //     </Box>
-
-    //     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-    //       <IconButton color="success" href="tel:+2347018090107" sx={{ background: '#f0f4ff', '&:hover': { background: '#e0ebff' } }}>
-    //         <PhoneIcon />
-    //       </IconButton>
-
-    //       <Button variant="contained" startIcon={<Badge badgeContent={items.length} color="secondary"><ShoppingCart /></Badge>} href="/cart" sx={{ background: '#2E7D4D', color: 'white', fontWeight: 'bold', borderRadius: 2, px: 3, '&:hover': { background: '#FFAB46' }, display: { xs: 'none', md: 'flex' } }}>
-    //         Cart
-    //       </Button>
-
-    //       <IconButton edge="end" onClick={handleDrawerToggle} sx={{ display: { md: 'none' } }} aria-label="open menu">
-    //         <MenuIcon sx={{color: "#ffffff"}}/>
-    //       </IconButton>
-    //     </Box>
-    //   </Toolbar>
-
-    //   <Drawer anchor="top" open={mobileOpen} onClose={handleDrawerToggle} ModalProps={{ keepMounted: true }}>
-    //     {drawer}
-    //   </Drawer>
-    // </AppBar>
-
     <AppBar
   position="sticky"
   elevation={0}

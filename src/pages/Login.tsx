@@ -26,7 +26,7 @@ const LoginPage = () => {
       navigate("/admin");
     } else {
       login({ id: "2", name: "User", email, role: "customer" });
-      navigate("/dashboard");
+      navigate("/user/dashboard");
     }
   };
 

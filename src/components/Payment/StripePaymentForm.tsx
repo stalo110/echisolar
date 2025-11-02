@@ -33,7 +33,7 @@ const StripePaymentForm = () => {
     });
 
     if (createPaymentMethodError) {
-      setError(createPaymentMethodError.message);
+      // setError(createPaymentMethodError.message);
       setLoading(false);
       return;
     }
