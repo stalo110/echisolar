@@ -3,72 +3,20 @@
 
 @layer base {
     @font-face {
-      font-family: "Museo Slab Light";
-      src: url("./assets/fonts/museo-slab/Museo_Slab_100.otf") format("opentype");
-      font-weight: 100;
+      font-family: "JUST Sans ExBold";
+      src: url("./assets/fonts/just_sans/JUST Sans ExBold.otf") format("opentype");
+      /* font-weight: 100;
       font-display: swap;
-      font-style: normal;
-    }
-  
-    @font-face {
-      font-family: "Museo Slab Normal";
-      src: url("./assets/fonts/museo-slab/Museo_Slab_300.otf") format("opentype");
-      font-weight: 300;
-      font-display: swap;
-      font-style: normal;
+      font-style: normal; */
     }
 
-    @font-face {
-        font-family: "Museo Slab Medium";
-        src: url("./assets/fonts/museo-slab/Museo_Slab_500.otf") format("opentype");
-        font-weight: 500;
-        font-display: swap;
-        font-style: normal;
-      }
-  
-    @font-face {
-      font-family: "Museo Slab Bold";
-      src: url("./assets/fonts/museo-slab/Museo_Slab_700.otf") format("opentype");
-      font-weight: 700;
+        @font-face {
+      font-family: "JUST Sans Regular";
+      src: url("./assets/fonts/just_sans/JUST Sans Regular.otf") format("opentype");
+      /* font-weight: 100;
       font-display: swap;
-      font-style: normal;
+      font-style: normal; */
     }
-
-
-  
-    @font-face {  
-      font-family: 'HelveticaBlackCondensedOblique';  
-      src: url("./assets/fonts/helvetica/Helvetica Black Condensed Oblique.otf") format("opentype");  
-      font-display: swap;
-      font-style: normal;
-      font-weight: 300; 
-    }
-      
-  
-    @font-face {  
-      font-family: 'Helvetica Neue'; 
-      src: url("./assets/fonts/Helvetica Neue/HelveticaNeueLTStd-Bd.otf") format("opentype");  
-      font-display: swap;
-      font-style: normal;
-      font-weight: 300; 
-    }  
-    @font-face {  
-      font-family: 'Helvetica Neue'; 
-      src: url("./assets/fonts/Helvetica Neue/HelveticaNeueLTStd-Bd.otf") format("opentype");  
-      font-display: swap;
-      font-style: normal;
-      font-weight: 100; 
-    }  
-    @font-face {  
-      font-family: 'Helvetica Neue Lt'; 
-      src: url("./assets/fonts/Helvetica Neue/HelveticaNeueLTStd-Md.otf") format("opentype");  
-      font-display: swap;
-      font-style: normal;
-      font-weight: 400; 
-    } 
-
-    
-  
   
 
   }
@@ -78,12 +26,15 @@
 :root{
   --brand-amber: #FFAB46;
   --brand-green: #2E7D4D;
-  --font-sans: 'Just Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
 }
 
 body{
-  font-family: var(--font-sans);
-  color: #111;
+  font-family: "JUST Sans Regular";
+  color: #fff;
+}
+
+h1, h2, h3, h4, h5, h6, b, strong {
+  font-family: "JUST Sans ExBold";
 }
 
 

@@ -9,14 +9,17 @@ export type Product = {
   images?: string[];
   isActive?: boolean;
   isLatestArrival?: boolean;
+  rating?: number;
+  reviews?: number;
+  availability?: boolean;
 }
 
 const sampleProducts: Product[] = [
-  { id: 'p1', name: 'Solar Panel 300W', description: 'High efficiency monocrystalline solar panel.', price: 120000, stock: 10, images: ['/images/sample1.jpg'], isActive: true, isLatestArrival: true, category: 'Panels' },
-  { id: 'p2', name: 'Inverter 5kW', description: 'Pure sine wave inverter for stable power.', price: 450000, stock: 5, images: ['/images/sample2.jpg'], isActive: true, isLatestArrival: false, category: 'Inverters' },
-  { id: 'p3', name: 'Battery 200Ah', description: 'Deep cycle battery for long runtime.', price: 220000, stock: 8, images: ['/images/sample3.jpg'], isActive: true, isLatestArrival: true, category: 'Batteries' },
-  { id: 'p4', name: 'Solar Mount Kit', description: 'Durable mounting kit for panels.', price: 25000, stock: 25, images: ['/images/sample4.jpg'], isActive: true, isLatestArrival: false, category: 'Accessories' },
-  { id: 'p5', name: 'Charge Controller 60A', description: 'MPPT charge controller for efficient charging.', price: 60000, stock: 12, images: ['/images/sample5.jpg'], isActive: true, isLatestArrival: true, category: 'Controllers' },
+  { id: 'p1', name: 'Solar Panel 300W', description: 'High efficiency monocrystalline solar panel.', price: 120000, stock: 10, images: ['/images/solar.jpg'], isActive: true, isLatestArrival: true, category: 'Panels' },
+  { id: 'p2', name: 'Inverter 5kW', description: 'Pure sine wave inverter for stable power.', price: 450000, stock: 5, images: ['/images/solar2.jpg'], isActive: true, isLatestArrival: false, category: 'Inverters' },
+  { id: 'p3', name: 'Battery 200Ah', description: 'Deep cycle battery for long runtime.', price: 220000, stock: 8, images: ['/images/solar3.jpg'], isActive: true, isLatestArrival: true, category: 'Batteries' },
+  { id: 'p4', name: 'Solar Mount Kit', description: 'Durable mounting kit for panels.', price: 25000, stock: 25, images: ['/images/solar4.jpg'], isActive: true, isLatestArrival: false, category: 'Accessories' },
+  { id: 'p5', name: 'Charge Controller 60A', description: 'MPPT charge controller for efficient charging.', price: 60000, stock: 12, images: ['/images/solar5.jpg'], isActive: true, isLatestArrival: true, category: 'Controllers' },
 ];
 
 export const fetchProducts = async (_filter?: Partial<Product>) => {

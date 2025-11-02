@@ -15,8 +15,9 @@ const theme = createTheme({
     fontFamily: `var(--font-sans)`,
   }
 });
-// import { ToastContainer } from 'material-react-toastify';
-// import { ConsentBanner } from "./ConsentBanner";
+import { ToastContainer } from 'material-react-toastify';
+import 'material-react-toastify/dist/ReactToastify.css';
+import { ConsentBanner } from "./ConsentBanner";
 
 
 function App() {
@@ -28,6 +29,8 @@ function App() {
           <Box>
             <ScrollToTop />
             <Navigation />
+            <ToastContainer />
+            <ConsentBanner />
           </Box>
         </CartProvider>
       </AuthProvider>

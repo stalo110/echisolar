@@ -1,101 +1,91 @@
-// import React, { useState, useEffect } from 'react';
+import { Box, Container, Typography, Grid, Card, IconButton } from "@mui/material";
 import {
-  Box,
-  Container,
-  Typography,
-  Grid,
-  Card,
-  Button,
-  IconButton,
-  Chip,
-} from '@mui/material';
-import {
-  ExpandMore as ExpandMoreIcon,
+  Lightbulb as LightbulbIcon,
   CheckCircle as CheckCircleIcon,
-  ArrowForward as ArrowForwardIcon,
+  ThumbUp as ThumbUpIcon,
+  FormatQuote as QuoteIcon,
+  ChevronRight as ChevronRightIcon,
   Phone as PhoneIcon,
   Send as SendIcon,
-  ChevronRight as ChevronRightIcon,
-  Lightbulb as LightbulbIcon,
-  ThumbUp as ThumbUpIcon,
-  Circle as CircleIcon,
-  FormatQuote as QuoteIcon
-} from '@mui/icons-material';
+} from "@mui/icons-material";
 
-
-// Services Section Component
 export const ServicesSection = () => {
   const services = [
-    {
-      icon: <LightbulbIcon fontSize="large" color="primary" />, 
-      title: 'Solar System Design',
-      description: 'Custom PV system design, site assessments and shading analysis to maximize energy yield.'
-    },
-    {
-      icon: <CheckCircleIcon fontSize="large" color="primary" />,
-      title: 'Installation & Commissioning',
-      description: 'Professional on-site installation of solar panels, inverters and balance-of-system components.'
-    },
-    {
-      icon: <ThumbUpIcon fontSize="large" color="primary" />,
-      title: 'Maintenance & Support',
-      description: 'Preventive maintenance, system checks, and rapid troubleshooting to keep systems performing.'
-    },
-    {
-      icon: <QuoteIcon fontSize="large" color="primary" />,
-      title: 'Battery & Energy Storage',
-      description: 'Lithium and lead-acid battery options, storage sizing and integration with solar systems.'
-    },
-    {
-      icon: <ChevronRightIcon fontSize="large" color="primary" />,
-      title: 'Inverters & Components',
-      description: 'Supply and installation of high-quality inverters, charge controllers and mounting systems.'
-    },
-    {
-      icon: <PhoneIcon fontSize="large" color="primary" />,
-      title: 'Financing & Installment Plans',
-      description: 'Flexible payment options including installment plans and financing partnerships for homeowners and businesses.'
-    }
+    { icon: <LightbulbIcon />, title: "Solar System Design", desc: "Custom PV system design, shading analysis, maximize energy yield." },
+    { icon: <CheckCircleIcon />, title: "Installation & Commissioning", desc: "Professional on-site installation of panels & inverters." },
+    { icon: <ThumbUpIcon />, title: "Maintenance & Support", desc: "Preventive maintenance, checks and rapid troubleshooting." },
+    { icon: <QuoteIcon />, title: "Battery & Energy Storage", desc: "Battery options, sizing and integration with solar systems." },
+    { icon: <ChevronRightIcon />, title: "Inverters & Components", desc: "High-quality inverters & mounting systems supply." },
+    { icon: <PhoneIcon />, title: "Financing & Plans", desc: "Flexible payment options and financing partnerships." },
   ];
 
   return (
-    <Box sx={{ py: 8, backgroundColor: 'background.default' }}>
+    <Box sx={{ py: 10, background: "#070707" }}>
       <Container maxWidth="lg">
-        <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Typography variant="overline" sx={{ color: 'primary.main', fontWeight: 700 }}>Our Services</Typography>
-          <Typography variant="h3" component="h2" gutterBottom sx={{ fontWeight: 700 }}>
-            Clean, reliable solar solutions
-          </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 700, mx: 'auto' }}>
-            We design, install and maintain solar energy systems for homes and businesses, backed by monitoring and flexible payment options.
+        <Box sx={{ textAlign: "center", mb: 6 }}>
+          <Typography variant="overline" sx={{ color: "#FFAB46", fontWeight: 800 }}>Our Services</Typography>
+          <Typography variant="h3" sx={{ fontWeight: 800, color: "#EAEAEA", mt: 1 }}>Clean, reliable solar solutions</Typography>
+          <Typography sx={{ color: "rgba(234,234,234,0.75)", maxWidth: 780, mx: "auto", mt: 2 }}>
+            We design, install and maintain solar systems for homes and businesses, backed by monitoring and flexible payment options.
           </Typography>
         </Box>
 
         <Grid container spacing={3}>
-          {services.map((service, index) => (
-            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
-              <Card sx={{ height: '100%', p: 3, borderRadius: 2 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-                  {service.icon}
-                  <Typography variant="h6" sx={{ fontWeight: 700 }}>{service.title}</Typography>
+          {services.map((s, i) => (
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={i}>
+              <Card
+                sx={{
+                  p: 3,
+                  height: "100%",
+                  borderRadius: 2,
+                  background: "linear-gradient(180deg,#111,#161616)",
+                  color: "#EAEAEA",
+                  transition: "transform .28s ease, box-shadow .28s ease",
+                  "&:hover": { transform: "translateY(-8px)", boxShadow: "0 18px 40px rgba(0,0,0,0.6)" },
+                }}
+              >
+                <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start", mb: 1 }}>
+                  <IconButton
+                    sx={{
+                      background: "rgba(255,255,255,0.03)",
+                      color: "#FFAB46",
+                      "&:hover": { filter: "drop-shadow(0 6px 16px rgba(255,171,70,0.18))" },
+                    }}
+                    size="large"
+                  >
+                    {s.icon}
+                  </IconButton>
+                  <Typography variant="h6" sx={{ fontWeight: 800 }}>{s.title}</Typography>
                 </Box>
-                <Typography variant="body2" color="text.secondary">{service.description}</Typography>
+                <Typography sx={{ color: "rgba(234,234,234,0.75)" }}>{s.desc}</Typography>
               </Card>
             </Grid>
           ))}
         </Grid>
 
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 6, gap: 2, flexWrap: 'wrap' }}>
-          <Button variant="contained" size="large" startIcon={<SendIcon />} sx={{ borderRadius: 2 , background: "#2E7D4D" }}>
+        <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 6 }}>
+          <Box component="button" sx={{
+            border: "none",
+            px: 4,
+            py: 1.2,
+            borderRadius: 2,
+            background: "linear-gradient(90deg,#2E7D4D,#289b5a)",
+            color: "#fff",
+            fontWeight: 800,
+            cursor: "pointer",
+            boxShadow: "0 10px 30px rgba(46,125,77,0.14)",
+            "&:hover": { transform: "translateY(-3px)" }
+          }}>
             Contact Sales
-          </Button>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton color="primary" sx={{ mr: 1 }}>
-              <PhoneIcon />
+          </Box>
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <IconButton sx={{ background: "rgba(255,255,255,0.03)", color: "#FFAB46" }}>
+              <SendIcon />
             </IconButton>
             <Box>
-              <Typography variant="body1" fontWeight="bold">+234 701 809 0107</Typography>
-              <Typography variant="body2" color="text.secondary">Talk to an Expert</Typography>
+              <Typography sx={{ fontWeight: 700, color: "#EAEAEA" }}>+234 701 809 0107</Typography>
+              <Typography sx={{ color: "rgba(234,234,234,0.7)" }}>Talk to an Expert</Typography>
             </Box>
           </Box>
         </Box>
