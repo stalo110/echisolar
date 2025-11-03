@@ -1,4 +1,3 @@
-// src/pages/admin/Revenue.tsx
 import { Box, Typography, Paper, Grid, LinearProgress } from "@mui/material";
 
 const brandAmber = "#FFAB46";
@@ -11,7 +10,7 @@ const Revenue = () => (
     </Typography>
 
     <Grid container spacing={3}>
-      <Grid item xs={12} md={4}>
+      <Grid size={{ xs: 12, md: 4 }}>
         <Paper
           sx={{
             p: 3,
@@ -30,7 +29,7 @@ const Revenue = () => (
         </Paper>
       </Grid>
 
-      <Grid item xs={12} md={8}>
+      <Grid size={{ xs: 12, md: 8 }}>
         <Paper
           sx={{
             p: 3,

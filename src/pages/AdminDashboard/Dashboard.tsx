@@ -1,4 +1,3 @@
-// src/pages/admin/Dashboard.tsx
 import {
   Box,
   CssBaseline,
@@ -67,14 +66,15 @@ const AdminDashboard = () => {
       <List>
         {menuItems.map((item) => (
           <ListItem
-            button
+            // button
             key={item.text}
             sx={{
               "&:hover": {
                 background: "rgba(255,255,255,0.08)",
               },
-            }}
+            }}       
           >
+          
             <ListItemIcon sx={{ color: brandAmber }}>{item.icon}</ListItemIcon>
             <ListItemText primary={item.text} />
           </ListItem>
@@ -170,7 +170,7 @@ const AdminDashboard = () => {
             { title: "Users", value: "1,248" },
             { title: "Products", value: "76" },
           ].map((card, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
               <Paper
                 sx={{
                   p: 3,

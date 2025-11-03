@@ -1,4 +1,3 @@
-// src/pages/admin/Products.tsx
 import {
   Box,
   Typography,
@@ -16,7 +15,7 @@ import { Edit, Delete, Add } from "@mui/icons-material";
 import { useState } from "react";
 
 const brandAmber = "#FFAB46";
-const brandGreen = "#2E7D4D";
+// const brandGreen = "#2E7D4D";
 
 interface Product {
   id: number;
@@ -26,7 +25,7 @@ interface Product {
   category: string;
 }
 
-const Products = () => {
+const AdminProducts = () => {
   const [products, setProducts] = useState<Product[]>([
     { id: 1, name: "Solar Panel 250W", price: 95000, stock: 12, category: "Solar Panels" },
     { id: 2, name: "Inverter 5KVA", price: 220000, stock: 8, category: "Inverters" },
@@ -98,4 +97,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default AdminProducts;

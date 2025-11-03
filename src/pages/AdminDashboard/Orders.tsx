@@ -1,4 +1,3 @@
-// src/pages/admin/Orders.tsx
 import { Box, Typography, Paper, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 
 const brandAmber = "#FFAB46";

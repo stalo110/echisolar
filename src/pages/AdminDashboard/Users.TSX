@@ -1,4 +1,3 @@
-// src/pages/admin/Users.tsx
 import { Box, Typography, Paper, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 
 const brandAmber = "#FFAB46";
@@ -9,7 +8,7 @@ const users = [
   { id: 2, name: "Admin", email: "admin@shop.com", role: "Admin" },
 ];
 
-const Users = () => (
+const AdminUsers = () => (
   <Box sx={{ p: 3, bgcolor: "#0D0D0D", color: "#fff", minHeight: "100vh" }}>
     <Typography variant="h5" sx={{ color: brandAmber, mb: 3 }}>
       Users
@@ -46,4 +45,4 @@ const Users = () => (
   </Box>
 );
 
-export default Users;
+export default AdminUsers;
