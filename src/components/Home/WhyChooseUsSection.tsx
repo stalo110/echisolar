@@ -49,7 +49,7 @@ export const WhyChooseUsSection = () => {
           ))}
         </Grid>
 
-        <Box sx={{ mt: 6, p: 4, background: "linear-gradient(90deg,#2E7D4D,#278b57)", borderRadius: 2, color: "#fff", textAlign: "center" }}>
+        <Box sx={{ mt: 6, p: 4, background: "#0ba21dff", borderRadius: 2, color: "#fff", textAlign: "center" }}>
           <Typography variant="h5" sx={{ fontWeight: 800 }}>Ready to Save with Solar?</Typography>
           <Typography sx={{ opacity: 0.95, mt: 1 }}>Join thousands enjoying clean, affordable energy.</Typography>
           <Box sx={{ display: "flex", gap: 3, justifyContent: "center", mt: 3, flexWrap: "wrap" }}>

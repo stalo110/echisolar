@@ -5,17 +5,11 @@
     @font-face {
       font-family: "JUST Sans ExBold";
       src: url("./assets/fonts/just_sans/JUST Sans ExBold.otf") format("opentype");
-      /* font-weight: 100;
-      font-display: swap;
-      font-style: normal; */
     }
 
         @font-face {
       font-family: "JUST Sans Regular";
       src: url("./assets/fonts/just_sans/JUST Sans Regular.otf") format("opentype");
-      /* font-weight: 100;
-      font-display: swap;
-      font-style: normal; */
     }
   
 

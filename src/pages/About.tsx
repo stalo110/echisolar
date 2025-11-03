@@ -94,7 +94,8 @@ const About = () => {
               fontWeight: "bold",
               mb: 4,
               textAlign: "center",
-              background: "linear-gradient(90deg, #2E7D4D, #5EC784)",
+              color: "#0ba21dff",
+              background: "linear-gradient(90deg, #0ba21dff, #0ba21dff)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}

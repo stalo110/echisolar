@@ -8,10 +8,10 @@ import {
   Link,
 } from "@mui/material";
 import { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import TopNav from "../navigation/TopNav";
-import Footer from "../navigation/Footer";
+import TopNav from "../../navigation/TopNav";
+import Footer from "../../navigation/Footer";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");

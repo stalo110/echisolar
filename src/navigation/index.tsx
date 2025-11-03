@@ -5,7 +5,7 @@ import ProductDetail from "../pages/ProductDetail";
 import Cart from "../pages/Cart";
 import Checkout from "../pages/Checkout";
 import Orders from "../pages/Orders";
-import Profile from "../pages/Profile";
+import Profile from "../pages/UserDashboard/Profile";
 // import AdminProducts from "../pages/AdminProducts";
 // import AdminDashboard from "../pages/AdminDashboard";
 import Addresses from "../pages/Addresses";
@@ -13,36 +13,41 @@ import PaymentStatus from "../pages/PaymentStatus";
 import Receipt from "../pages/Receipt";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
-import LoginPage from "../pages/Login";
-import RegisterPage from "../pages/Register";
-import UserDashboardPage from "../pages/UserDashboard";
+import LoginPage from "../pages/Auth/Login";
+import RegisterPage from "../pages/Auth/Register";
+import UserDashboardPage from "../pages/UserDashboard/UserDashboard";
 // import AdminUsers from "../pages/AdminUsers";
-import { Subscriptions } from "@mui/icons-material";
-
-
+import UserProducts from "../pages/UserDashboard/userProducts";
+import UserSubscriptions from "../pages/UserDashboard/Subscriptions";
 
 export const Navigation = () => (
-    <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-          <Route path="/contact" element={<Contact />} />
-        <Route path="/products/:id" element={<ProductDetail />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/user/profile" element={<Profile />} />
-        <Route path="/addresses" element={<Addresses />} />
-        {/* <Route path="/admin" element={<AdminDashboard />} /> */}
-        {/* <Route path="/admin/products" element={<AdminProducts />} /> */}
-        {/* <Route path="/admin/users" element={<AdminUsers />} /> */}
-        <Route path="/payment/status" element={<PaymentStatus />} />
-        <Route path="/receipt/:id" element={<Receipt />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/user/dashboard" element={<UserDashboardPage />} />
-        <Route path="/user/subscriptions" element={<Subscriptions />} />
-        
-        <Route path="*" element={<Home />} />
-    </Routes>
+  <Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="/products" element={<Products />} />
+    <Route path="/contact" element={<Contact />} />
+    <Route path="/products/:id" element={<ProductDetail />} />
+    <Route path="/cart" element={<Cart />} />
+    <Route path="/checkout" element={<Checkout />} />
+    <Route path="/orders" element={<Orders />} />
+    <Route path="/addresses" element={<Addresses />} />
+    {/* <Route path="/admin" element={<AdminDashboard />} /> */}
+    {/* <Route path="/admin/products" element={<AdminProducts />} /> */}
+    {/* <Route path="/admin/users" element={<AdminUsers />} /> */}
+    <Route path="/payment/status" element={<PaymentStatus />} />
+    <Route path="/receipt/:id" element={<Receipt />} />
+    <Route path="/about" element={<About />} />
+
+    {/* Auth Route */}
+    <Route path="/login" element={<LoginPage />} />
+    <Route path="/register" element={<RegisterPage />} />
+
+    {/* User Route */}
+    <Route path="/user/dashboard" element={<UserDashboardPage />} />
+    <Route path="/user/subscriptions" element={<UserSubscriptions />} />
+    <Route path="/user/profile" element={<Profile />} />
+    <Route path="/user/products" element={<UserProducts />} />
+
+    {/* Fallback Route */}
+    <Route path="*" element={<Home />} />
+  </Routes>
 );
