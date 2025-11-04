@@ -1,5 +1,3 @@
-
-
 import {
   Box,
   Typography,
@@ -17,40 +15,41 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  MenuItem,
   Snackbar,
   Alert,
+  Grid,
 } from "@mui/material";
-import { Edit, Delete, Add } from "@mui/icons-material";
+import { Edit, Delete, Add, Image } from "@mui/icons-material";
 import { useState, type ChangeEvent } from "react";
 import AdminLayout from "../../components/Admin/AdminLayout";
 
 const brandAmber = "#FFAB46";
 
-interface Product {
+interface Project {
   id: number;
-  name: string;
-  price: number;
-  stock: number;
-  category: string;
-  image?: string;
+  title: string;
+  description: string;
+  location: string;
+  images: string[];
 }
 
-const AdminProducts = () => {
-  const [products, setProducts] = useState<Product[]>([
+const AdminProjects = () => {
+  const [projects, setProjects] = useState<Project[]>([
     {
       id: 1,
-      name: "Solar Panel 250W",
-      price: 95000,
-      stock: 12,
-      category: "Solar Panels",
+      title: "Lagos Community Microgrid",
+      description:
+        "A 50kW hybrid microgrid powering a community clinic and 12 homes in Lagos.",
+      location: "Lagos, Nigeria",
+      images: [],
     },
     {
       id: 2,
-      name: "Inverter 5KVA",
-      price: 220000,
-      stock: 8,
-      category: "Inverters",
+      title: "Benin Rooftop Solar",
+      description:
+        "5kW rooftop solar installation for residential use, with battery storage.",
+      location: "Benin City, Nigeria",
+      images: [],
     },
   ]);
 
@@ -58,13 +57,12 @@ const AdminProducts = () => {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [selectedDeleteId, setSelectedDeleteId] = useState<number | null>(null);
 
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [formData, setFormData] = useState<Partial<Product>>({
-    name: "",
-    price: 0,
-    stock: 0,
-    category: "",
-    image: "",
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [formData, setFormData] = useState<Partial<Project>>({
+    title: "",
+    description: "",
+    location: "",
+    images: [],
   });
 
   const [snackbar, setSnackbar] = useState({
@@ -73,68 +71,85 @@ const AdminProducts = () => {
     severity: "success" as "success" | "info" | "error",
   });
 
-  const handleOpen = (product?: Product) => {
-    if (product) {
-      setEditingProduct(product);
-      setFormData(product);
+  const handleOpen = (project?: Project) => {
+    if (project) {
+      setEditingProject(project);
+      setFormData(project);
     } else {
-      setEditingProduct(null);
-      setFormData({ name: "", price: 0, stock: 0, category: "", image: "" });
+      setEditingProject(null);
+      setFormData({ title: "", description: "", location: "", images: [] });
     }
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
-    setEditingProduct(null);
+    setEditingProject(null);
   };
 
   const handleSnackbarClose = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setFormData((prev) => ({ ...prev, image: reader.result as string }));
-    };
-    reader.readAsDataURL(file);
+    const files = e.target.files;
+    if (!files) return;
+
+    const newImages: string[] = [];
+
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        newImages.push(reader.result as string);
+        setFormData((prev) => ({
+          ...prev,
+          images: [...(prev.images || []), ...newImages],
+        }));
+      };
+      reader.readAsDataURL(file);
+    });
   };
 
   const handleSave = () => {
-    if (editingProduct) {
-      setProducts((prev) =>
+    if (!formData.title || !formData.description) {
+      setSnackbar({
+        open: true,
+        message: "Please fill in all required fields.",
+        severity: "error",
+      });
+      return;
+    }
+
+    if (editingProject) {
+      setProjects((prev) =>
         prev.map((p) =>
-          p.id === editingProduct.id ? { ...editingProduct, ...formData } : p
+          p.id === editingProject.id ? { ...editingProject, ...formData } : p
         )
       );
       setSnackbar({
         open: true,
-        message: "Product updated successfully!",
+        message: "Project updated successfully!",
         severity: "success",
       });
     } else {
-      setProducts((prev) => [
+      setProjects((prev) => [
         ...prev,
         {
           id: prev.length + 1,
-          name: formData.name || "",
-          price: Number(formData.price),
-          stock: Number(formData.stock),
-          category: formData.category || "",
-          image: formData.image || "",
+          title: formData.title || "",
+          description: formData.description || "",
+          location: formData.location || "",
+          images: formData.images || [],
         },
       ]);
       setSnackbar({
         open: true,
-        message: "Product added successfully!",
+        message: "Project added successfully!",
         severity: "success",
       });
     }
@@ -148,10 +163,10 @@ const AdminProducts = () => {
 
   const handleConfirmDelete = () => {
     if (selectedDeleteId !== null) {
-      setProducts((prev) => prev.filter((p) => p.id !== selectedDeleteId));
+      setProjects((prev) => prev.filter((p) => p.id !== selectedDeleteId));
       setSnackbar({
         open: true,
-        message: "Product deleted successfully!",
+        message: "Project deleted successfully!",
         severity: "info",
       });
     }
@@ -160,10 +175,10 @@ const AdminProducts = () => {
   };
 
   return (
-     <AdminLayout>
+    <AdminLayout>
     <Box sx={{ p: 3, color: "#fff", bgcolor: "#0D0D0D", minHeight: "100vh" }}>
       <Typography variant="h5" sx={{ fontWeight: "bold", color: brandAmber, mb: 3 }}>
-        Manage Products
+        Manage Projects
       </Typography>
 
       <Button
@@ -178,7 +193,7 @@ const AdminProducts = () => {
           "&:hover": { bgcolor: "#FF9C25" },
         }}
       >
-        Add Product
+        Add Project
       </Button>
 
       <TableContainer
@@ -192,7 +207,7 @@ const AdminProducts = () => {
         <Table>
           <TableHead>
             <TableRow>
-              {["Image", "Name", "Category", "Price", "Stock", "Actions"].map((h) => (
+              {["Images", "Title", "Location", "Description", "Actions"].map((h) => (
                 <TableCell key={h} sx={{ color: brandAmber, fontWeight: "bold" }}>
                   {h}
                 </TableCell>
@@ -200,35 +215,44 @@ const AdminProducts = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.map((p) => (
+            {projects.map((p) => (
               <TableRow key={p.id}>
                 <TableCell>
-                  {p.image ? (
-                    <img
-                      src={p.image}
-                      alt={p.name}
-                      style={{
-                        width: 50,
-                        height: 50,
-                        borderRadius: "8px",
-                        objectFit: "cover",
-                      }}
-                    />
-                  ) : (
-                    <Box
-                      sx={{
-                        width: 50,
-                        height: 50,
-                        bgcolor: "rgba(255,255,255,0.1)",
-                        borderRadius: "8px",
-                      }}
-                    />
-                  )}
+                  <Box sx={{ display: "flex", gap: 1 }}>
+                    {p.images && p.images.length > 0 ? (
+                      p.images.map((img, idx) => (
+                        <img
+                          key={idx}
+                          src={img}
+                          alt={p.title}
+                          style={{
+                            width: 50,
+                            height: 50,
+                            borderRadius: "8px",
+                            objectFit: "cover",
+                          }}
+                        />
+                      ))
+                    ) : (
+                      <Box
+                        sx={{
+                          width: 50,
+                          height: 50,
+                          bgcolor: "rgba(255,255,255,0.1)",
+                          borderRadius: "8px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Image sx={{ color: "#555" }} />
+                      </Box>
+                    )}
+                  </Box>
                 </TableCell>
-                <TableCell sx={{ color: "#fff" }}>{p.name}</TableCell>
-                <TableCell sx={{ color: "#fff" }}>{p.category}</TableCell>
-                <TableCell sx={{ color: "#fff" }}>₦{p.price.toLocaleString()}</TableCell>
-                <TableCell sx={{ color: "#fff" }}>{p.stock}</TableCell>
+                <TableCell sx={{ color: "#fff" }}>{p.title}</TableCell>
+                <TableCell sx={{ color: "#fff" }}>{p.location}</TableCell>
+                <TableCell sx={{ color: "#ccc" }}>{p.description}</TableCell>
                 <TableCell>
                   <IconButton color="inherit" size="small" onClick={() => handleOpen(p)}>
                     <Edit sx={{ color: brandAmber }} />
@@ -261,61 +285,42 @@ const AdminProducts = () => {
         }}
       >
         <DialogTitle sx={{ color: brandAmber, fontWeight: "bold" }}>
-          {editingProduct ? "Edit Product" : "Add Product"}
+          {editingProject ? "Edit Project" : "Add Project"}
         </DialogTitle>
         <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
           <TextField
-            label="Product Name"
-            name="name"
-            value={formData.name || ""}
-            onChange={handleInputChange}
-            fullWidth
-            InputLabelProps={{ style: { color: "#ccc" } }}
-            InputProps={{
-              sx: {
-                color: "#fff",
-                borderColor: "rgba(255,255,255,0.2)",
-              },
-            }}
-          />
-          <TextField
-            label="Price (₦)"
-            name="price"
-            type="number"
-            value={formData.price || ""}
+            label="Project Title"
+            name="title"
+            value={formData.title || ""}
             onChange={handleInputChange}
             fullWidth
             InputLabelProps={{ style: { color: "#ccc" } }}
             InputProps={{ sx: { color: "#fff" } }}
           />
           <TextField
-            label="Stock"
-            name="stock"
-            type="number"
-            value={formData.stock || ""}
+            label="Location"
+            name="location"
+            value={formData.location || ""}
             onChange={handleInputChange}
             fullWidth
             InputLabelProps={{ style: { color: "#ccc" } }}
             InputProps={{ sx: { color: "#fff" } }}
           />
           <TextField
-            select
-            label="Category"
-            name="category"
-            value={formData.category || ""}
+            label="Description"
+            name="description"
+            multiline
+            rows={4}
+            value={formData.description || ""}
             onChange={handleInputChange}
             fullWidth
             InputLabelProps={{ style: { color: "#ccc" } }}
             InputProps={{ sx: { color: "#fff" } }}
-          >
-            <MenuItem value="Solar Panels">Solar Panels</MenuItem>
-            <MenuItem value="Inverters">Inverters</MenuItem>
-            <MenuItem value="Batteries">Batteries</MenuItem>
-          </TextField>
+          />
 
           <Box>
             <Typography variant="body2" sx={{ mb: 1 }}>
-              Product Image
+              Upload Project Images
             </Typography>
             <Button
               variant="outlined"
@@ -326,22 +331,32 @@ const AdminProducts = () => {
                 "&:hover": { borderColor: "#FF9C25" },
               }}
             >
-              Upload Image
-              <input hidden accept="image/*" type="file" onChange={handleImageChange} />
+              Upload
+              <input
+                hidden
+                multiple
+                accept="image/*"
+                type="file"
+                onChange={handleImageChange}
+              />
             </Button>
-            {formData.image && (
-              <Box sx={{ mt: 2 }}>
-                <img
-                  src={formData.image}
-                  alt="preview"
-                  style={{
-                    width: "100%",
-                    maxHeight: 200,
-                    borderRadius: 8,
-                    objectFit: "cover",
-                  }}
-                />
-              </Box>
+
+            {formData.images && formData.images.length > 0 && (
+              <Grid container spacing={1} sx={{ mt: 2 }}>
+                {formData.images.map((img, idx) => (
+                  <Grid size={{xs:4}} key={idx}>
+                    <img
+                      src={img}
+                      alt="preview"
+                      style={{
+                        width: "100%",
+                        borderRadius: 8,
+                        objectFit: "cover",
+                      }}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
             )}
           </Box>
         </DialogContent>
@@ -354,7 +369,7 @@ const AdminProducts = () => {
             sx={{ bgcolor: brandAmber, color: "#000", fontWeight: "bold" }}
             onClick={handleSave}
           >
-            {editingProduct ? "Save Changes" : "Add Product"}
+            {editingProject ? "Save Changes" : "Add Project"}
           </Button>
         </DialogActions>
       </Dialog>
@@ -376,7 +391,7 @@ const AdminProducts = () => {
           Confirm Deletion
         </DialogTitle>
         <DialogContent>
-          <Typography>Are you sure you want to delete this product?</Typography>
+          <Typography>Are you sure you want to delete this project?</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setConfirmOpen(false)} sx={{ color: "#ccc" }}>
@@ -408,9 +423,9 @@ const AdminProducts = () => {
         </Alert>
       </Snackbar>
     </Box>
-     </AdminLayout>
+    </AdminLayout>
 
   );
 };
 
-export default AdminProducts;
+export default AdminProjects;

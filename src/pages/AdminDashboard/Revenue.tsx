@@ -1,10 +1,12 @@
 import { Box, Typography, Paper, Grid, LinearProgress } from "@mui/material";
+import AdminLayout from "../../components/Admin/AdminLayout";
 
 const brandAmber = "#FFAB46";
 const brandGreen = "#2E7D4D";
 
 const Revenue = () => (
-  <Box sx={{ p: 3, bgcolor: "#0D0D0D", color: "#fff", minHeight: "100vh" }}>
+  <AdminLayout>
+      <Box sx={{ p: 3, bgcolor: "#0D0D0D", color: "#fff", minHeight: "100vh" }}>
     <Typography variant="h5" sx={{ color: brandAmber, mb: 3 }}>
       Revenue & Analytics
     </Typography>
@@ -19,11 +21,11 @@ const Revenue = () => (
             boxShadow: "0 0 20px rgba(0,0,0,0.4)",
           }}
         >
-          <Typography variant="subtitle1">Total Revenue</Typography>
+          <Typography variant="subtitle1" sx={{color:"#ffffff"}}>Total Revenue</Typography>
           <Typography variant="h5" sx={{ color: brandAmber, fontWeight: "bold" }}>
             ₦5.4M
           </Typography>
-          <Typography variant="body2" sx={{ opacity: 0.7 }}>
+          <Typography variant="body2" sx={{ opacity: 0.7, color:"#ffffff" }}>
             +12% from last month
           </Typography>
         </Paper>
@@ -38,7 +40,7 @@ const Revenue = () => (
             border: "1px solid rgba(255,255,255,0.08)",
           }}
         >
-          <Typography variant="subtitle1" sx={{ mb: 1 }}>
+          <Typography variant="subtitle1" sx={{ mb: 1, color:"#ffffff" }}>
             Monthly Growth
           </Typography>
           <LinearProgress
@@ -58,6 +60,8 @@ const Revenue = () => (
       </Grid>
     </Grid>
   </Box>
+  </AdminLayout>
+
 );
 
 export default Revenue;

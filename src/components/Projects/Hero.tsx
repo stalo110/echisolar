@@ -38,7 +38,7 @@ export const HeroSection = () => {
                   textShadow: "0 0 15px rgba(255,171,70,0.4)",
                 }}
               >
-                Our Products
+                Our Projects
               </Typography>
               <Typography
                 variant="h6"
@@ -48,8 +48,7 @@ export const HeroSection = () => {
                   maxWidth: 600,
                 }}
               >
-                Explore premium solar panels, inverters, and batteries designed
-                to power your world sustainably.
+                Check out the projects we have excuted so far.
               </Typography>
             </Box>
           </Grid>

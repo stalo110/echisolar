@@ -1,4 +1,5 @@
 import { Box, Typography, Paper, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
+import AdminLayout from "../../components/Admin/AdminLayout";
 
 const brandAmber = "#FFAB46";
 const brandGreen = "#2E7D4D";
@@ -9,6 +10,9 @@ const users = [
 ];
 
 const AdminUsers = () => (
+  <AdminLayout>
+
+
   <Box sx={{ p: 3, bgcolor: "#0D0D0D", color: "#fff", minHeight: "100vh" }}>
     <Typography variant="h5" sx={{ color: brandAmber, mb: 3 }}>
       Users
@@ -43,6 +47,7 @@ const AdminUsers = () => (
       </Table>
     </Paper>
   </Box>
+    </AdminLayout>
 );
 
 export default AdminUsers;

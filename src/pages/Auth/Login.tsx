@@ -21,9 +21,9 @@ const LoginPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email === "admin@echisolar.com" && password === "password") {
+    if (email === "admin@echisolar.com" && password === "admin") {
       login({ id: "1", name: "Admin", email, role: "admin" });
-      navigate("/admin");
+      navigate("/admin/dashboard");
     } else {
       login({ id: "2", name: "User", email, role: "customer" });
       navigate("/user/dashboard");

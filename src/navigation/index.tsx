@@ -4,7 +4,6 @@ import Products from "../pages/Products";
 import ProductDetail from "../pages/ProductDetail";
 import Cart from "../pages/Cart";
 import Checkout from "../pages/Checkout";
-import Orders from "../pages/Orders";
 import Profile from "../pages/UserDashboard/Profile";
 import Addresses from "../pages/Addresses";
 import PaymentStatus from "../pages/PaymentStatus";
@@ -20,28 +19,32 @@ import AdminDashboard from "../pages/AdminDashboard/Dashboard";
 import AdminProducts from "../pages/AdminDashboard/Products";
 import Revenue from "../pages/AdminDashboard/Revenue";
 import AdminUsers from '../pages/AdminDashboard/Users';
+import Projects from "../pages/Projects";
+import AdminProjects from "../pages/AdminDashboard/Projects";
+import AdminOrders from "../pages/AdminDashboard/Orders";
 
 export const Navigation = () => (
   <Routes>
     {/* Landing Page Route */}
     <Route path="/" element={<Home />} />
     <Route path="/products" element={<Products />} />
+    <Route path="/projects" element={<Projects />} />
     <Route path="/contact" element={<Contact />} />
     <Route path="/products/:id" element={<ProductDetail />} />
     <Route path="/cart" element={<Cart />} />
     <Route path="/checkout" element={<Checkout />} />
-    <Route path="/orders" element={<Orders />} />
     <Route path="/addresses" element={<Addresses />} />
     <Route path="/payment/status" element={<PaymentStatus />} />
     <Route path="/receipt/:id" element={<Receipt />} />
     <Route path="/about" element={<About />} />
 
     {/* Admin Route */}
-    <Route path="/admin" element={<AdminDashboard />} />
+    <Route path="/admin/dashboard" element={<AdminDashboard />} />
     <Route path="/admin/products" element={<AdminProducts />} />
     <Route path="/admin/users" element={<AdminUsers />} />
-     <Route path="/admin/orders" element={<Orders />} />
+     <Route path="/admin/orders" element={<AdminOrders />} />
     <Route path="/admin/revenue" element={<Revenue />} />
+      <Route path="/admin/projects" element={<AdminProjects />} />
 
 
     {/* Auth Route */}
