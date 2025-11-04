@@ -9,7 +9,7 @@ const users = [
   { id: 2, name: "Admin", email: "admin@shop.com", role: "Admin" },
 ];
 
-const Users = () => (
+const AdminUsers = () => (
   <AdminLayout>
 
 
@@ -50,4 +50,4 @@ const Users = () => (
     </AdminLayout>
 );
 
-export default Users;
+export default AdminUsers;

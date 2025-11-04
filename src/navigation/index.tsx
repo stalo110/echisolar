@@ -18,10 +18,10 @@ import UserSubscriptions from "../pages/UserDashboard/Subscriptions";
 import AdminDashboard from "../pages/AdminDashboard/Dashboard";
 import AdminProducts from "../pages/AdminDashboard/Products";
 import Revenue from "../pages/AdminDashboard/Revenue";
-import Users from '../pages/AdminDashboard/Users';
 import Projects from "../pages/Projects";
 import AdminProjects from "../pages/AdminDashboard/Projects";
 import AdminOrders from "../pages/AdminDashboard/Orders";
+import AdminUsers from "../pages/AdminDashboard/AdminUsers";
 
 export const Navigation = () => (
   <Routes>
@@ -41,7 +41,7 @@ export const Navigation = () => (
     {/* Admin Route */}
     <Route path="/admin/dashboard" element={<AdminDashboard />} />
     <Route path="/admin/products" element={<AdminProducts />} />
-    <Route path="/admin/users" element={<Users />} />
+    <Route path="/admin/users" element={<AdminUsers />} />
      <Route path="/admin/orders" element={<AdminOrders />} />
     <Route path="/admin/revenue" element={<Revenue />} />
       <Route path="/admin/projects" element={<AdminProjects />} />
