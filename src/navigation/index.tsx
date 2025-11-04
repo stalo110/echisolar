@@ -57,7 +57,7 @@ export const Navigation = () => (
     <Route path="/user/profile" element={<Profile />} />
     <Route path="/user/products" element={<UserProducts />} />
 
-    {/* Fallback Route */}
+    {/* Fallback Route if not found */}
     <Route path="*" element={<Home />} />
   </Routes>
 );
