@@ -96,6 +96,7 @@ export default function TopNav() {
             py: 1.5,
             px: 2,
             transition: "all 0.3s ease",
+            fontFamily:"JUST Sans Regular",
             "&:hover": {
               backgroundColor: "rgba(255,255,255,0.08)",
             },
@@ -115,6 +116,7 @@ export default function TopNav() {
                 fontSize: "1.1rem",
                 fontWeight: 600,
                 color: "#fff",
+                fontFamily: "JUST Sans Regular",
                 sx: {
                   transition: "color 0.3s ease",
                   "&:hover": { color: "var(--brand-amber)" },
@@ -146,7 +148,7 @@ export default function TopNav() {
               <ListItemIcon sx={{ minWidth: 32, color: "inherit" }}>
                 <AccountCircle />
               </ListItemIcon>
-              <ListItemText primary="Login" />
+              <ListItemText primary="Login" primaryTypographyProps={{ fontFamily: "JUST Sans Regular" }} />
             </ListItemButton>
 
             <ListItemButton
@@ -159,7 +161,7 @@ export default function TopNav() {
                 "&:hover": { color: "var(--brand-amber)" },
               }}
             >
-              <ListItemText primary="Sign Up" />
+              <ListItemText primary="Sign Up" primaryTypographyProps={{ fontFamily: "JUST Sans Regular" }} />
             </ListItemButton>
           </>
         ) : (
@@ -176,7 +178,7 @@ export default function TopNav() {
               <ListItemIcon sx={{ minWidth: 32, color: "var(--brand-green)" }}>
                 <AccountCircle />
               </ListItemIcon>
-              <ListItemText primary={user.name} />
+              <ListItemText primary={user.name} primaryTypographyProps={{ fontFamily: "JUST Sans Regular" }} />
             </ListItemButton>
 
             <ListItemButton
@@ -192,7 +194,7 @@ export default function TopNav() {
               <ListItemIcon sx={{ minWidth: 32, color: "inherit" }}>
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText primary="Logout" />
+              <ListItemText primary="Logout" primaryTypographyProps={{ fontFamily: "JUST Sans Regular" }} />
             </ListItemButton>
           </>
         )}
@@ -209,7 +211,7 @@ export default function TopNav() {
               <ShoppingCart sx={{ color: "white" }} />
             </Badge>
           </ListItemIcon>
-          <ListItemText primary="Cart" />
+          <ListItemText primary="Cart" primaryTypographyProps={{ fontFamily: "JUST Sans Regular" }} />
         </ListItemButton>
       </List>
 
@@ -276,6 +278,7 @@ export default function TopNav() {
               sx={{
                 color: "#fff",
                 fontWeight: "bold",
+                fontFamily: "JUST Sans Regular",
                 textTransform: "none",
                 position: "relative",
                 "&::after": {
@@ -303,6 +306,7 @@ export default function TopNav() {
               sx={{
                 color: "var(--brand-amber)",
                 fontWeight: "bold",
+                fontFamily: "JUST Sans Regular",
                 textTransform: "none",
                 border: "1px solid var(--brand-amber)",
                 borderRadius: 2,
@@ -323,7 +327,7 @@ export default function TopNav() {
                 startIcon={
                   <AccountCircle sx={{ color: "var(--brand-green)" }} />
                 }
-                sx={{ color: "var(--brand-green)", fontWeight: "bold" }}
+                sx={{ color: "var(--brand-green)", fontWeight: "bold", fontFamily: "JUST Sans Regular" }}
               >
                 {user.name}
               </Button>
@@ -333,6 +337,7 @@ export default function TopNav() {
                 sx={{
                   color: "#fff",
                   fontWeight: "bold",
+                  fontFamily: "JUST Sans Regular",
                   "&:hover": { color: "var(--brand-amber)" },
                 }}
               >
@@ -368,7 +373,7 @@ export default function TopNav() {
               background: "linear-gradient(90deg, #f6c90e, #ffab46)",
               color: "white",
               fontWeight: "bold",
-              fontFamily: "JUST Sans ExBold",
+              fontFamily: "JUST Sans Regular",
               borderRadius: 2,
               px: 3,
               boxShadow: "0 0 15px rgba(246,201,14,0.4)",
