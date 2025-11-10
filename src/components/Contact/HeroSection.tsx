@@ -46,6 +46,7 @@ export const HeroSection = () => {
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   textShadow: '0 4px 15px rgba(0, 188, 212, 0.2)',
+                  fontFamily: 'JUST Sans ExBold',
                 }}
               >
                 Contact Us
@@ -56,6 +57,7 @@ export const HeroSection = () => {
                   color: 'rgba(255,255,255,0.85)',
                   mt: 2,
                   maxWidth: '500px',
+                  fontFamily: 'JUST Sans Regular',
                 }}
               >
                 Let’s connect and bring clean, renewable energy to your home or business.

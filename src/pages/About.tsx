@@ -28,6 +28,7 @@ const About = () => {
             background: "linear-gradient(90deg, #FFAB46, #FFD18A)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
+            fontFamily: "JUST Sans ExBold",
           }}
         >
           About Echi Solar
@@ -74,11 +75,12 @@ const About = () => {
                     color: "#FFAB46",
                     mb: 1.5,
                     textTransform: "uppercase",
+                    fontFamily: "JUST Sans ExBold",
                   }}
                 >
                   {item.title}
                 </Typography>
-                <Typography sx={{ color: "rgba(255,255,255,0.8)" }}>
+                <Typography sx={{ color: "rgba(255,255,255,0.8)", fontFamily: "JUST Sans Regular" }}>
                   {item.text}
                 </Typography>
               </Paper>
@@ -98,6 +100,7 @@ const About = () => {
               background: "linear-gradient(90deg, #0ba21dff, #0ba21dff)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
+              fontFamily: "JUST Sans ExBold",
             }}
           >
             Why Choose Us?
@@ -136,11 +139,11 @@ const About = () => {
                 >
                   <Typography
                     variant="h6"
-                    sx={{ fontWeight: "bold", color: "#2E7D4D", mb: 1.5 }}
+                    sx={{ fontWeight: "bold", color: "#2E7D4D", mb: 1.5, fontFamily: "JUST Sans ExBold" }}
                   >
                     {card.title}
                   </Typography>
-                  <Typography sx={{ color: "rgba(255,255,255,0.8)" }}>
+                  <Typography sx={{ color: "rgba(255,255,255,0.8)", fontFamily: "JUST Sans Regular" }}>
                     {card.text}
                   </Typography>
                 </Paper>

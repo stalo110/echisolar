@@ -7,8 +7,8 @@ const Orders = () => {
     <Box>
       <TopNav />
       <Container sx={{ py: 6 }}>
-        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 3 }}>My Orders</Typography>
-        <Typography color="text.secondary">List of past and active orders will appear here.</Typography>
+        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 3, fontFamily: "JUST Sans ExBold" }}>My Orders</Typography>
+        <Typography color="text.secondary" sx={{ fontFamily: "JUST Sans Regular" }}>List of past and active orders will appear here.</Typography>
       </Container>
       <Footer />
     </Box>

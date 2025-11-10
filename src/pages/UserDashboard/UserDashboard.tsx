@@ -31,16 +31,16 @@ const UserDashboardPage = () => {
               boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
             }}
           >
-            <Typography variant="h6" sx={{ mb: 2, color: "#FFAB46" }}>
+            <Typography variant="h6" sx={{ mb: 2, color: "#FFAB46", fontFamily: "JUST Sans ExBold" }}>
               Subscription Details
             </Typography>
-            <Typography>
+            <Typography sx={{ fontFamily: "JUST Sans Regular" }}>
               <strong>Plan:</strong> {subscription.plan}
             </Typography>
-            <Typography>
+            <Typography sx={{ fontFamily: "JUST Sans Regular" }}>
               <strong>Status:</strong> {subscription.status}
             </Typography>
-            <Typography>
+            <Typography sx={{ fontFamily: "JUST Sans Regular" }}>
               <strong>Next Payment:</strong> {subscription.nextPayment}
             </Typography>
           </Paper>
@@ -58,13 +58,13 @@ const UserDashboardPage = () => {
               boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
             }}
           >
-            <Typography variant="h6" sx={{ mb: 2, color: "#FFAB46" }}>
+            <Typography variant="h6" sx={{ mb: 2, color: "#FFAB46", fontFamily: "JUST Sans ExBold" }}>
               User Information
             </Typography>
-            <Typography>
+            <Typography sx={{ fontFamily: "JUST Sans Regular" }}>
               <strong>Name:</strong> {user?.name}
             </Typography>
-            <Typography>
+            <Typography sx={{ fontFamily: "JUST Sans Regular" }}>
               <strong>Email:</strong> {user?.email}
             </Typography>
           </Paper>
@@ -82,7 +82,7 @@ const UserDashboardPage = () => {
               boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
             }}
           >
-            <Typography variant="h6" sx={{ mb: 2, color: "#FFAB46" }}>
+            <Typography variant="h6" sx={{ mb: 2, color: "#FFAB46", fontFamily: "JUST Sans ExBold" }}>
               Order History
             </Typography>
             {orders.map((order) => (
@@ -98,8 +98,8 @@ const UserDashboardPage = () => {
                   gap: 1,
                 }}
               >
-                <Typography>Order #{order.id}</Typography>
-                <Typography variant="body2" color="gray">
+                <Typography sx={{ fontFamily: "JUST Sans ExBold" }}>Order #{order.id}</Typography>
+                <Typography variant="body2" color="gray" sx={{ fontFamily: "JUST Sans Regular" }}>
                   {order.date} | {order.status} | <strong>{order.total}</strong>
                 </Typography>
               </Box>

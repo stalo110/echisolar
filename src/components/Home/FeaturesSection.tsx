@@ -88,8 +88,8 @@ export const FeaturesSection = () => {
                 <Box sx={{ fontSize: 48, mb: 2, animation: "pulse 2.6s infinite", color: "#FFAB46" }}>
                   {f.icon}
                 </Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, color: "#EAEAEA" }}>{f.title}</Typography>
-                <Typography sx={{ color: "rgba(234,234,234,0.78)", mt: 1 }}>{f.desc}</Typography>
+                <Typography variant="h5" sx={{ fontWeight: 800, color: "#EAEAEA", fontFamily: "JUST Sans ExBold" }}>{f.title}</Typography>
+                <Typography sx={{ color: "rgba(234,234,234,0.78)", mt: 1, fontFamily: "JUST Sans Regular" }}>{f.desc}</Typography>
               </Box>
             </Grid>
           ))}

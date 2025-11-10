@@ -41,7 +41,7 @@ const Footer = () => {
               alt="Logo"
               sx={{ height: 35, mb: 2, filter: "drop-shadow(0 0 8px rgba(255,171,70,0.3))" }}
             />
-            <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.6)" }}>
+            <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.6)", fontFamily: "JUST Sans Regular" }}>
               Providing sustainable solar solutions today for a cleaner, brighter tomorrow.
             </Typography>
 
@@ -82,18 +82,19 @@ const Footer = () => {
                 color: "#FFAB46",
                 textTransform: "uppercase",
                 mb: 2,
+                fontFamily: "JUST Sans ExBold",
               }}
             >
               Contact Info
             </Typography>
 
-            <Typography variant="body2" sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+            <Typography variant="body2" sx={{ display: "flex", alignItems: "center", mb: 1, fontFamily: "JUST Sans Regular" }}>
               <Phone sx={{ mr: 1, color: "#2E7D4D" }} /> +234 701 809 0107
             </Typography>
-            <Typography variant="body2" sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+            <Typography variant="body2" sx={{ display: "flex", alignItems: "center", mb: 1, fontFamily: "JUST Sans Regular" }}>
               <Email sx={{ mr: 1, color: "#2E7D4D" }} /> info@echisolar.com
             </Typography>
-            <Typography variant="body2" sx={{ display: "flex", alignItems: "center" }}>
+            <Typography variant="body2" sx={{ display: "flex", alignItems: "center", fontFamily: "JUST Sans Regular" }}>
               <LocationOn sx={{ mr: 1, color: "#2E7D4D" }} /> Office 201, Book Foundation, Agu Awka
             </Typography>
           </Grid>
@@ -107,6 +108,7 @@ const Footer = () => {
                 color: "#FFAB46",
                 textTransform: "uppercase",
                 mb: 2,
+                fontFamily: "JUST Sans ExBold",
               }}
             >
               Useful Links
@@ -143,11 +145,12 @@ const Footer = () => {
                 color: "#FFAB46",
                 textTransform: "uppercase",
                 mb: 2,
+                fontFamily: "JUST Sans ExBold",
               }}
             >
               Newsletter
             </Typography>
-            <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.6)", mb: 2 }}>
+            <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.6)", mb: 2, fontFamily: "JUST Sans Regular" }}>
               Stay up to date with our latest offers and insights.
             </Typography>
 
@@ -200,7 +203,7 @@ const Footer = () => {
             borderTop: "1px solid rgba(255,255,255,0.08)",
           }}
         >
-          <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.5)" }}>
+          <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.5)", fontFamily: "JUST Sans Regular" }}>
             © {new Date().getFullYear()} <strong>Echi Solar</strong>. All rights reserved.
           </Typography>
         </Box>

@@ -103,6 +103,7 @@ export const HeroSection = () => {
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 textShadow: "0 0 15px rgba(255,171,70,0.4)",
+                fontFamily: "JUST Sans ExBold",
               }}
             >
               About Echi Solar
@@ -115,6 +116,7 @@ export const HeroSection = () => {
                 color: "rgba(255,255,255,0.8)",
                 maxWidth: 600,
                 lineHeight: 1.6,
+                fontFamily: "JUST Sans Regular",
               }}
             >
               Empowering communities with sustainable energy and driving Nigeria’s clean energy future.

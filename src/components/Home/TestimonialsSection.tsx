@@ -12,9 +12,9 @@ export const TestimonialsSection = () => {
     <Box sx={{ py: 10, background: "#050505" }}>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: "center", mb: 6 }}>
-          <Typography variant="overline" sx={{ color: "#FFAB46", fontWeight: 800 }}>Testimonials</Typography>
-          <Typography variant="h3" sx={{ fontWeight: 800, color: "#EAEAEA", mt: 1 }}>What Our Customers Say</Typography>
-          <Typography sx={{ color: "rgba(234,234,234,0.75)", maxWidth: 760, mx: "auto", mt: 2 }}>
+          <Typography variant="overline" sx={{ color: "#FFAB46", fontWeight: 800, fontFamily: "JUST Sans ExBold" }}>Testimonials</Typography>
+          <Typography variant="h3" sx={{ fontWeight: 800, color: "#EAEAEA", mt: 1, fontFamily: "JUST Sans ExBold" }}>What Our Customers Say</Typography>
+          <Typography sx={{ color: "rgba(234,234,234,0.75)", maxWidth: 760, mx: "auto", mt: 2, fontFamily: "JUST Sans Regular" }}>
             Hear from homeowners and businesses who have transformed their energy consumption with our solar solutions.
           </Typography>
         </Box>
@@ -36,12 +36,12 @@ export const TestimonialsSection = () => {
                 <QuoteIcon sx={{ position: "absolute", right: 16, top: 16, fontSize: 42, color: "#2E7D4D", opacity: 0.08 }} />
                 <CardContent sx={{ p: 0 }}>
                   <Rating value={t.rating} readOnly sx={{ mb: 2 }} />
-                  <Typography sx={{ mb: 2, color: "rgba(234,234,234,0.95)" }}>"{t.content}"</Typography>
+                  <Typography sx={{ mb: 2, color: "rgba(234,234,234,0.95)", fontFamily: "JUST Sans Regular" }}>"{t.content}"</Typography>
                   <Box sx={{ display: "flex", alignItems: "center", mt: 3 }}>
                     <Avatar src={t.avatar} alt={t.name} sx={{ mr: 2, width: 48, height: 48 }} />
                     <Box>
-                      <Typography sx={{ fontWeight: 800 }}>{t.name}</Typography>
-                      <Typography sx={{ color: "rgba(234,234,234,0.7)" }}>{t.company}</Typography>
+                      <Typography sx={{ fontWeight: 800, fontFamily: "JUST Sans ExBold" }}>{t.name}</Typography>
+                      <Typography sx={{ color: "rgba(234,234,234,0.7)", fontFamily: "JUST Sans Regular" }}>{t.company}</Typography>
                     </Box>
                   </Box>
                 </CardContent>

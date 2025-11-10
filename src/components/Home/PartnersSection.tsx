@@ -14,13 +14,13 @@ export const PartnersSection = () => {
     <Box sx={{ py: 8, background: "linear-gradient(180deg, #070707, #0d0d0d)" }}>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: "center", mb: 6 }}>
-          <Typography variant="overline" sx={{ color: "#FFAB46", fontWeight: 800 }}>
+          <Typography variant="overline" sx={{ color: "#FFAB46", fontWeight: 800, fontFamily: "JUST Sans ExBold" }}>
             Trusted Partnerships
           </Typography>
-          <Typography variant="h3" sx={{ fontWeight: 800, color: "#EAEAEA", mt: 1 }}>
+          <Typography variant="h3" sx={{ fontWeight: 800, color: "#EAEAEA", mt: 1, fontFamily: "JUST Sans ExBold" }}>
             Our Technology Partners
           </Typography>
-          <Typography sx={{ color: "rgba(234,234,234,0.7)", maxWidth: 700, mx: "auto", mt: 2 }}>
+          <Typography sx={{ color: "rgba(234,234,234,0.7)", maxWidth: 700, mx: "auto", mt: 2, fontFamily: "JUST Sans Regular" }}>
             We partner with world-leading manufacturers to bring you the most reliable and efficient solar technology available.
           </Typography>
         </Box>
@@ -50,7 +50,7 @@ export const PartnersSection = () => {
                     mx: "auto",
                   }}
                 />
-                <Typography variant="caption" sx={{ display: "block", mt: 1, color: "rgba(234,234,234,0.7)" }}>
+                <Typography variant="caption" sx={{ display: "block", mt: 1, color: "rgba(234,234,234,0.7)", fontFamily: "JUST Sans Regular" }}>
                   {p.name}
                 </Typography>
               </Box>

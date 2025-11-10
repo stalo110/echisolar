@@ -21,7 +21,7 @@ const UserProducts = () => {
     <UserDashboardLayout>
       <Typography
         variant="h4"
-        sx={{ fontWeight: "700", color: "#C79B3B", mb: 4 }}
+        sx={{ fontWeight: "700", color: "#C79B3B", mb: 4, fontFamily: "JUST Sans ExBold" }}
       >
         My Products
       </Typography>
@@ -51,11 +51,11 @@ const UserProducts = () => {
                   mb: 2,
                 }}
               />
-              <Typography variant="h6">{product.name}</Typography>
-              <Typography sx={{ color: "#C79B3B", mb: 1 }}>
+              <Typography variant="h6" sx={{ fontFamily: "JUST Sans ExBold" }}>{product.name}</Typography>
+              <Typography sx={{ color: "#C79B3B", mb: 1, fontFamily: "JUST Sans ExBold" }}>
                 {product.price}
               </Typography>
-              <Typography variant="body2" sx={{ color: "#ccc", mb: 2 }}>
+              <Typography variant="body2" sx={{ color: "#ccc", mb: 2, fontFamily: "JUST Sans Regular" }}>
                 Status: {product.status}
               </Typography>
               <Button
@@ -64,6 +64,7 @@ const UserProducts = () => {
                   bgcolor: "#C79B3B",
                   color: "#000",
                   fontWeight: "600",
+                  fontFamily: "JUST Sans ExBold",
                   "&:hover": { bgcolor: "#e1b860" },
                 }}
               >

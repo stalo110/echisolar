@@ -368,6 +368,7 @@ export default function TopNav() {
               background: "linear-gradient(90deg, #f6c90e, #ffab46)",
               color: "white",
               fontWeight: "bold",
+              fontFamily: "JUST Sans ExBold",
               borderRadius: 2,
               px: 3,
               boxShadow: "0 0 15px rgba(246,201,14,0.4)",

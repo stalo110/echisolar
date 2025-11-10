@@ -136,6 +136,7 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
               background: "linear-gradient(90deg, #FFAB46, #FFD18A)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
+              fontFamily: "JUST Sans ExBold",
             }}
           >
             {product.name}
@@ -167,7 +168,7 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
           </Box>
 
           <Box sx={{ flex: 1 }}>
-            <Typography variant="h5" gutterBottom sx={{ fontWeight: 700 }}>
+            <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, fontFamily: "JUST Sans ExBold" }}>
               {product.name}
             </Typography>
             <Rating value={product.rating} readOnly />
@@ -177,18 +178,19 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
                 my: 2,
                 color: "#FFAB46",
                 fontWeight: "bold",
+                fontFamily: "JUST Sans ExBold",
               }}
             >
               ${(product.price * quantity).toFixed(2)}
             </Typography>
 
-            <Typography variant="body1" paragraph color="rgba(255,255,255,0.85)">
+            <Typography variant="body1" paragraph color="rgba(255,255,255,0.85)" sx={{ fontFamily: "JUST Sans Regular" }}>
               {product.description}
             </Typography>
-            <Typography variant="body2" color="rgba(255,255,255,0.7)">
+            <Typography variant="body2" color="rgba(255,255,255,0.7)" sx={{ fontFamily: "JUST Sans Regular" }}>
               <strong>Category:</strong> {product.category}
             </Typography>
-            <Typography variant="body2" color="rgba(255,255,255,0.7)">
+            <Typography variant="body2" color="rgba(255,255,255,0.7)" sx={{ fontFamily: "JUST Sans Regular" }}>
               <strong>Availability:</strong>{" "}
               {product.availability ? "In Stock" : "Out of Stock"}
             </Typography>
@@ -220,6 +222,7 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
                   background: "linear-gradient(90deg, #FFAB46, #FFD18A)",
                   color: "#000",
                   fontWeight: "bold",
+                  fontFamily: "JUST Sans ExBold",
                   px: 3,
                   "&:hover": {
                     background: "linear-gradient(90deg, #FFD18A, #FFAB46)",

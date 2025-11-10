@@ -36,6 +36,7 @@ export const HeroSection = () => {
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   textShadow: "0 0 15px rgba(255,171,70,0.4)",
+                  fontFamily: "JUST Sans ExBold",
                 }}
               >
                 Our Products
@@ -46,6 +47,7 @@ export const HeroSection = () => {
                   mt: 2,
                   color: "rgba(255,255,255,0.8)",
                   maxWidth: 600,
+                  fontFamily: "JUST Sans Regular",
                 }}
               >
                 Explore premium solar panels, inverters, and batteries designed

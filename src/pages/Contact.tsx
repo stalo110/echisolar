@@ -44,7 +44,8 @@ const Contact = () => {
             textAlign: 'center',
             background: "linear-gradient(90deg, #FFAB46, #FFD18A)",
             WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
+            WebkitTextFillColor: 'transparent',
+            fontFamily: "JUST Sans ExBold"
           }}
         >
           Get In Touch
@@ -61,17 +62,17 @@ const Contact = () => {
                 borderRadius: 3,
               }}
             >
-              <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2, color: '#fff' }}>
+              <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2, color: '#fff', fontFamily: "JUST Sans ExBold" }}>
                 Contact Information
               </Typography>
-              <Typography sx={{ mb: 1, color: '#fff' }}>📍 123 Solar Street, Lagos, Nigeria</Typography>
-              <Typography sx={{ mb: 1, color: '#fff' }}>📞 +234 801 234 5678</Typography>
-              <Typography sx={{ mb: 1, color: '#fff' }}>
+              <Typography sx={{ mb: 1, color: '#fff', fontFamily: "JUST Sans Regular" }}>📍 123 Solar Street, Lagos, Nigeria</Typography>
+              <Typography sx={{ mb: 1, color: '#fff', fontFamily: "JUST Sans Regular" }}>📞 +234 801 234 5678</Typography>
+              <Typography sx={{ mb: 1, color: '#fff', fontFamily: "JUST Sans Regular" }}>
                 ✉️ <Link href="mailto:info@echisolar.com" underline="hover" color="#90caf9">
                   info@echisolar.com
                 </Link>
               </Typography>
-              <Typography sx={{ mt: 2, color: '#fff' }}>🕒 Mon - Fri: 9:00 AM - 5:00 PM</Typography>
+              <Typography sx={{ mt: 2, color: '#fff', fontFamily: "JUST Sans Regular" }}>🕒 Mon - Fri: 9:00 AM - 5:00 PM</Typography>
             </Paper>
           </Grid>
 
@@ -85,7 +86,7 @@ const Contact = () => {
                 border: '1px solid rgba(255,255,255,0.1)',
               }}
             >
-              <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2, color: '#fff' }}>
+              <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2, color: '#fff', fontFamily: "JUST Sans ExBold" }}>
                 Send Us a Message
               </Typography>
 
@@ -141,6 +142,7 @@ const Contact = () => {
                     mt: 3,
                     py: 1.4,
                     fontWeight: 'bold',
+                    fontFamily: "JUST Sans ExBold",
                     background: 'linear-gradient(90deg, #e48a1cff, #FFAB46)',
                     '&:hover': {
                       background: 'linear-gradient(90deg, #e48a1cff, #FFAB46)',
@@ -165,7 +167,7 @@ const Contact = () => {
               textAlign: 'center',
             }}
           >
-            <Typography variant="h5" sx={{ mb: 2, color: '#fff' }}>
+            <Typography variant="h5" sx={{ mb: 2, color: '#fff', fontFamily: "JUST Sans ExBold" }}>
               Our Location
             </Typography>
             <Box

@@ -124,6 +124,7 @@ const UserDashboardLayout = ({ children }: UserDashboardLayoutProps) => {
               primaryTypographyProps={{
                 fontWeight: selected === item.id ? 600 : 400,
                 fontSize: "0.95rem",
+                fontFamily: selected === item.id ? "JUST Sans ExBold" : "JUST Sans Regular",
               }}
             />
           </ListItemButton>

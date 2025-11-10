@@ -66,6 +66,7 @@ export default function Projects() {
             color: brandAmber,
             mb: 5,
             textAlign: "center",
+            fontFamily: "JUST Sans ExBold",
           }}
         >
           Our Solar Projects
@@ -121,6 +122,7 @@ export default function Projects() {
                       color: brandAmber,
                       fontWeight: "bold",
                       mb: 1.5,
+                      fontFamily: "JUST Sans ExBold",
                     }}
                   >
                     {p.title}
@@ -131,6 +133,7 @@ export default function Projects() {
                       color: "#ccc",
                       lineHeight: 1.6,
                       fontSize: "0.95rem",
+                      fontFamily: "JUST Sans Regular",
                     }}
                   >
                     {p.summary}

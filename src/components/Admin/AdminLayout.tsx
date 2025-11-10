@@ -19,9 +19,11 @@ import {
   Inventory,
   AttachMoney,
   Dashboard as DashboardIcon,
+  Logout as LogoutIcon,
 } from "@mui/icons-material";
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 const brandAmber = "#FFAB46";
 const drawerWidth = 240;
@@ -44,8 +46,15 @@ interface Props {
 const AdminLayout = ({ children }: Props) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   const drawer = (
     <Box
@@ -71,6 +80,7 @@ const AdminLayout = ({ children }: Props) => {
             fontWeight: "bold",
             color: brandAmber,
             letterSpacing: 1.2,
+            fontFamily: "JUST Sans ExBold",
           }}
         >
           Admin Panel
@@ -110,11 +120,35 @@ const AdminLayout = ({ children }: Props) => {
                 primaryTypographyProps={{
                   fontWeight: active ? "bold" : "normal",
                   color: active ? brandAmber : "#fff",
+                  fontFamily: active ? "JUST Sans ExBold" : "JUST Sans Regular",
                 }}
               />
             </ListItem>
           );
         })}
+        
+        {/* Logout Button */}
+        <ListItem
+          onClick={handleLogout}
+          sx={{
+            mt: 2,
+            cursor: "pointer",
+            "&:hover": { background: "rgba(255,255,255,0.08)" },
+            transition: "0.3s",
+          }}
+        >
+          <ListItemIcon sx={{ color: "#ff6b6b" }}>
+            <LogoutIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary="Logout"
+            primaryTypographyProps={{
+              fontWeight: "normal",
+              color: "#ff6b6b",
+              fontFamily: "JUST Sans Regular",
+            }}
+          />
+        </ListItem>
       </List>
     </Box>
   );
@@ -147,6 +181,7 @@ const AdminLayout = ({ children }: Props) => {
               fontWeight: "bold",
               flexGrow: 1,
               color: brandAmber,
+              fontFamily: "JUST Sans ExBold",
             }}
           >
             Admin Dashboard

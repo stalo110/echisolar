@@ -177,7 +177,7 @@ const AdminProjects = () => {
   return (
     <AdminLayout>
     <Box sx={{ p: 3, color: "#fff", bgcolor: "#0D0D0D", minHeight: "100vh" }}>
-      <Typography variant="h5" sx={{ fontWeight: "bold", color: brandAmber, mb: 3 }}>
+      <Typography variant="h5" sx={{ fontWeight: "bold", color: brandAmber, mb: 3, fontFamily: "JUST Sans ExBold" }}>
         Manage Projects
       </Typography>
 
@@ -190,6 +190,7 @@ const AdminProjects = () => {
           bgcolor: brandAmber,
           color: "#000",
           fontWeight: "bold",
+          fontFamily: "JUST Sans ExBold",
           "&:hover": { bgcolor: "#FF9C25" },
         }}
       >
@@ -208,7 +209,7 @@ const AdminProjects = () => {
           <TableHead>
             <TableRow>
               {["Images", "Title", "Location", "Description", "Actions"].map((h) => (
-                <TableCell key={h} sx={{ color: brandAmber, fontWeight: "bold" }}>
+                <TableCell key={h} sx={{ color: brandAmber, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
                   {h}
                 </TableCell>
               ))}
@@ -250,9 +251,9 @@ const AdminProjects = () => {
                     )}
                   </Box>
                 </TableCell>
-                <TableCell sx={{ color: "#fff" }}>{p.title}</TableCell>
-                <TableCell sx={{ color: "#fff" }}>{p.location}</TableCell>
-                <TableCell sx={{ color: "#ccc" }}>{p.description}</TableCell>
+                <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>{p.title}</TableCell>
+                <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>{p.location}</TableCell>
+                <TableCell sx={{ color: "#ccc", fontFamily: "JUST Sans Regular" }}>{p.description}</TableCell>
                 <TableCell>
                   <IconButton color="inherit" size="small" onClick={() => handleOpen(p)}>
                     <Edit sx={{ color: brandAmber }} />
@@ -284,7 +285,7 @@ const AdminProjects = () => {
           },
         }}
       >
-        <DialogTitle sx={{ color: brandAmber, fontWeight: "bold" }}>
+        <DialogTitle sx={{ color: brandAmber, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
           {editingProject ? "Edit Project" : "Add Project"}
         </DialogTitle>
         <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
@@ -319,7 +320,7 @@ const AdminProjects = () => {
           />
 
           <Box>
-            <Typography variant="body2" sx={{ mb: 1 }}>
+            <Typography variant="body2" sx={{ mb: 1, fontFamily: "JUST Sans Regular" }}>
               Upload Project Images
             </Typography>
             <Button
@@ -366,7 +367,7 @@ const AdminProjects = () => {
           </Button>
           <Button
             variant="contained"
-            sx={{ bgcolor: brandAmber, color: "#000", fontWeight: "bold" }}
+            sx={{ bgcolor: brandAmber, color: "#000", fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}
             onClick={handleSave}
           >
             {editingProject ? "Save Changes" : "Add Project"}
@@ -387,11 +388,11 @@ const AdminProjects = () => {
           },
         }}
       >
-        <DialogTitle sx={{ color: brandAmber, fontWeight: "bold" }}>
+        <DialogTitle sx={{ color: brandAmber, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
           Confirm Deletion
         </DialogTitle>
         <DialogContent>
-          <Typography>Are you sure you want to delete this project?</Typography>
+          <Typography sx={{ fontFamily: "JUST Sans Regular" }}>Are you sure you want to delete this project?</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setConfirmOpen(false)} sx={{ color: "#ccc" }}>
@@ -399,7 +400,7 @@ const AdminProjects = () => {
           </Button>
           <Button
             variant="contained"
-            sx={{ bgcolor: "red", color: "#fff", fontWeight: "bold" }}
+            sx={{ bgcolor: "red", color: "#fff", fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}
             onClick={handleConfirmDelete}
           >
             Delete

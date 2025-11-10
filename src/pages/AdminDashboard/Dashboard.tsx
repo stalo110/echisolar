@@ -20,6 +20,7 @@ const AdminDashboard = () => {
             fontWeight: "bold",
             color: brandAmber,
             mb: 4,
+            fontFamily: "JUST Sans ExBold",
           }}
         >
           Dashboard Overview
@@ -50,10 +51,10 @@ const AdminDashboard = () => {
                   },
                 }}
               >
-                <Typography variant="subtitle2" sx={{ opacity: 0.7 }}>
+                <Typography variant="subtitle2" sx={{ opacity: 0.7, fontFamily: "JUST Sans Regular" }}>
                   {card.title}
                 </Typography>
-                <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+                <Typography variant="h5" sx={{ fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
                   {card.value}
                 </Typography>
               </Paper>
@@ -72,10 +73,10 @@ const AdminDashboard = () => {
             boxShadow: "0 0 25px rgba(0,0,0,0.5)",
           }}
         >
-          <Typography variant="h6" sx={{ mb: 2, color: brandGreen }}>
+          <Typography variant="h6" sx={{ mb: 2, color: brandGreen, fontFamily: "JUST Sans ExBold" }}>
             Sales Analytics (Coming Soon)
           </Typography>
-          <Typography variant="body2" sx={{ opacity: 0.7 }}>
+          <Typography variant="body2" sx={{ opacity: 0.7, fontFamily: "JUST Sans Regular" }}>
             Visual charts for revenue growth, top products, and order trends
             will appear here.
           </Typography>

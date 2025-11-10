@@ -37,7 +37,7 @@ const Products = () => {
       <TopNav />
       <HeroSection />
       <Container sx={{ py: 6 }}>
-        <Typography variant="h4" sx={{ fontWeight: "bold", mb: 3 }}>
+        <Typography variant="h4" sx={{ fontWeight: "bold", mb: 3, fontFamily: "JUST Sans ExBold" }}>
           Shop — Products
         </Typography>
 

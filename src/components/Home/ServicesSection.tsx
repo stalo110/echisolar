@@ -23,9 +23,9 @@ export const ServicesSection = () => {
     <Box sx={{ py: 10, background: "#070707" }}>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: "center", mb: 6 }}>
-          <Typography variant="overline" sx={{ color: "#FFAB46", fontWeight: 800 }}>Our Services</Typography>
-          <Typography variant="h3" sx={{ fontWeight: 800, color: "#EAEAEA", mt: 1 }}>Clean, reliable solar solutions</Typography>
-          <Typography sx={{ color: "rgba(234,234,234,0.75)", maxWidth: 780, mx: "auto", mt: 2 }}>
+          <Typography variant="overline" sx={{ color: "#FFAB46", fontWeight: 800, fontFamily: "JUST Sans ExBold" }}>Our Services</Typography>
+          <Typography variant="h3" sx={{ fontWeight: 800, color: "#EAEAEA", mt: 1, fontFamily: "JUST Sans ExBold" }}>Clean, reliable solar solutions</Typography>
+          <Typography sx={{ color: "rgba(234,234,234,0.75)", maxWidth: 780, mx: "auto", mt: 2, fontFamily: "JUST Sans Regular" }}>
             We design, install and maintain solar systems for homes and businesses, backed by monitoring and flexible payment options.
           </Typography>
         </Box>
@@ -55,9 +55,9 @@ export const ServicesSection = () => {
                   >
                     {s.icon}
                   </IconButton>
-                  <Typography variant="h6" sx={{ fontWeight: 800 }}>{s.title}</Typography>
+                  <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: "JUST Sans ExBold" }}>{s.title}</Typography>
                 </Box>
-                <Typography sx={{ color: "rgba(234,234,234,0.75)" }}>{s.desc}</Typography>
+                <Typography sx={{ color: "rgba(234,234,234,0.75)", fontFamily: "JUST Sans Regular" }}>{s.desc}</Typography>
               </Card>
             </Grid>
           ))}
@@ -72,6 +72,7 @@ export const ServicesSection = () => {
             background: "linear-gradient(90deg,#2E7D4D,#289b5a)",
             color: "#fff",
             fontWeight: 800,
+            fontFamily: "JUST Sans ExBold",
             cursor: "pointer",
             boxShadow: "0 10px 30px rgba(46,125,77,0.14)",
             "&:hover": { transform: "translateY(-3px)" }
@@ -84,8 +85,8 @@ export const ServicesSection = () => {
               <SendIcon />
             </IconButton>
             <Box>
-              <Typography sx={{ fontWeight: 700, color: "#EAEAEA" }}>+234 701 809 0107</Typography>
-              <Typography sx={{ color: "rgba(234,234,234,0.7)" }}>Talk to an Expert</Typography>
+              <Typography sx={{ fontWeight: 700, color: "#EAEAEA", fontFamily: "JUST Sans ExBold" }}>+234 701 809 0107</Typography>
+              <Typography sx={{ color: "rgba(234,234,234,0.7)", fontFamily: "JUST Sans Regular" }}>Talk to an Expert</Typography>
             </Box>
           </Box>
         </Box>

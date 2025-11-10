@@ -16,9 +16,9 @@ export const WhyChooseUsSection = () => {
     <Box sx={{ py: 10, background: "#070707" }}>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: "center", mb: 6 }}>
-          <Typography variant="overline" sx={{ color: "#FFAB46", fontWeight: 800 }}>Why Choose EchiSolar</Typography>
-          <Typography variant="h3" sx={{ fontWeight: 800, color: "#EAEAEA", mt: 1 }}>The Smart Choice for Solar Energy</Typography>
-          <Typography sx={{ color: "rgba(234,234,234,0.75)", maxWidth: 760, mx: "auto", mt: 2 }}>
+          <Typography variant="overline" sx={{ color: "#FFAB46", fontWeight: 800, fontFamily: "JUST Sans ExBold" }}>Why Choose EchiSolar</Typography>
+          <Typography variant="h3" sx={{ fontWeight: 800, color: "#EAEAEA", mt: 1, fontFamily: "JUST Sans ExBold" }}>The Smart Choice for Solar Energy</Typography>
+          <Typography sx={{ color: "rgba(234,234,234,0.75)", maxWidth: 760, mx: "auto", mt: 2, fontFamily: "JUST Sans Regular" }}>
             We make switching to solar energy simple, affordable, and rewarding with our comprehensive solutions and expert support.
           </Typography>
         </Box>
@@ -41,8 +41,8 @@ export const WhyChooseUsSection = () => {
               }}>
                 <CardContent>
                   <Box sx={{ fontSize: 36, mb: 2, color: "#2E7D4D" }}>{f.icon}</Box>
-                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 1 }}>{f.title}</Typography>
-                  <Typography sx={{ color: "rgba(234,234,234,0.78)" }}>{f.desc}</Typography>
+                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, fontFamily: "JUST Sans ExBold" }}>{f.title}</Typography>
+                  <Typography sx={{ color: "rgba(234,234,234,0.78)", fontFamily: "JUST Sans Regular" }}>{f.desc}</Typography>
                 </CardContent>
               </Card>
             </Grid>
@@ -50,12 +50,12 @@ export const WhyChooseUsSection = () => {
         </Grid>
 
         <Box sx={{ mt: 6, p: 4, background: "#0ba21dff", borderRadius: 2, color: "#fff", textAlign: "center" }}>
-          <Typography variant="h5" sx={{ fontWeight: 800 }}>Ready to Save with Solar?</Typography>
-          <Typography sx={{ opacity: 0.95, mt: 1 }}>Join thousands enjoying clean, affordable energy.</Typography>
+          <Typography variant="h5" sx={{ fontWeight: 800, fontFamily: "JUST Sans ExBold" }}>Ready to Save with Solar?</Typography>
+          <Typography sx={{ opacity: 0.95, mt: 1, fontFamily: "JUST Sans Regular" }}>Join thousands enjoying clean, affordable energy.</Typography>
           <Box sx={{ display: "flex", gap: 3, justifyContent: "center", mt: 3, flexWrap: "wrap" }}>
-            <Typography sx={{ fontWeight: 800 }}>Average Savings: ₦500,000/year</Typography>
-            <Typography sx={{ fontWeight: 800 }}>ROI: 2-3 Years</Typography>
-            <Typography sx={{ fontWeight: 800 }}>Warranty: 25 Years</Typography>
+            <Typography sx={{ fontWeight: 800, fontFamily: "JUST Sans ExBold" }}>Average Savings: ₦500,000/year</Typography>
+            <Typography sx={{ fontWeight: 800, fontFamily: "JUST Sans ExBold" }}>ROI: 2-3 Years</Typography>
+            <Typography sx={{ fontWeight: 800, fontFamily: "JUST Sans ExBold" }}>Warranty: 25 Years</Typography>
           </Box>
         </Box>
       </Container>

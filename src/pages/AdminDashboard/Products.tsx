@@ -162,7 +162,7 @@ const AdminProducts = () => {
   return (
      <AdminLayout>
     <Box sx={{ p: 3, color: "#fff", bgcolor: "#0D0D0D", minHeight: "100vh" }}>
-      <Typography variant="h5" sx={{ fontWeight: "bold", color: brandAmber, mb: 3 }}>
+      <Typography variant="h5" sx={{ fontWeight: "bold", color: brandAmber, mb: 3, fontFamily: "JUST Sans ExBold" }}>
         Manage Products
       </Typography>
 
@@ -175,6 +175,7 @@ const AdminProducts = () => {
           bgcolor: brandAmber,
           color: "#000",
           fontWeight: "bold",
+          fontFamily: "JUST Sans ExBold",
           "&:hover": { bgcolor: "#FF9C25" },
         }}
       >
@@ -193,7 +194,7 @@ const AdminProducts = () => {
           <TableHead>
             <TableRow>
               {["Image", "Name", "Category", "Price", "Stock", "Actions"].map((h) => (
-                <TableCell key={h} sx={{ color: brandAmber, fontWeight: "bold" }}>
+                <TableCell key={h} sx={{ color: brandAmber, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
                   {h}
                 </TableCell>
               ))}
@@ -225,10 +226,10 @@ const AdminProducts = () => {
                     />
                   )}
                 </TableCell>
-                <TableCell sx={{ color: "#fff" }}>{p.name}</TableCell>
-                <TableCell sx={{ color: "#fff" }}>{p.category}</TableCell>
-                <TableCell sx={{ color: "#fff" }}>₦{p.price.toLocaleString()}</TableCell>
-                <TableCell sx={{ color: "#fff" }}>{p.stock}</TableCell>
+                <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>{p.name}</TableCell>
+                <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>{p.category}</TableCell>
+                <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>₦{p.price.toLocaleString()}</TableCell>
+                <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>{p.stock}</TableCell>
                 <TableCell>
                   <IconButton color="inherit" size="small" onClick={() => handleOpen(p)}>
                     <Edit sx={{ color: brandAmber }} />
@@ -260,7 +261,7 @@ const AdminProducts = () => {
           },
         }}
       >
-        <DialogTitle sx={{ color: brandAmber, fontWeight: "bold" }}>
+        <DialogTitle sx={{ color: brandAmber, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
           {editingProduct ? "Edit Product" : "Add Product"}
         </DialogTitle>
         <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
@@ -351,7 +352,7 @@ const AdminProducts = () => {
           </Button>
           <Button
             variant="contained"
-            sx={{ bgcolor: brandAmber, color: "#000", fontWeight: "bold" }}
+            sx={{ bgcolor: brandAmber, color: "#000", fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}
             onClick={handleSave}
           >
             {editingProduct ? "Save Changes" : "Add Product"}
@@ -372,11 +373,11 @@ const AdminProducts = () => {
           },
         }}
       >
-        <DialogTitle sx={{ color: brandAmber, fontWeight: "bold" }}>
+        <DialogTitle sx={{ color: brandAmber, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
           Confirm Deletion
         </DialogTitle>
         <DialogContent>
-          <Typography>Are you sure you want to delete this product?</Typography>
+          <Typography sx={{ fontFamily: "JUST Sans Regular" }}>Are you sure you want to delete this product?</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setConfirmOpen(false)} sx={{ color: "#ccc" }}>
@@ -384,7 +385,7 @@ const AdminProducts = () => {
           </Button>
           <Button
             variant="contained"
-            sx={{ bgcolor: "red", color: "#fff", fontWeight: "bold" }}
+            sx={{ bgcolor: "red", color: "#fff", fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}
             onClick={handleConfirmDelete}
           >
             Delete

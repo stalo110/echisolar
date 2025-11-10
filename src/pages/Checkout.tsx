@@ -211,6 +211,7 @@ const Checkout = () => {
             mb: 4,
             color: "#FFAB46",
             textShadow: "0 0 12px rgba(255,171,70,0.3)",
+            fontFamily: "JUST Sans ExBold",
           }}
         >
           Checkout
@@ -227,7 +228,7 @@ const Checkout = () => {
             boxShadow: "0 0 20px rgba(0,0,0,0.4)",
           }}
         >
-          <Typography variant="h6" sx={{ color: "#FFAB46", mb: 2 }}>
+          <Typography variant="h6" sx={{ color: "#FFAB46", mb: 2, fontFamily: "JUST Sans ExBold" }}>
             Payment Provider
           </Typography>
           <RadioGroup
@@ -238,17 +239,17 @@ const Checkout = () => {
             <FormControlLabel
               value="auto"
               control={<Radio sx={{ color: "#FFAB46" }} />}
-              label="Auto (route by location)"
+              label={<span style={{ fontFamily: "JUST Sans Regular" }}>Auto (route by location)</span>}
             />
             <FormControlLabel
               value="paystack"
               control={<Radio sx={{ color: "#FFAB46" }} />}
-              label="Paystack (NG)"
+              label={<span style={{ fontFamily: "JUST Sans Regular" }}>Paystack (NG)</span>}
             />
             <FormControlLabel
               value="stripe"
               control={<Radio sx={{ color: "#FFAB46" }} />}
-              label="Stripe (International)"
+              label={<span style={{ fontFamily: "JUST Sans Regular" }}>Stripe (International)</span>}
             />
           </RadioGroup>
         </Paper>
@@ -264,7 +265,7 @@ const Checkout = () => {
             boxShadow: "0 0 20px rgba(0,0,0,0.4)",
           }}
         >
-          <Typography variant="h6" sx={{ color: "#FFAB46", mb: 2 }}>
+          <Typography variant="h6" sx={{ color: "#FFAB46", mb: 2, fontFamily: "JUST Sans ExBold" }}>
             Installment Options
           </Typography>
 
@@ -293,13 +294,13 @@ const Checkout = () => {
           {installment !== "full" && (
             <Box sx={{ mt: 3 }}>
               <Divider sx={{ mb: 2, borderColor: "rgba(255,255,255,0.1)" }} />
-              <Typography variant="subtitle1" sx={{ color: "#C79B3B", mb: 1 }}>
+              <Typography variant="subtitle1" sx={{ color: "#C79B3B", mb: 1, fontFamily: "JUST Sans ExBold" }}>
                 Payment Schedule
               </Typography>
               {schedule.map((s) => (
                 <Typography
                   key={s.monthOffset}
-                  sx={{ color: "rgba(255,255,255,0.7)", mb: 0.5 }}
+                  sx={{ color: "rgba(255,255,255,0.7)", mb: 0.5, fontFamily: "JUST Sans Regular" }}
                 >
                   Month {s.monthOffset}: NGN {s.amount.toLocaleString()}
                 </Typography>
@@ -335,6 +336,7 @@ const Checkout = () => {
                 bgcolor: "#FFAB46",
                 color: "#000",
                 fontWeight: "600",
+                fontFamily: "JUST Sans ExBold",
                 borderRadius: 2,
                 px: 4,
                 py: 1.2,
@@ -360,9 +362,9 @@ const Checkout = () => {
             bgcolor: "rgba(255,255,255,0.05)",
           }}
         >
-          <Typography variant="subtitle1" sx={{ color: "#ccc" }}>
+          <Typography variant="subtitle1" sx={{ color: "#ccc", fontFamily: "JUST Sans Regular" }}>
             Total:{" "}
-            <span style={{ color: "#FFAB46", fontWeight: 700 }}>
+            <span style={{ color: "#FFAB46", fontWeight: 700, fontFamily: "JUST Sans ExBold" }}>
               NGN {total.toLocaleString()}
             </span>
           </Typography>

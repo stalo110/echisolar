@@ -40,6 +40,7 @@ const AdminOrders = () => {
             color: brandAmber,
             mb: 3,
             fontWeight: "bold",
+            fontFamily: "JUST Sans ExBold",
           }}
         >
           Orders
@@ -57,10 +58,10 @@ const AdminOrders = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ color: brandAmber }}>Order ID</TableCell>
-                  <TableCell sx={{ color: brandAmber }}>Customer</TableCell>
-                  <TableCell sx={{ color: brandAmber }}>Total</TableCell>
-                  <TableCell sx={{ color: brandAmber }}>Status</TableCell>
+                  <TableCell sx={{ color: brandAmber, fontFamily: "JUST Sans ExBold" }}>Order ID</TableCell>
+                  <TableCell sx={{ color: brandAmber, fontFamily: "JUST Sans ExBold" }}>Customer</TableCell>
+                  <TableCell sx={{ color: brandAmber, fontFamily: "JUST Sans ExBold" }}>Total</TableCell>
+                  <TableCell sx={{ color: brandAmber, fontFamily: "JUST Sans ExBold" }}>Status</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -74,9 +75,9 @@ const AdminOrders = () => {
                       },
                     }}
                   >
-                    <TableCell sx={{ color: "#fff" }}>{o.id}</TableCell>
-                    <TableCell sx={{ color: "#fff" }}>{o.customer}</TableCell>
-                    <TableCell sx={{ color: "#fff" }}>
+                    <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>{o.id}</TableCell>
+                    <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>{o.customer}</TableCell>
+                    <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>
                       ₦{o.total.toLocaleString()}
                     </TableCell>
                     <TableCell
@@ -88,6 +89,7 @@ const AdminOrders = () => {
                             ? brandAmber
                             : "#999",
                         fontWeight: "bold",
+                        fontFamily: "JUST Sans ExBold",
                       }}
                     >
                       {o.status}
@@ -114,6 +116,7 @@ const AdminOrders = () => {
                 color: "#ccc",
                 fontWeight: 400,
                 fontSize: { xs: "1rem", sm: "1.25rem" },
+                fontFamily: "JUST Sans Regular",
               }}
             >
               No new orders yet.

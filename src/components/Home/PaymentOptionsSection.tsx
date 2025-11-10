@@ -6,7 +6,7 @@ export const PaymentOptionsSection = () => {
 
   return (
     <Box sx={{ py: 8, px: { xs: 2, md: 6 }, background: "#0b0b0b" }}>
-      <Typography variant="h4" sx={{ textAlign: "center", mb: 6, fontWeight: 800, color: "#EAEAEA" }}>
+      <Typography variant="h4" sx={{ textAlign: "center", mb: 6, fontWeight: 800, color: "#EAEAEA", fontFamily: "JUST Sans ExBold" }}>
         Flexible Payment Options
       </Typography>
 
@@ -35,10 +35,10 @@ export const PaymentOptionsSection = () => {
                 "&:hover": { transform: "translateY(-8px)", boxShadow: "0 20px 50px rgba(0,0,0,0.6)" },
               }}
             >
-              <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: p.accent }}>
+              <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: p.accent, fontFamily: "JUST Sans ExBold" }}>
                 {p.title}
               </Typography>
-              <Typography sx={{ color: "rgba(234,234,234,0.8)" }}>{p.desc}</Typography>
+              <Typography sx={{ color: "rgba(234,234,234,0.8)", fontFamily: "JUST Sans Regular" }}>{p.desc}</Typography>
             </Paper>
           </Grid>
         ))}

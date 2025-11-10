@@ -22,7 +22,7 @@ const Profile = () => {
     <UserDashboardLayout>
       <Typography
         variant="h4"
-        sx={{ fontWeight: "700", color: "#C79B3B", mb: 4 }}
+        sx={{ fontWeight: "700", color: "#C79B3B", mb: 4, fontFamily: "JUST Sans ExBold" }}
       >
         My Profile
       </Typography>
@@ -53,21 +53,21 @@ const Profile = () => {
               >
                 {user.name.charAt(0)}
               </Avatar>
-              <Typography variant="h6">{user.name}</Typography>
-              <Typography variant="body2" sx={{ color: "#ccc" }}>
+              <Typography variant="h6" sx={{ fontFamily: "JUST Sans ExBold" }}>{user.name}</Typography>
+              <Typography variant="body2" sx={{ color: "#ccc", fontFamily: "JUST Sans Regular" }}>
                 {user.email}
               </Typography>
             </Box>
 
             <Divider sx={{ my: 3, borderColor: "rgba(255,255,255,0.1)" }} />
 
-            <Typography variant="body2">
+            <Typography variant="body2" sx={{ fontFamily: "JUST Sans Regular" }}>
               <strong>Phone:</strong> {user.phone}
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="body2" sx={{ fontFamily: "JUST Sans Regular" }}>
               <strong>Address:</strong> {user.address}
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="body2" sx={{ fontFamily: "JUST Sans Regular" }}>
               <strong>Member since:</strong> {user.joined}
             </Typography>
           </Paper>
@@ -85,13 +85,13 @@ const Profile = () => {
               boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
             }}
           >
-            <Typography variant="h6" sx={{ color: "#C79B3B", mb: 2 }}>
+            <Typography variant="h6" sx={{ color: "#C79B3B", mb: 2, fontFamily: "JUST Sans ExBold" }}>
               Account Overview
             </Typography>
-            <Typography sx={{ mb: 1 }}>Orders: 12</Typography>
-            <Typography sx={{ mb: 1 }}>Wishlist Items: 8</Typography>
-            <Typography sx={{ mb: 1 }}>Active Subscription: Yes</Typography>
-            <Typography sx={{ mb: 1 }}>Total Spent: $1,200</Typography>
+            <Typography sx={{ mb: 1, fontFamily: "JUST Sans Regular" }}>Orders: 12</Typography>
+            <Typography sx={{ mb: 1, fontFamily: "JUST Sans Regular" }}>Wishlist Items: 8</Typography>
+            <Typography sx={{ mb: 1, fontFamily: "JUST Sans Regular" }}>Active Subscription: Yes</Typography>
+            <Typography sx={{ mb: 1, fontFamily: "JUST Sans Regular" }}>Total Spent: $1,200</Typography>
 
             <Box mt={3}>
               <Button
@@ -100,6 +100,7 @@ const Profile = () => {
                   bgcolor: "#C79B3B",
                   color: "#000",
                   fontWeight: "600",
+                  fontFamily: "JUST Sans ExBold",
                   "&:hover": { bgcolor: "#e1b860" },
                 }}
               >

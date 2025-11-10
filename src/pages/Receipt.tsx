@@ -9,9 +9,9 @@ const Receipt = () => {
     <Box>
       <TopNav />
       <Container sx={{ py: 6 }}>
-        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 3 }}>Receipt #{id}</Typography>
+        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 3, fontFamily: "JUST Sans ExBold" }}>Receipt #{id}</Typography>
         <Paper sx={{ p:3 }}>
-          <Typography>Receipt details and payment summary will be shown here.</Typography>
+          <Typography sx={{ fontFamily: "JUST Sans Regular" }}>Receipt details and payment summary will be shown here.</Typography>
         </Paper>
       </Container>
       <Footer />

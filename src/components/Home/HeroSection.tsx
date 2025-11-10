@@ -38,6 +38,7 @@ export const HeroSection = () => {
                   mb: 2,
                   letterSpacing: "-0.02em",
                   textShadow: "0 6px 24px rgba(2,2,2,0.6)",
+                  fontFamily:"JUST Sans ExBold"
                 }}
               >
                 Powering a{" "}
@@ -54,6 +55,7 @@ export const HeroSection = () => {
                   color: "rgba(234,234,234,0.92)",
                   fontWeight: 400,
                   mb: 4,
+                  fontFamily:"JUST Sans Regular"
                 }}
               >
                 Delivering reliable solar solutions that reduce costs, promote sustainability,
@@ -79,6 +81,7 @@ export const HeroSection = () => {
                     py: 1.4,
                     borderRadius: 2,
                     fontWeight: 700,
+                    fontFamily: "JUST Sans ExBold",
                     boxShadow: "0 8px 30px rgba(46,125,77,0.16)",
                     transition: "transform .18s ease, box-shadow .18s ease",
                     "&:hover": {
@@ -102,6 +105,7 @@ export const HeroSection = () => {
                     py: 1.4,
                     borderRadius: 2,
                     fontWeight: 700,
+                    fontFamily: "JUST Sans ExBold",
                     boxShadow: "0 8px 30px rgba(255,171,70,0.12)",
                     "&:hover": {
                       transform: "translateY(-3px)",
@@ -129,10 +133,10 @@ export const HeroSection = () => {
                   { label: "Average Savings", value: "85%" },
                 ].map((s) => (
                   <Box key={s.label} sx={{ textAlign: "center" }}>
-                    <Typography sx={{ color: AMBER, fontWeight: 800, fontSize: "1.6rem" }}>
+                    <Typography sx={{ color: AMBER, fontWeight: 800, fontSize: "1.6rem", fontFamily: "JUST Sans ExBold" }}>
                       {s.value}
                     </Typography>
-                    <Typography sx={{ color: "rgba(234,234,234,0.8)" }}>{s.label}</Typography>
+                    <Typography sx={{ color: "rgba(234,234,234,0.8)", fontFamily: "JUST Sans Regular" }}>{s.label}</Typography>
                   </Box>
                 ))}
               </Box>

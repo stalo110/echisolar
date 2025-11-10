@@ -24,7 +24,7 @@ const UserSubscriptions = () => {
     <UserDashboardLayout>
       <Typography
         variant="h4"
-        sx={{ fontWeight: "700", color: "#C79B3B", mb: 4 }}
+        sx={{ fontWeight: "700", color: "#C79B3B", mb: 4, fontFamily: "JUST Sans ExBold" }}
       >
         My Subscriptions
       </Typography>
@@ -42,20 +42,20 @@ const UserSubscriptions = () => {
               boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
             }}
           >
-              <Typography variant="h6" sx={{ color: "#C79B3B" }}>
+              <Typography variant="h6" sx={{ color: "#C79B3B", fontFamily: "JUST Sans ExBold" }}>
                 {sub.plan}
               </Typography>
-              <Typography>
+              <Typography sx={{ fontFamily: "JUST Sans Regular" }}>
                 Status: <Chip label={sub.status} color="success" />
               </Typography>
-              <Typography>Next Payment: {sub.nextPayment}</Typography>
-              <Typography>Amount: {sub.price}</Typography>
+              <Typography sx={{ fontFamily: "JUST Sans Regular" }}>Next Payment: {sub.nextPayment}</Typography>
+              <Typography sx={{ fontFamily: "JUST Sans Regular" }}>Amount: {sub.price}</Typography>
             </Paper>
           </Grid>
         ))}
       </Grid>
 
-      <Typography variant="h6" sx={{ mt: 5, mb: 2, color: "#C79B3B" }}>
+      <Typography variant="h6" sx={{ mt: 5, mb: 2, color: "#C79B3B", fontFamily: "JUST Sans ExBold" }}>
         Past Subscriptions
       </Typography>
       <Grid container spacing={3}>
@@ -71,12 +71,12 @@ const UserSubscriptions = () => {
               boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
             }}
           >
-              <Typography variant="h6">{sub.plan}</Typography>
-              <Typography>
+              <Typography variant="h6" sx={{ fontFamily: "JUST Sans ExBold" }}>{sub.plan}</Typography>
+              <Typography sx={{ fontFamily: "JUST Sans Regular" }}>
                 Status: <Chip label={sub.status} color="error" />
               </Typography>
-              <Typography>Ended: {sub.ended}</Typography>
-              <Typography>Amount: {sub.price}</Typography>
+              <Typography sx={{ fontFamily: "JUST Sans Regular" }}>Ended: {sub.ended}</Typography>
+              <Typography sx={{ fontFamily: "JUST Sans Regular" }}>Amount: {sub.price}</Typography>
             </Paper>
           </Grid>
         ))}
