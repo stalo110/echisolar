@@ -152,6 +152,7 @@ import PaystackPaymentButton from "../components/Payment/PaystackPaymentButton";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useAuth } from "../contexts/AuthContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 // 🪙 Stripe setup
 const stripePromise = loadStripe("pk_test_YOUR_STRIPE_PUBLISHABLE_KEY");
@@ -169,6 +170,7 @@ const Checkout = () => {
   const [installment, setInstallment] = useState("full");
   const { items, clear } = useCart();
   const { user } = useAuth();
+  const { theme, mode } = useTheme();
   const navigate = useNavigate();
 
   const total = items.reduce((s, i) => s + i.price * i.quantity, 0);
@@ -195,10 +197,12 @@ const Checkout = () => {
   return (
     <Box
       sx={{
-        bgcolor: "#0B0C10",
-        color: "#fff",
+        bgcolor: theme.palette.background.default,
+        color: theme.palette.text.primary,
         minHeight: "100vh",
-        background: "linear-gradient(145deg, #0B0C10 0%, #1F2833 100%)",
+        background: mode === 'dark' 
+          ? "linear-gradient(145deg, #0B0C10 0%, #1F2833 100%)"
+          : "linear-gradient(145deg, #f8f9fa 0%, #ffffff 100%)",
       }}
     >
       <TopNav />
@@ -209,8 +213,8 @@ const Checkout = () => {
           sx={{
             fontWeight: "700",
             mb: 4,
-            color: "#FFAB46",
-            textShadow: "0 0 12px rgba(255,171,70,0.3)",
+            color: theme.palette.primary.main,
+            textShadow: `0 0 12px ${theme.palette.primary.main}30`,
             fontFamily: "JUST Sans ExBold",
           }}
         >
@@ -223,32 +227,32 @@ const Checkout = () => {
             p: 3,
             mb: 3,
             borderRadius: 3,
-            bgcolor: "#1F2833",
-            border: "1px solid rgba(255,255,255,0.08)",
-            boxShadow: "0 0 20px rgba(0,0,0,0.4)",
+            bgcolor: theme.palette.background.paper,
+            border: `1px solid ${theme.palette.divider}`,
+            boxShadow: mode === 'dark' ? "0 0 20px rgba(0,0,0,0.4)" : "0 0 20px rgba(0,0,0,0.1)",
           }}
         >
-          <Typography variant="h6" sx={{ color: "#FFAB46", mb: 2, fontFamily: "JUST Sans ExBold" }}>
+          <Typography variant="h6" sx={{ color: theme.palette.primary.main, mb: 2, fontFamily: "JUST Sans ExBold" }}>
             Payment Provider
           </Typography>
           <RadioGroup
             value={provider}
             onChange={(e) => setProvider(e.target.value)}
-            sx={{ color: "#fff" }}
+            sx={{ color: theme.palette.text.primary }}
           >
             <FormControlLabel
               value="auto"
-              control={<Radio sx={{ color: "#FFAB46" }} />}
+              control={<Radio sx={{ color: theme.palette.primary.main }} />}
               label={<span style={{ fontFamily: "JUST Sans Regular" }}>Auto (route by location)</span>}
             />
             <FormControlLabel
               value="paystack"
-              control={<Radio sx={{ color: "#FFAB46" }} />}
+              control={<Radio sx={{ color: theme.palette.primary.main }} />}
               label={<span style={{ fontFamily: "JUST Sans Regular" }}>Paystack (NG)</span>}
             />
             <FormControlLabel
               value="stripe"
-              control={<Radio sx={{ color: "#FFAB46" }} />}
+              control={<Radio sx={{ color: theme.palette.primary.main }} />}
               label={<span style={{ fontFamily: "JUST Sans Regular" }}>Stripe (International)</span>}
             />
           </RadioGroup>

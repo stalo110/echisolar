@@ -10,11 +10,44 @@ import Footer from "../navigation/Footer";
 import { HeroSection } from "../components/About/HeroSection";
 import { AboutSection } from "../components/Home/AboutSection";
 import { PartnersSection } from "../components/Home/PartnersSection";
+import { TeamSection } from "../components/Home/TeamSection";
+import { useTheme } from "../contexts/ThemeContext";
 
 const About = () => {
+  const { theme, mode } = useTheme();
+  
   return (
-    <Box sx={{ background: "linear-gradient(180deg, #000, #0A0A0A)", color: "#fff" }}>
-      <TopNav />
+    <Box sx={{ 
+      background: mode === 'dark' 
+        ? "linear-gradient(180deg, #000, #0A0A0A)" 
+        : "linear-gradient(180deg, #f8f9fa, #ffffff)", 
+      color: theme.palette.text.primary,
+      minHeight: "100vh",
+      position: "relative",
+      overflow: "hidden"
+    }}>
+      {/* Professional Background Elements */}
+      <Box sx={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        zIndex: -1,
+        opacity: mode === 'dark' ? 0.015 : 0.01,
+        backgroundImage: `
+          conic-gradient(from 45deg at 30% 70%, ${theme.palette.primary.main}20, transparent 50%),
+          conic-gradient(from 225deg at 70% 30%, ${theme.palette.secondary.main}15, transparent 50%)
+        `,
+        backgroundSize: "600px 600px, 400px 400px",
+        animation: "slowRotate 30s linear infinite",
+        "@keyframes slowRotate": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" }
+        }
+      }} />
+      <Box sx={{ position: "relative", zIndex: 1 }}>
+        <TopNav />
       <HeroSection />
 
       <Container sx={{ py: 8 }}>
@@ -25,7 +58,7 @@ const About = () => {
             fontWeight: "bold",
             mb: 4,
             textAlign: "center",
-            background: "linear-gradient(90deg, #FFAB46, #FFD18A)",
+            background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             fontFamily: "JUST Sans ExBold",
@@ -51,19 +84,19 @@ const About = () => {
               text: "We envision a future where clean energy is accessible to everyone. Through innovation, education, and a commitment to excellence, we aim to be a leading force in the renewable energy sector, driving the transition to a more sustainable and energy-efficient world.",
             },
           ].map((item) => (
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 6 }} key={item.title}>
               <Paper
                 sx={{
                   p: 3,
                   height: "100%",
-                  background: "rgba(255,255,255,0.05)",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  background: mode === 'dark' ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.02)",
+                  border: `1px solid ${theme.palette.divider}`,
                   borderRadius: 3,
                   backdropFilter: "blur(8px)",
                   transition: "all 0.3s ease",
                   "&:hover": {
-                    borderColor: "#FFAB46",
-                    boxShadow: "0 0 15px rgba(255,171,70,0.3)",
+                    borderColor: theme.palette.primary.main,
+                    boxShadow: `0 0 15px ${theme.palette.primary.main}50`,
                     transform: "translateY(-5px)",
                   },
                 }}
@@ -72,7 +105,7 @@ const About = () => {
                   variant="h6"
                   sx={{
                     fontWeight: "bold",
-                    color: "#FFAB46",
+                    color: theme.palette.primary.main,
                     mb: 1.5,
                     textTransform: "uppercase",
                     fontFamily: "JUST Sans ExBold",
@@ -80,7 +113,7 @@ const About = () => {
                 >
                   {item.title}
                 </Typography>
-                <Typography sx={{ color: "rgba(255,255,255,0.8)", fontFamily: "JUST Sans Regular" }}>
+                <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
                   {item.text}
                 </Typography>
               </Paper>
@@ -96,8 +129,7 @@ const About = () => {
               fontWeight: "bold",
               mb: 4,
               textAlign: "center",
-              color: "#0ba21dff",
-              background: "linear-gradient(90deg, #0ba21dff, #0ba21dff)",
+              background: `linear-gradient(90deg, ${theme.palette.secondary.main}, ${theme.palette.secondary.light})`,
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               fontFamily: "JUST Sans ExBold",
@@ -126,24 +158,24 @@ const About = () => {
                   sx={{
                     p: 3,
                     textAlign: "center",
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.08)",
+                    background: mode === 'dark' ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.02)",
+                    border: `1px solid ${theme.palette.divider}`,
                     borderRadius: 3,
                     transition: "all 0.3s ease",
                     "&:hover": {
-                      borderColor: "#2E7D4D",
-                      boxShadow: "0 0 12px rgba(46,125,77,0.4)",
+                      borderColor: theme.palette.secondary.main,
+                      boxShadow: `0 0 12px ${theme.palette.secondary.main}66`,
                       transform: "translateY(-5px)",
                     },
                   }}
                 >
                   <Typography
                     variant="h6"
-                    sx={{ fontWeight: "bold", color: "#2E7D4D", mb: 1.5, fontFamily: "JUST Sans ExBold" }}
+                    sx={{ fontWeight: "bold", color: theme.palette.secondary.main, mb: 1.5, fontFamily: "JUST Sans ExBold" }}
                   >
                     {card.title}
                   </Typography>
-                  <Typography sx={{ color: "rgba(255,255,255,0.8)", fontFamily: "JUST Sans Regular" }}>
+                  <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
                     {card.text}
                   </Typography>
                 </Paper>
@@ -153,8 +185,10 @@ const About = () => {
         </Box>
       </Container>
 
-      <PartnersSection />
-      <Footer />
+      <TeamSection />
+        <PartnersSection />
+        <Footer />
+      </Box>
     </Box>
   );
 };

@@ -22,6 +22,7 @@ import {
   Menu as MenuIcon,
   Close as CloseIcon,
 } from "@mui/icons-material";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const menuItems = [
   {
@@ -55,6 +56,7 @@ interface UserDashboardLayoutProps {
 }
 
 const UserDashboardLayout = ({ children }: UserDashboardLayoutProps) => {
+  const { theme, mode } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -72,14 +74,14 @@ const UserDashboardLayout = ({ children }: UserDashboardLayoutProps) => {
     <Box
       sx={{
         p: 2,
-        background: "linear-gradient(180deg, #141414, #0e0e0e)",
+        background: theme.palette.background.paper,
         height: "100%",
-        color: "#fff",
+        color: theme.palette.text.primary,
       }}
     >
       <IconButton
         sx={{
-          color: "#FFAB46",
+          color: theme.palette.primary.main,
           mb: 2,
           display: { md: "none", xs: "block" },
         }}
@@ -102,18 +104,18 @@ const UserDashboardLayout = ({ children }: UserDashboardLayoutProps) => {
               borderRadius: 2,
               mb: 1,
               transition: "0.3s ease",
-              color: selected === item.id ? "#FFAB46" : "#bbb",
+              color: selected === item.id ? theme.palette.primary.main : theme.palette.text.secondary,
               backgroundColor:
-                selected === item.id ? "rgba(246,201,14,0.1)" : "transparent",
+                selected === item.id ? `${theme.palette.primary.main}10` : "transparent",
               "&:hover": {
-                backgroundColor: "rgba(246,201,14,0.15)",
+                backgroundColor: `${theme.palette.primary.main}15`,
                 transform: "translateX(4px)",
               },
             }}
           >
             <ListItemIcon
               sx={{
-                color: selected === item.id ? "#FFAB46" : "#777",
+                color: selected === item.id ? theme.palette.primary.main : theme.palette.text.secondary,
                 minWidth: 40,
               }}
             >
@@ -134,12 +136,12 @@ const UserDashboardLayout = ({ children }: UserDashboardLayoutProps) => {
   );
 
   return (
-    <Box sx={{ bgcolor: "#0B0C10", color: "#fff", minHeight: "100vh" }}>
+    <Box sx={{ bgcolor: theme.palette.background.default, color: theme.palette.text.primary, minHeight: "100vh" }}>
       <TopNav />
       <Container sx={{ py: 6 }}>
         <IconButton
           sx={{
-            color: "#FFAB46",
+            color: theme.palette.primary.main,
             mb: 3,
             display: { xs: "inline-flex", md: "none" },
           }}
@@ -158,10 +160,10 @@ const UserDashboardLayout = ({ children }: UserDashboardLayoutProps) => {
             <Paper
               sx={{
                 p: 0,
-                background: "linear-gradient(180deg, #141414, #0e0e0e)",
-                border: "1px solid rgba(255,255,255,0.1)",
+                background: theme.palette.background.paper,
+                border: `1px solid ${theme.palette.divider}`,
                 borderRadius: 3,
-                boxShadow: "0 2px 10px rgba(0,0,0,0.4)",
+                boxShadow: mode === 'dark' ? "0 2px 10px rgba(0,0,0,0.4)" : "0 2px 10px rgba(0,0,0,0.1)",
                 height: "100%",
                 overflow: "hidden",
               }}
@@ -175,7 +177,7 @@ const UserDashboardLayout = ({ children }: UserDashboardLayoutProps) => {
             open={drawerOpen}
             onClose={() => setDrawerOpen(false)}
             PaperProps={{
-              sx: { width: 260, backgroundColor: "#0e0e0e", color: "#fff" },
+              sx: { width: 260, backgroundColor: theme.palette.background.paper, color: theme.palette.text.primary },
             }}
           >
             {Sidebar}

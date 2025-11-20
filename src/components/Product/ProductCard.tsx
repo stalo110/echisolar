@@ -11,9 +11,11 @@ import type { Product } from "../../services/productService";
 import { useCart } from "../../contexts/CartContext";
 import { useState } from "react";
 import ProductModal from "./ProductModal";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export const ProductCard = ({ product }: { product: Product }) => {
   const { add } = useCart();
+  const { theme, mode } = useTheme();
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -26,15 +28,15 @@ export const ProductCard = ({ product }: { product: Product }) => {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          bgcolor: "rgba(255,255,255,0.05)",
+          bgcolor: theme.palette.background.paper,
           borderRadius: 3,
-          border: "1px solid rgba(255,255,255,0.1)",
+          border: `1px solid ${theme.palette.divider}`,
           backdropFilter: "blur(8px)",
-          boxShadow: "0 0 20px rgba(0,0,0,0.3)",
+          boxShadow: mode === 'dark' ? "0 0 20px rgba(0,0,0,0.3)" : "0 0 20px rgba(0,0,0,0.1)",
           transition: "transform 0.3s ease, box-shadow 0.3s ease",
           "&:hover": {
             transform: "translateY(-6px)",
-            boxShadow: "0 0 30px rgba(255,171,70,0.25)",
+            boxShadow: `0 0 30px ${theme.palette.primary.main}25`,
           },
         }}
       >
@@ -56,7 +58,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
             variant="h6"
             sx={{
               fontFamily: "JUST Sans ExBold",
-              color: "#fff",
+              color: theme.palette.text.primary,
               mb: 0.5,
               letterSpacing: "0.5px",
             }}
@@ -64,15 +66,16 @@ export const ProductCard = ({ product }: { product: Product }) => {
             {product.name}
           </Typography>
           <Typography
-            sx={{ color: "rgba(255,255,255,0.6)", mb: 1, fontSize: "0.9rem" }}
+            sx={{ color: theme.palette.text.secondary, mb: 1, fontSize: "0.9rem", fontFamily: "JUST Sans Regular" }}
           >
             {product.category}
           </Typography>
           <Typography
             sx={{
-              color: "var(--brand-amber)",
+              color: theme.palette.primary.main,
               fontWeight: "bold",
               fontSize: "1.1rem",
+              fontFamily: "JUST Sans ExBold",
             }}
           >
             ₦{product.price.toLocaleString()}
@@ -87,12 +90,12 @@ export const ProductCard = ({ product }: { product: Product }) => {
                 textTransform: "none",
                 fontWeight: "bold",
                 fontFamily: "JUST Sans Regular",
-                color: "var(--brand-amber)",
-                border: "1px solid var(--brand-amber)",
+                color: theme.palette.primary.main,
+                border: `1px solid ${theme.palette.primary.main}`,
                 borderRadius: "10px",
                 px: 2,
                 "&:hover": {
-                  backgroundColor: "rgba(255,171,70,0.1)",
+                  backgroundColor: `${theme.palette.primary.main}10`,
                 },
               }}
             >
@@ -111,14 +114,14 @@ export const ProductCard = ({ product }: { product: Product }) => {
               }
               sx={{
                 ml: "auto",
-                background: "var(--brand-green)",
+                background: theme.palette.secondary.main,
                 fontWeight: "bold",
                 fontFamily: "JUST Sans ExBold",
                 textTransform: "none",
                 borderRadius: "10px",
                 px: 2.5,
                 "&:hover": {
-                  backgroundColor: "#256e42",
+                  backgroundColor: theme.palette.secondary.dark,
                 },
               }}
             >

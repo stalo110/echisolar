@@ -12,8 +12,10 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import TopNav from "../../navigation/TopNav";
 import Footer from "../../navigation/Footer";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const LoginPage = () => {
+  const { theme, mode } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuth();
@@ -31,7 +33,7 @@ const LoginPage = () => {
   };
 
   return (
-    <Box sx={{ bgcolor: "#0b0b0b", minHeight: "100vh", color: "#fff" }}>
+    <Box sx={{ bgcolor: theme.palette.background.default, minHeight: "100vh", color: theme.palette.text.primary }}>
       <TopNav />
 
       <Container
@@ -50,17 +52,17 @@ const LoginPage = () => {
           sx={{
             p: 4,
             width: "100%",
-            bgcolor: "#1a1a1a",
+            bgcolor: theme.palette.background.paper,
             borderRadius: 3,
-            border: "1px solid #2e2e2e",
-            boxShadow: "0 0 25px rgba(255,171,70,0.05)",
+            border: `1px solid ${theme.palette.divider}`,
+            boxShadow: `0 0 25px ${theme.palette.primary.main}05`,
           }}
         >
           <Typography
             component="h1"
             variant="h5"
             sx={{
-              color: "var(--brand-amber)",
+              color: theme.palette.primary.main,
               textAlign: "center",
               fontFamily: "JUST Sans ExBold",
               mb: 3,
@@ -78,11 +80,11 @@ const LoginPage = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              InputLabelProps={{ style: { color: "#bbb" } }}
+              InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
               InputProps={{
                 style: {
-                  color: "#fff",
-                  background: "#121212",
+                  color: theme.palette.text.primary,
+                  background: mode === 'dark' ? "#121212" : "#f5f5f5",
                   borderRadius: "8px",
                 },
               }}
@@ -96,11 +98,11 @@ const LoginPage = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              InputLabelProps={{ style: { color: "#bbb" } }}
+              InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
               InputProps={{
                 style: {
-                  color: "#fff",
-                  background: "#121212",
+                  color: theme.palette.text.primary,
+                  background: mode === 'dark' ? "#121212" : "#f5f5f5",
                   borderRadius: "8px",
                 },
               }}
@@ -113,12 +115,12 @@ const LoginPage = () => {
               sx={{
                 mt: 3,
                 mb: 2,
-                background: "var(--brand-green)",
-                color: "#fff",
+                background: theme.palette.secondary.main,
+                color: mode === 'dark' ? "#fff" : "#000",
                 fontFamily: "JUST Sans ExBold",
                 textTransform: "none",
                 py: 1.2,
-                "&:hover": { background: "#36a15f" },
+                "&:hover": { background: theme.palette.secondary.dark },
               }}
             >
               Sign In
@@ -131,7 +133,7 @@ const LoginPage = () => {
                 display: "block",
                 textAlign: "center",
                 mt: 1,
-                color: "var(--brand-amber)",
+                color: theme.palette.primary.main,
                 textDecoration: "none",
                 fontFamily: "JUST Sans Regular",
                 "&:hover": { textDecoration: "underline" },

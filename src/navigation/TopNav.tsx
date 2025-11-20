@@ -14,14 +14,15 @@ import {
   ListItemIcon,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import PhoneIcon from "@mui/icons-material/Phone";
 import CloseIcon from "@mui/icons-material/Close";
+import { FaWhatsapp } from "react-icons/fa";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import ShoppingCart from "@mui/icons-material/ShoppingCart";
 import LogoutIcon from "@mui/icons-material/Logout";
-// import LoginIcon from '@mui/icons-material/Login';
+import { Brightness4, Brightness7 } from "@mui/icons-material";
 import { useAuth } from "../contexts/AuthContext";
 import { useCart } from "../contexts/CartContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -35,6 +36,7 @@ export default function TopNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, logout } = useAuth();
   const { items } = useCart();
+  const { mode, toggleTheme, theme } = useTheme();
 
   const handleDrawerToggle = () => setMobileOpen((s) => !s);
   const drawer = (
@@ -42,16 +44,15 @@ export default function TopNav() {
       sx={{
         width: "100%",
         height: "100vh",
-        background: "rgba(0,0,0,0.95)",
+        background: mode === 'dark' ? "rgba(0,0,0,0.95)" : "rgba(255,255,255,0.95)",
         backdropFilter: "blur(8px)",
-        color: "#fff",
+        color: theme.palette.text.primary,
         display: "flex",
         flexDirection: "column",
         p: 3,
-        borderBottom: "1px solid rgba(255,255,255,0.1)",
+        borderBottom: `1px solid ${theme.palette.divider}`,
       }}
     >
-      {/* Top Section: Logo + Close */}
       <Box
         sx={{
           display: "flex",
@@ -73,20 +74,19 @@ export default function TopNav() {
             component="img"
             src="/images/logo.png"
             alt="Echi Solar"
-            sx={{ height: 36, filter: "brightness(0) invert(1)" }}
+            sx={{ height: 20, filter: mode === 'dark' ? "brightness(0) invert(1)" : "none" }}
           />
         </Box>
 
         <IconButton
           onClick={handleDrawerToggle}
           aria-label="close drawer"
-          sx={{ color: "#fff" }}
+          sx={{ color: theme.palette.text.primary }}
         >
           <CloseIcon />
         </IconButton>
       </Box>
 
-      {/* Navigation Links */}
       <List
         sx={{
           mt: 4,
@@ -98,7 +98,7 @@ export default function TopNav() {
             transition: "all 0.3s ease",
             fontFamily:"JUST Sans Regular",
             "&:hover": {
-              backgroundColor: "rgba(255,255,255,0.08)",
+              backgroundColor: mode === 'dark' ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)",
             },
           },
         }}
@@ -115,18 +115,17 @@ export default function TopNav() {
               primaryTypographyProps={{
                 fontSize: "1.1rem",
                 fontWeight: 600,
-                color: "#fff",
+                color: theme.palette.text.primary,
                 fontFamily: "JUST Sans Regular",
                 sx: {
                   transition: "color 0.3s ease",
-                  "&:hover": { color: "var(--brand-amber)" },
+                  "&:hover": { color: theme.palette.primary.main },
                 },
               }}
             />
           </ListItemButton>
         ))}
 
-        {/* Auth Links */}
         {!user ? (
           <>
             <ListItemButton
@@ -134,14 +133,13 @@ export default function TopNav() {
               href="/login"
               onClick={handleDrawerToggle}
               sx={{
-                border: "1px solid var(--brand-amber)",
-                color: "var(--brand-amber)",
+                border: `1px solid ${theme.palette.primary.main}`,
+                color: theme.palette.primary.main,
                 borderRadius: 2,
                 mt: 2,
                 "&:hover": {
-                  background:
-                    "linear-gradient(90deg, var(--brand-amber), #ffbe6b)",
-                  color: "#000",
+                  background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+                  color: mode === 'dark' ? "#000" : "#fff",
                 },
               }}
             >
@@ -156,9 +154,9 @@ export default function TopNav() {
               href="/register"
               onClick={handleDrawerToggle}
               sx={{
-                color: "#fff",
+                color: theme.palette.text.primary,
                 fontWeight: 600,
-                "&:hover": { color: "var(--brand-amber)" },
+                "&:hover": { color: theme.palette.primary.main },
               }}
             >
               <ListItemText primary="Sign Up" primaryTypographyProps={{ fontFamily: "JUST Sans Regular" }} />
@@ -171,11 +169,11 @@ export default function TopNav() {
               href="/user/profile"
               onClick={handleDrawerToggle}
               sx={{
-                color: "var(--brand-green)",
+                color: theme.palette.secondary.main,
                 fontWeight: "bold",
               }}
             >
-              <ListItemIcon sx={{ minWidth: 32, color: "var(--brand-green)" }}>
+              <ListItemIcon sx={{ minWidth: 32, color: theme.palette.secondary.main }}>
                 <AccountCircle />
               </ListItemIcon>
               <ListItemText primary={user.name} primaryTypographyProps={{ fontFamily: "JUST Sans Regular" }} />
@@ -187,8 +185,8 @@ export default function TopNav() {
                 handleDrawerToggle();
               }}
               sx={{
-                color: "#fff",
-                "&:hover": { color: "var(--brand-amber)" },
+                color: theme.palette.text.primary,
+                "&:hover": { color: theme.palette.primary.main },
               }}
             >
               <ListItemIcon sx={{ minWidth: 32, color: "inherit" }}>
@@ -199,29 +197,28 @@ export default function TopNav() {
           </>
         )}
 
-        {/* Cart */}
         <ListItemButton
           component="a"
           href="/cart"
           onClick={handleDrawerToggle}
           sx={{ mt: 2 }}
         >
-          <ListItemIcon sx={{ minWidth: 32, color: "#fff" }}>
+          <ListItemIcon sx={{ minWidth: 32, color: theme.palette.text.primary }}>
             <Badge badgeContent={items.length} color="secondary">
-              <ShoppingCart sx={{ color: "white" }} />
+              <ShoppingCart sx={{ color: theme.palette.text.primary }} />
             </Badge>
           </ListItemIcon>
           <ListItemText primary="Cart" primaryTypographyProps={{ fontFamily: "JUST Sans Regular" }} />
         </ListItemButton>
       </List>
 
-      {/* Bottom Section */}
       <Box
         sx={{
           textAlign: "center",
           mt: "auto",
           opacity: 0.6,
           fontSize: "0.8rem",
+          color: theme.palette.text.secondary,
         }}
       >
         © {new Date().getFullYear()} Echi Solar
@@ -236,15 +233,14 @@ export default function TopNav() {
       sx={{
         top: 0,
         zIndex: 1100,
-        background: "rgba(0,0,0,0.85)",
+        background: mode === 'dark' ? "rgba(0,0,0,0.85)" : "rgba(255,255,255,0.95)",
         backdropFilter: "blur(8px)",
-        color: "white",
-        borderBottom: "1px solid rgba(255,255,255,0.1)",
+        color: theme.palette.text.primary,
+        borderBottom: `1px solid ${theme.palette.divider}`,
         px: { xs: 2, md: 6 },
       }}
     >
       <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
-        {/* Logo */}
         <Box
           component="a"
           href="/"
@@ -259,11 +255,10 @@ export default function TopNav() {
             component="img"
             src="/images/logo.png"
             alt="Echi Solar"
-            sx={{ height: 30 }}
+            sx={{ height: 20, filter: mode === 'dark' ? "brightness(0) invert(1)" : "none" }}
           />
         </Box>
 
-        {/* Desktop Links */}
         <Box
           sx={{
             display: { xs: "none", md: "flex" },
@@ -276,7 +271,7 @@ export default function TopNav() {
               key={link.label}
               href={link.href}
               sx={{
-                color: "#fff",
+                color: theme.palette.text.primary,
                 fontWeight: "bold",
                 fontFamily: "JUST Sans Regular",
                 textTransform: "none",
@@ -288,11 +283,11 @@ export default function TopNav() {
                   left: 0,
                   width: "0%",
                   height: "2px",
-                  backgroundColor: "var(--brand-amber)",
+                  backgroundColor: theme.palette.primary.main,
                   transition: "width 0.3s ease",
                 },
                 "&:hover::after": { width: "100%" },
-                "&:hover": { color: "var(--brand-amber)" },
+                "&:hover": { color: theme.palette.primary.main },
               }}
             >
               {link.label}
@@ -302,19 +297,18 @@ export default function TopNav() {
           {!user ? (
             <Button
               href="/login"
-              startIcon={<AccountCircle sx={{ color: "var(--brand-amber)" }} />}
+              startIcon={<AccountCircle sx={{ color: theme.palette.primary.main }} />}
               sx={{
-                color: "var(--brand-amber)",
+                color: theme.palette.primary.main,
                 fontWeight: "bold",
                 fontFamily: "JUST Sans Regular",
                 textTransform: "none",
-                border: "1px solid var(--brand-amber)",
+                border: `1px solid ${theme.palette.primary.main}`,
                 borderRadius: 2,
                 px: 2,
                 "&:hover": {
-                  background:
-                    "linear-gradient(90deg, var(--brand-amber), #ffbe6b)",
-                  color: "#000",
+                  background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+                  color: mode === 'dark' ? "#000" : "#fff",
                 },
               }}
             >
@@ -325,20 +319,20 @@ export default function TopNav() {
               <Button
                 href="/user/profile"
                 startIcon={
-                  <AccountCircle sx={{ color: "var(--brand-green)" }} />
+                  <AccountCircle sx={{ color: theme.palette.secondary.main }} />
                 }
-                sx={{ color: "var(--brand-green)", fontWeight: "bold", fontFamily: "JUST Sans Regular" }}
+                sx={{ color: theme.palette.secondary.main, fontWeight: "bold", fontFamily: "JUST Sans Regular" }}
               >
                 {user.name}
               </Button>
               <Button
                 onClick={logout}
-                startIcon={<LogoutIcon sx={{ color: "#fff" }} />}
+                startIcon={<LogoutIcon sx={{ color: theme.palette.text.primary }} />}
                 sx={{
-                  color: "#fff",
+                  color: theme.palette.text.primary,
                   fontWeight: "bold",
                   fontFamily: "JUST Sans Regular",
-                  "&:hover": { color: "var(--brand-amber)" },
+                  "&:hover": { color: theme.palette.primary.main },
                 }}
               >
                 Logout
@@ -347,18 +341,28 @@ export default function TopNav() {
           )}
         </Box>
 
-        {/* Right-side buttons */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <IconButton
-            href="tel:+2347018090107"
+            onClick={toggleTheme}
             sx={{
-              background: "linear-gradient(145deg, #1a1a1a, #111)",
-              border: "1px solid rgba(255,255,255,0.2)",
-              "&:hover": { background: "var(--brand-amber)" },
-              color: "white",
+              color: theme.palette.text.primary,
+              "&:hover": { color: theme.palette.primary.main },
             }}
           >
-            <PhoneIcon />
+            {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
+          </IconButton>
+
+          <IconButton
+            href="https://wa.me/2347018090107"
+            target="_blank"
+            sx={{
+              background: mode === 'dark' ? "linear-gradient(145deg, #1a1a1a, #111)" : "linear-gradient(145deg, #f5f5f5, #e0e0e0)",
+              border: `1px solid ${theme.palette.divider}`,
+              "&:hover": { background: theme.palette.primary.main },
+              color: theme.palette.text.primary,
+            }}
+          >
+            <FaWhatsapp />
           </IconButton>
 
           <Button
@@ -370,17 +374,16 @@ export default function TopNav() {
             }
             href="/cart"
             sx={{
-              background: "linear-gradient(90deg, #f6c90e, #ffab46)",
-              color: "white",
+              background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+              color: mode === 'dark' ? "white" : "#000",
               fontWeight: "bold",
               fontFamily: "JUST Sans Regular",
               borderRadius: 2,
               px: 3,
-              boxShadow: "0 0 15px rgba(246,201,14,0.4)",
+              boxShadow: `0 0 15px ${theme.palette.primary.main}40`,
               "&:hover": {
-                background:
-                  "linear-gradient(90deg, var(--brand-amber), #FFAB46)",
-                color: "#000",
+                background: `linear-gradient(90deg, ${theme.palette.primary.light}, ${theme.palette.primary.main})`,
+                color: mode === 'dark' ? "#000" : "white",
               },
               display: { xs: "none", md: "flex" },
             }}
@@ -391,7 +394,7 @@ export default function TopNav() {
           <IconButton
             edge="end"
             onClick={handleDrawerToggle}
-            sx={{ display: { md: "none" }, color: "#fff" }}
+            sx={{ display: { md: "none" }, color: theme.palette.text.primary }}
           >
             <MenuIcon />
           </IconButton>

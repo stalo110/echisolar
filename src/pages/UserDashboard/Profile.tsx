@@ -8,8 +8,10 @@ import {
   Divider,
 } from "@mui/material";
 import UserDashboardLayout from "../../components/User/UserDashboardLayout";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const Profile = () => {
+  const { theme, mode } = useTheme();
   const user = {
     name: "John Doe",
     email: "john@example.com",
@@ -22,7 +24,7 @@ const Profile = () => {
     <UserDashboardLayout>
       <Typography
         variant="h4"
-        sx={{ fontWeight: "700", color: "#C79B3B", mb: 4, fontFamily: "JUST Sans ExBold" }}
+        sx={{ fontWeight: "700", color: theme.palette.primary.main, mb: 4, fontFamily: "JUST Sans ExBold" }}
       >
         My Profile
       </Typography>
@@ -33,11 +35,11 @@ const Profile = () => {
             <Paper
               sx={{
                 p: 3,
-                background: "linear-gradient(135deg, #111, #1f1f1f)",
-                border: "1px solid rgba(255,255,255,0.1)",
-                color: "#f5f5f5",
+                background: theme.palette.background.paper,
+                border: `1px solid ${theme.palette.divider}`,
+                color: theme.palette.text.primary,
                 borderRadius: 3,
-                boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+                boxShadow: mode === 'dark' ? "0 4px 20px rgba(0,0,0,0.4)" : "0 4px 20px rgba(0,0,0,0.1)",
               }}
             >
             <Box sx={{ textAlign: "center" }}>
@@ -47,19 +49,19 @@ const Profile = () => {
                   height: 100,
                   mb: 2,
                   mx: "auto",
-                  bgcolor: "#C79B3B",
+                  bgcolor: theme.palette.primary.main,
                   fontSize: 32,
                 }}
               >
                 {user.name.charAt(0)}
               </Avatar>
               <Typography variant="h6" sx={{ fontFamily: "JUST Sans ExBold" }}>{user.name}</Typography>
-              <Typography variant="body2" sx={{ color: "#ccc", fontFamily: "JUST Sans Regular" }}>
+              <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
                 {user.email}
               </Typography>
             </Box>
 
-            <Divider sx={{ my: 3, borderColor: "rgba(255,255,255,0.1)" }} />
+            <Divider sx={{ my: 3, borderColor: theme.palette.divider }} />
 
             <Typography variant="body2" sx={{ fontFamily: "JUST Sans Regular" }}>
               <strong>Phone:</strong> {user.phone}
@@ -78,14 +80,14 @@ const Profile = () => {
         <Paper
             sx={{
               p: 3,
-              background: "linear-gradient(135deg, #111, #1f1f1f)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              color: "#f5f5f5",
+              background: theme.palette.background.paper,
+              border: `1px solid ${theme.palette.divider}`,
+              color: theme.palette.text.primary,
               borderRadius: 3,
-              boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+              boxShadow: mode === 'dark' ? "0 4px 20px rgba(0,0,0,0.4)" : "0 4px 20px rgba(0,0,0,0.1)",
             }}
           >
-            <Typography variant="h6" sx={{ color: "#C79B3B", mb: 2, fontFamily: "JUST Sans ExBold" }}>
+            <Typography variant="h6" sx={{ color: theme.palette.primary.main, mb: 2, fontFamily: "JUST Sans ExBold" }}>
               Account Overview
             </Typography>
             <Typography sx={{ mb: 1, fontFamily: "JUST Sans Regular" }}>Orders: 12</Typography>
@@ -97,11 +99,11 @@ const Profile = () => {
               <Button
                 variant="contained"
                 sx={{
-                  bgcolor: "#C79B3B",
-                  color: "#000",
+                  bgcolor: theme.palette.primary.main,
+                  color: mode === 'dark' ? "#000" : "#fff",
                   fontWeight: "600",
                   fontFamily: "JUST Sans ExBold",
-                  "&:hover": { bgcolor: "#e1b860" },
+                  "&:hover": { bgcolor: theme.palette.primary.dark },
                 }}
               >
                 Edit Profile

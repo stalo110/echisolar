@@ -1,22 +1,24 @@
 import { Typography, Paper, Grid, Chip } from "@mui/material";
 import UserDashboardLayout from "../../components/User/UserDashboardLayout";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const UserSubscriptions = () => {
+  const { theme, mode } = useTheme();
   const activeSubs = [
     {
-      plan: "6-Month Premium",
+      plan: "6-Month Solar Plan",
       status: "Active",
       nextPayment: "2025-12-01",
-      price: "$150",
+      price: "₦150,000",
     },
   ];
 
   const pastSubs = [
     {
-      plan: "3-Month Standard",
+      plan: "3-Month Solar Plan",
       status: "Expired",
       ended: "2025-09-01",
-      price: "$90",
+      price: "₦90,000",
     },
   ];
 
@@ -24,7 +26,7 @@ const UserSubscriptions = () => {
     <UserDashboardLayout>
       <Typography
         variant="h4"
-        sx={{ fontWeight: "700", color: "#C79B3B", mb: 4, fontFamily: "JUST Sans ExBold" }}
+        sx={{ fontWeight: "700", color: theme.palette.primary.main, mb: 4, fontFamily: "JUST Sans ExBold" }}
       >
         My Subscriptions
       </Typography>
@@ -35,14 +37,14 @@ const UserSubscriptions = () => {
            <Paper
             sx={{
               p: 3,
-              background: "linear-gradient(135deg, #111, #1f1f1f)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              color: "#f5f5f5",
+              background: theme.palette.background.paper,
+              border: `1px solid ${theme.palette.divider}`,
+              color: theme.palette.text.primary,
               borderRadius: 3,
-              boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+              boxShadow: mode === 'dark' ? "0 4px 20px rgba(0,0,0,0.4)" : "0 4px 20px rgba(0,0,0,0.1)",
             }}
           >
-              <Typography variant="h6" sx={{ color: "#C79B3B", fontFamily: "JUST Sans ExBold" }}>
+              <Typography variant="h6" sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>
                 {sub.plan}
               </Typography>
               <Typography sx={{ fontFamily: "JUST Sans Regular" }}>
@@ -55,7 +57,7 @@ const UserSubscriptions = () => {
         ))}
       </Grid>
 
-      <Typography variant="h6" sx={{ mt: 5, mb: 2, color: "#C79B3B", fontFamily: "JUST Sans ExBold" }}>
+      <Typography variant="h6" sx={{ mt: 5, mb: 2, color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>
         Past Subscriptions
       </Typography>
       <Grid container spacing={3}>
@@ -64,11 +66,11 @@ const UserSubscriptions = () => {
            <Paper
             sx={{
               p: 3,
-              background: "linear-gradient(135deg, #111, #1f1f1f)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              color: "#f5f5f5",
+              background: theme.palette.background.paper,
+              border: `1px solid ${theme.palette.divider}`,
+              color: theme.palette.text.primary,
               borderRadius: 3,
-              boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+              boxShadow: mode === 'dark' ? "0 4px 20px rgba(0,0,0,0.4)" : "0 4px 20px rgba(0,0,0,0.1)",
             }}
           >
               <Typography variant="h6" sx={{ fontFamily: "JUST Sans ExBold" }}>{sub.plan}</Typography>

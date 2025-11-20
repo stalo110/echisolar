@@ -14,21 +14,25 @@ import {
   LinkedIn,
   Instagram,
   Email,
-  Phone,
   LocationOn,
 } from "@mui/icons-material";
-import { FaBehance } from "react-icons/fa";
+import { FaBehance, FaWhatsapp } from "react-icons/fa";
+import { useTheme } from "../contexts/ThemeContext";
 
 const Footer = () => {
+  const { theme, mode } = useTheme();
+  
   return (
     <Box
       sx={{
-        background: "radial-gradient(circle at top, #111 0%, #000 100%)",
-        color: "rgba(255,255,255,0.9)",
+        background: mode === 'dark' 
+          ? "radial-gradient(circle at top, #111 0%, #000 100%)"
+          : "radial-gradient(circle at top, #f8f9fa 0%, #ffffff 100%)",
+        color: theme.palette.text.primary,
         py: 8,
         mt: 10,
-        borderTop: "1px solid rgba(255,255,255,0.08)",
-        boxShadow: "0 -4px 30px rgba(255,171,70,0.05)",
+        borderTop: `1px solid ${theme.palette.divider}`,
+        boxShadow: `0 -4px 30px ${theme.palette.primary.main}15`,
       }}
     >
       <Container maxWidth="lg">
@@ -37,11 +41,11 @@ const Footer = () => {
           <Grid size={{xs:12, md:3}}>
             <Box
               component="img"
-              src="/images/logo2.png"
-              alt="Logo"
-              sx={{ height: 35, mb: 2, filter: "drop-shadow(0 0 8px rgba(255,171,70,0.3))" }}
+              src="/images/logo.png"
+              alt="Echi Solar"
+              sx={{ height: 20, mb: 2, filter: mode === 'dark' ? "brightness(0) invert(1)" : "none" }}
             />
-            <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.6)", fontFamily: "JUST Sans Regular" }}>
+            <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
               Providing sustainable solar solutions today for a cleaner, brighter tomorrow.
             </Typography>
 
@@ -58,12 +62,11 @@ const Footer = () => {
                   href={social.href}
                   target="_blank"
                   sx={{
-                    color: "rgba(255,255,255,0.8)",
+                    color: theme.palette.text.secondary,
                     transition: "all 0.3s ease",
                     "&:hover": {
-                      color: "#FFAB46",
+                      color: theme.palette.primary.main,
                       transform: "translateY(-2px)",
-                      textShadow: "0 0 10px rgba(255,171,70,0.5)",
                     },
                   }}
                 >
@@ -79,7 +82,7 @@ const Footer = () => {
               variant="h6"
               sx={{
                 fontWeight: "bold",
-                color: "#FFAB46",
+                color: theme.palette.primary.main,
                 textTransform: "uppercase",
                 mb: 2,
                 fontFamily: "JUST Sans ExBold",
@@ -88,14 +91,28 @@ const Footer = () => {
               Contact Info
             </Typography>
 
-            <Typography variant="body2" sx={{ display: "flex", alignItems: "center", mb: 1, fontFamily: "JUST Sans Regular" }}>
-              <Phone sx={{ mr: 1, color: "#2E7D4D" }} /> +234 701 809 0107
+            <Typography 
+              variant="body2" 
+              component="a"
+              href="https://wa.me/2347018090107"
+              target="_blank"
+              sx={{ 
+                display: "flex", 
+                alignItems: "center", 
+                mb: 1, 
+                fontFamily: "JUST Sans Regular", 
+                color: theme.palette.text.secondary,
+                textDecoration: "none",
+                "&:hover": { color: theme.palette.primary.main }
+              }}
+            >
+              <FaWhatsapp style={{ marginRight: 8, color: theme.palette.secondary.main }} /> +234 701 809 0107
             </Typography>
-            <Typography variant="body2" sx={{ display: "flex", alignItems: "center", mb: 1, fontFamily: "JUST Sans Regular" }}>
-              <Email sx={{ mr: 1, color: "#2E7D4D" }} /> info@echisolar.com
+            <Typography variant="body2" sx={{ display: "flex", alignItems: "center", mb: 1, fontFamily: "JUST Sans Regular", color: theme.palette.text.secondary }}>
+              <Email sx={{ mr: 1, color: theme.palette.secondary.main }} /> info@echisolar.com
             </Typography>
-            <Typography variant="body2" sx={{ display: "flex", alignItems: "center", fontFamily: "JUST Sans Regular" }}>
-              <LocationOn sx={{ mr: 1, color: "#2E7D4D" }} /> Office 201, Book Foundation, Agu Awka
+            <Typography variant="body2" sx={{ display: "flex", alignItems: "center", fontFamily: "JUST Sans Regular", color: theme.palette.text.secondary }}>
+              <LocationOn sx={{ mr: 1, color: theme.palette.secondary.main }} /> Office 201, Book Foundation, Agu Awka
             </Typography>
           </Grid>
 
@@ -105,7 +122,7 @@ const Footer = () => {
               variant="h6"
               sx={{
                 fontWeight: "bold",
-                color: "#FFAB46",
+                color: theme.palette.primary.main,
                 textTransform: "uppercase",
                 mb: 2,
                 fontFamily: "JUST Sans ExBold",
@@ -123,12 +140,13 @@ const Footer = () => {
                 key={i}
                 href={link.href}
                 underline="none"
-                color="rgba(255,255,255,0.7)"
+                color={theme.palette.text.secondary}
                 display="block"
                 sx={{
                   mb: 1,
                   transition: "color 0.3s ease",
-                  "&:hover": { color: "#FFAB46" },
+                  "&:hover": { color: theme.palette.primary.main },
+                  fontFamily: "JUST Sans Regular",
                 }}
               >
                 {link.label}
@@ -142,7 +160,7 @@ const Footer = () => {
               variant="h6"
               sx={{
                 fontWeight: "bold",
-                color: "#FFAB46",
+                color: theme.palette.primary.main,
                 textTransform: "uppercase",
                 mb: 2,
                 fontFamily: "JUST Sans ExBold",
@@ -150,7 +168,7 @@ const Footer = () => {
             >
               Newsletter
             </Typography>
-            <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.6)", mb: 2, fontFamily: "JUST Sans Regular" }}>
+            <Typography variant="body2" sx={{ color: theme.palette.text.secondary, mb: 2, fontFamily: "JUST Sans Regular" }}>
               Stay up to date with our latest offers and insights.
             </Typography>
 
@@ -161,30 +179,29 @@ const Footer = () => {
                 variant="outlined"
                 fullWidth
                 sx={{
-                  bgcolor: "rgba(255,255,255,0.1)",
+                  bgcolor: mode === 'dark' ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)",
                   borderRadius: "6px 0 0 6px",
                   input: {
-                    color: "#fff",
-                    "&::placeholder": { color: "rgba(255,255,255,0.6)" },
+                    color: theme.palette.text.primary,
+                    "&::placeholder": { color: theme.palette.text.secondary },
                   },
                   "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "rgba(255,255,255,0.2)",
+                    borderColor: theme.palette.divider,
                   },
                   "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#FFAB46",
+                    borderColor: theme.palette.primary.main,
                   },
                 }}
               />
               <Button
                 variant="contained"
                 sx={{
-                  bgcolor: "#2E7D4D",
+                  bgcolor: theme.palette.secondary.main,
                   borderRadius: "0 6px 6px 0",
                   minWidth: 50,
                   "&:hover": {
-                    bgcolor: "#FFAB46",
-                    color: "#000",
-                    boxShadow: "0 0 12px rgba(255,171,70,0.6)",
+                    bgcolor: theme.palette.primary.main,
+                    color: mode === 'dark' ? "#000" : "#fff",
                   },
                 }}
               >
@@ -200,10 +217,10 @@ const Footer = () => {
             textAlign: "center",
             mt: 6,
             pt: 3,
-            borderTop: "1px solid rgba(255,255,255,0.08)",
+            borderTop: `1px solid ${theme.palette.divider}`,
           }}
         >
-          <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.5)", fontFamily: "JUST Sans Regular" }}>
+          <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
             © {new Date().getFullYear()} <strong>Echi Solar</strong>. All rights reserved.
           </Typography>
         </Box>
@@ -213,4 +230,3 @@ const Footer = () => {
 };
 
 export default Footer;
-

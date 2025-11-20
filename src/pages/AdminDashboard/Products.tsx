@@ -1,5 +1,3 @@
-
-
 import {
   Box,
   Typography,
@@ -24,8 +22,7 @@ import {
 import { Edit, Delete, Add } from "@mui/icons-material";
 import { useState, type ChangeEvent } from "react";
 import AdminLayout from "../../components/Admin/AdminLayout";
-
-const brandAmber = "#FFAB46";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface Product {
   id: number;
@@ -37,6 +34,7 @@ interface Product {
 }
 
 const AdminProducts = () => {
+  const { theme, mode } = useTheme();
   const [products, setProducts] = useState<Product[]>([
     {
       id: 1,
@@ -161,8 +159,8 @@ const AdminProducts = () => {
 
   return (
      <AdminLayout>
-    <Box sx={{ p: 3, color: "#fff", bgcolor: "#0D0D0D", minHeight: "100vh" }}>
-      <Typography variant="h5" sx={{ fontWeight: "bold", color: brandAmber, mb: 3, fontFamily: "JUST Sans ExBold" }}>
+    <Box sx={{ p: 3, color: theme.palette.text.primary, bgcolor: theme.palette.background.default, minHeight: "100vh" }}>
+      <Typography variant="h5" sx={{ fontWeight: "bold", color: theme.palette.primary.main, mb: 3, fontFamily: "JUST Sans ExBold" }}>
         Manage Products
       </Typography>
 
@@ -172,11 +170,11 @@ const AdminProducts = () => {
         onClick={() => handleOpen()}
         sx={{
           mb: 3,
-          bgcolor: brandAmber,
-          color: "#000",
+          bgcolor: theme.palette.primary.main,
+          color: mode === 'dark' ? "#000" : "#fff",
           fontWeight: "bold",
           fontFamily: "JUST Sans ExBold",
-          "&:hover": { bgcolor: "#FF9C25" },
+          "&:hover": { bgcolor: theme.palette.primary.dark },
         }}
       >
         Add Product
@@ -185,16 +183,16 @@ const AdminProducts = () => {
       <TableContainer
         component={Paper}
         sx={{
-          background: "rgba(255,255,255,0.05)",
+          background: theme.palette.background.paper,
           borderRadius: 3,
-          border: "1px solid rgba(255,255,255,0.08)",
+          border: `1px solid ${theme.palette.divider}`,
         }}
       >
         <Table>
           <TableHead>
             <TableRow>
               {["Image", "Name", "Category", "Price", "Stock", "Actions"].map((h) => (
-                <TableCell key={h} sx={{ color: brandAmber, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+                <TableCell key={h} sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
                   {h}
                 </TableCell>
               ))}
@@ -220,19 +218,19 @@ const AdminProducts = () => {
                       sx={{
                         width: 50,
                         height: 50,
-                        bgcolor: "rgba(255,255,255,0.1)",
+                        bgcolor: theme.palette.divider,
                         borderRadius: "8px",
                       }}
                     />
                   )}
                 </TableCell>
-                <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>{p.name}</TableCell>
-                <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>{p.category}</TableCell>
-                <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>₦{p.price.toLocaleString()}</TableCell>
-                <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>{p.stock}</TableCell>
+                <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{p.name}</TableCell>
+                <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{p.category}</TableCell>
+                <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>₦{p.price.toLocaleString()}</TableCell>
+                <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{p.stock}</TableCell>
                 <TableCell>
                   <IconButton color="inherit" size="small" onClick={() => handleOpen(p)}>
-                    <Edit sx={{ color: brandAmber }} />
+                    <Edit sx={{ color: theme.palette.primary.main }} />
                   </IconButton>
                   <IconButton
                     color="inherit"
@@ -255,13 +253,13 @@ const AdminProducts = () => {
         fullWidth
         PaperProps={{
           sx: {
-            bgcolor: "#1A1A1A",
-            color: "#fff",
+            bgcolor: theme.palette.background.paper,
+            color: theme.palette.text.primary,
             borderRadius: 3,
           },
         }}
       >
-        <DialogTitle sx={{ color: brandAmber, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+        <DialogTitle sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
           {editingProduct ? "Edit Product" : "Add Product"}
         </DialogTitle>
         <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
@@ -271,11 +269,11 @@ const AdminProducts = () => {
             value={formData.name || ""}
             onChange={handleInputChange}
             fullWidth
-            InputLabelProps={{ style: { color: "#ccc" } }}
+            InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
             InputProps={{
               sx: {
-                color: "#fff",
-                borderColor: "rgba(255,255,255,0.2)",
+                color: theme.palette.text.primary,
+                borderColor: theme.palette.divider,
               },
             }}
           />
@@ -286,8 +284,8 @@ const AdminProducts = () => {
             value={formData.price || ""}
             onChange={handleInputChange}
             fullWidth
-            InputLabelProps={{ style: { color: "#ccc" } }}
-            InputProps={{ sx: { color: "#fff" } }}
+            InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+            InputProps={{ sx: { color: theme.palette.text.primary } }}
           />
           <TextField
             label="Stock"
@@ -296,8 +294,8 @@ const AdminProducts = () => {
             value={formData.stock || ""}
             onChange={handleInputChange}
             fullWidth
-            InputLabelProps={{ style: { color: "#ccc" } }}
-            InputProps={{ sx: { color: "#fff" } }}
+            InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+            InputProps={{ sx: { color: theme.palette.text.primary } }}
           />
           <TextField
             select
@@ -306,8 +304,8 @@ const AdminProducts = () => {
             value={formData.category || ""}
             onChange={handleInputChange}
             fullWidth
-            InputLabelProps={{ style: { color: "#ccc" } }}
-            InputProps={{ sx: { color: "#fff" } }}
+            InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+            InputProps={{ sx: { color: theme.palette.text.primary } }}
           >
             <MenuItem value="Solar Panels">Solar Panels</MenuItem>
             <MenuItem value="Inverters">Inverters</MenuItem>
@@ -322,9 +320,9 @@ const AdminProducts = () => {
               variant="outlined"
               component="label"
               sx={{
-                borderColor: brandAmber,
-                color: brandAmber,
-                "&:hover": { borderColor: "#FF9C25" },
+                borderColor: theme.palette.primary.main,
+                color: theme.palette.primary.main,
+                "&:hover": { borderColor: theme.palette.primary.dark },
               }}
             >
               Upload Image
@@ -347,12 +345,12 @@ const AdminProducts = () => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} sx={{ color: "#ccc" }}>
+          <Button onClick={handleClose} sx={{ color: theme.palette.text.secondary }}>
             Cancel
           </Button>
           <Button
             variant="contained"
-            sx={{ bgcolor: brandAmber, color: "#000", fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}
+            sx={{ bgcolor: theme.palette.primary.main, color: mode === 'dark' ? "#000" : "#fff", fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}
             onClick={handleSave}
           >
             {editingProduct ? "Save Changes" : "Add Product"}
@@ -366,21 +364,21 @@ const AdminProducts = () => {
         onClose={() => setConfirmOpen(false)}
         PaperProps={{
           sx: {
-            bgcolor: "#1A1A1A",
-            color: "#fff",
+            bgcolor: theme.palette.background.paper,
+            color: theme.palette.text.primary,
             borderRadius: 3,
             p: 2,
           },
         }}
       >
-        <DialogTitle sx={{ color: brandAmber, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+        <DialogTitle sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
           Confirm Deletion
         </DialogTitle>
         <DialogContent>
           <Typography sx={{ fontFamily: "JUST Sans Regular" }}>Are you sure you want to delete this product?</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setConfirmOpen(false)} sx={{ color: "#ccc" }}>
+          <Button onClick={() => setConfirmOpen(false)} sx={{ color: theme.palette.text.secondary }}>
             Cancel
           </Button>
           <Button

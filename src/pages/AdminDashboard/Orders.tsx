@@ -9,11 +9,8 @@ import {
   TableBody,
 } from "@mui/material";
 import AdminLayout from "../../components/Admin/AdminLayout";
+import { useTheme } from "../../contexts/ThemeContext";
 
-const brandAmber = "#FFAB46";
-const brandGreen = "#2E7D4D";
-
-// 🧾 Dummy data (replace later with API data)
 const orders = [
   { id: "ORD123", customer: "John Doe", total: 195000, status: "Delivered" },
   { id: "ORD124", customer: "Jane Smith", total: 87000, status: "Pending" },
@@ -22,14 +19,15 @@ const orders = [
 ];
 
 const AdminOrders = () => {
+  const { theme, mode } = useTheme();
   const hasOrders = orders.length > 0;
 
   return (
     <AdminLayout>
       <Box
         sx={{
-          color: "#fff",
-          bgcolor: "#0D0D0D",
+          color: theme.palette.text.primary,
+          bgcolor: theme.palette.background.default,
           minHeight: "100vh",
           p: { xs: 2, sm: 3 },
         }}
@@ -37,7 +35,7 @@ const AdminOrders = () => {
         <Typography
           variant="h5"
           sx={{
-            color: brandAmber,
+            color: theme.palette.primary.main,
             mb: 3,
             fontWeight: "bold",
             fontFamily: "JUST Sans ExBold",
@@ -49,19 +47,19 @@ const AdminOrders = () => {
         {hasOrders ? (
           <Paper
             sx={{
-              background: "rgba(255,255,255,0.05)",
+              background: theme.palette.background.paper,
               borderRadius: 3,
-              border: "1px solid rgba(255,255,255,0.08)",
+              border: `1px solid ${theme.palette.divider}`,
               overflow: "hidden",
             }}
           >
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ color: brandAmber, fontFamily: "JUST Sans ExBold" }}>Order ID</TableCell>
-                  <TableCell sx={{ color: brandAmber, fontFamily: "JUST Sans ExBold" }}>Customer</TableCell>
-                  <TableCell sx={{ color: brandAmber, fontFamily: "JUST Sans ExBold" }}>Total</TableCell>
-                  <TableCell sx={{ color: brandAmber, fontFamily: "JUST Sans ExBold" }}>Status</TableCell>
+                  <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Order ID</TableCell>
+                  <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Customer</TableCell>
+                  <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Total</TableCell>
+                  <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Status</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -70,24 +68,24 @@ const AdminOrders = () => {
                     key={o.id}
                     sx={{
                       "&:hover": {
-                        background: "rgba(255,255,255,0.06)",
+                        background: mode === 'dark' ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.04)",
                         transition: "0.3s",
                       },
                     }}
                   >
-                    <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>{o.id}</TableCell>
-                    <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>{o.customer}</TableCell>
-                    <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>
+                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{o.id}</TableCell>
+                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{o.customer}</TableCell>
+                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
                       ₦{o.total.toLocaleString()}
                     </TableCell>
                     <TableCell
                       sx={{
                         color:
                           o.status === "Delivered"
-                            ? brandGreen
+                            ? theme.palette.secondary.main
                             : o.status === "Pending"
-                            ? brandAmber
-                            : "#999",
+                            ? theme.palette.primary.main
+                            : theme.palette.text.secondary,
                         fontWeight: "bold",
                         fontFamily: "JUST Sans ExBold",
                       }}
@@ -106,14 +104,14 @@ const AdminOrders = () => {
               mt: 10,
               p: 4,
               borderRadius: 3,
-              background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(255,255,255,0.08)",
+              background: theme.palette.background.paper,
+              border: `1px solid ${theme.palette.divider}`,
             }}
           >
             <Typography
               variant="h6"
               sx={{
-                color: "#ccc",
+                color: theme.palette.text.secondary,
                 fontWeight: 400,
                 fontSize: { xs: "1rem", sm: "1.25rem" },
                 fontFamily: "JUST Sans Regular",
@@ -129,4 +127,3 @@ const AdminOrders = () => {
 };
 
 export default AdminOrders;
-

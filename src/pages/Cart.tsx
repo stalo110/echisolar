@@ -1,77 +1,3 @@
-// import { Box, Container, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from "@mui/material";
-// import TopNav from "../navigation/TopNav";
-// import Footer from "../navigation/Footer";
-// import { useCart } from "../contexts/CartContext";
-// import DeleteIcon from '@mui/icons-material/Delete';
-// import AddIcon from '@mui/icons-material/Add';
-// import RemoveIcon from '@mui/icons-material/Remove';
-
-// function formatNGN(n: number){ return `NGN ${n.toLocaleString()}` }
-
-// const Cart = () => {
-//   const { items, remove, clear, increaseQuantity, decreaseQuantity } = useCart();
-//   const total = items.reduce((s, i) => s + i.price * i.quantity, 0);
-
-//   return (
-//     <Box>
-//       <TopNav/>
-//       <Container sx={{ py: 6 }}>
-//         <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 3, color:"black" }}>Your Cart</Typography>
-//         {items.length === 0 ? (
-//           <Typography color="#ffffff">Your cart is empty</Typography>
-//         ) : (
-//           <TableContainer component={Paper} sx={{ mb: 3, backgroundColor: 'white' }}>
-//             <Table>
-//               <TableHead>
-//                 <TableRow>
-//                   <TableCell sx={{ color: 'black' }}>Product</TableCell>
-//                   <TableCell sx={{ color: 'black' }}>Qty</TableCell>
-//                   <TableCell sx={{ color: 'black' }} align="right">Unit</TableCell>
-//                   <TableCell sx={{ color: 'black' }} align="right">Total</TableCell>
-//                   <TableCell></TableCell>
-//                 </TableRow>
-//               </TableHead>
-//               <TableBody>
-//                 {items.map(it => (
-//                   <TableRow key={it.productId}>
-//                     <TableCell sx={{ color: 'black' }}>{it.name}</TableCell>
-//                     <TableCell sx={{ color: 'black' }}>
-//                       <IconButton onClick={() => decreaseQuantity(it.productId)} size="small">
-//                         <RemoveIcon />
-//                       </IconButton>
-//                       {it.quantity}
-//                       <IconButton onClick={() => increaseQuantity(it.productId)} size="small">
-//                         <AddIcon />
-//                       </IconButton>
-//                     </TableCell>
-//                     <TableCell sx={{ color: 'black' }} align="right">{formatNGN(it.price)}</TableCell>
-//                     <TableCell sx={{ color: 'black' }} align="right">{formatNGN(it.price * it.quantity)}</TableCell>
-//                     <TableCell align="right"><IconButton onClick={()=> remove(it.productId)}><DeleteIcon sx={{ color: 'red' }} /></IconButton></TableCell>
-//                   </TableRow>
-//                 ))}
-//                 <TableRow>
-//                   <TableCell colSpan={3} align="right"><strong style={{ color: 'black' }}>Subtotal</strong></TableCell>
-//                   <TableCell align="right"><strong style={{ color: 'black' }}>{formatNGN(total)}</strong></TableCell>
-//                   <TableCell />
-//                 </TableRow>
-//               </TableBody>
-//             </Table>
-//           </TableContainer>
-//         )}
-
-//         <Box sx={{ display: 'flex', gap: 2 }}>
-//           <Button variant="contained" color="error" onClick={()=> clear()}>Clear Cart</Button>
-//           <Button variant="contained" color="success" href="/checkout" disabled={items.length===0}>Proceed to Checkout</Button>
-//         </Box>
-//       </Container>
-//       <Footer />
-//     </Box>
-//   )
-// }
-
-// export default Cart;
-
-
 import {
   Box,
   Container,
@@ -92,17 +18,19 @@ import { useCart } from "../contexts/CartContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useTheme } from "../contexts/ThemeContext";
 
 function formatNGN(n: number) {
   return `NGN ${n.toLocaleString()}`;
 }
 
 const Cart = () => {
+  const { theme, mode } = useTheme();
   const { items, remove, clear, increaseQuantity, decreaseQuantity } = useCart();
   const total = items.reduce((s, i) => s + i.price * i.quantity, 0);
 
   return (
-    <Box sx={{ bgcolor: "#0b0b0b", minHeight: "100vh", color: "#fff" }}>
+    <Box sx={{ bgcolor: theme.palette.background.default, minHeight: "100vh", color: theme.palette.text.primary }}>
       <TopNav />
 
       <Container sx={{ py: 8 }}>
@@ -111,7 +39,7 @@ const Cart = () => {
           sx={{
             fontFamily: "JUST Sans ExBold",
             mb: 4,
-            color: "var(--brand-amber)",
+            color: theme.palette.primary.main,
             textAlign: "center",
             letterSpacing: "1px",
           }}
@@ -123,7 +51,7 @@ const Cart = () => {
           <Typography
             sx={{
               textAlign: "center",
-              color: "#ccc",
+              color: theme.palette.text.secondary,
               fontFamily: "JUST Sans Regular",
             }}
           >
@@ -133,10 +61,10 @@ const Cart = () => {
           <TableContainer
             component={Paper}
             sx={{
-              background: "#1a1a1a",
-              border: "1px solid #333",
+              background: theme.palette.background.paper,
+              border: `1px solid ${theme.palette.divider}`,
               borderRadius: 2,
-              boxShadow: "0 0 15px rgba(0,0,0,0.4)",
+              boxShadow: mode === 'dark' ? "0 0 15px rgba(0,0,0,0.4)" : "0 0 15px rgba(0,0,0,0.1)",
               mb: 4,
             }}
           >
@@ -147,9 +75,9 @@ const Cart = () => {
                     <TableCell
                       key={h}
                       sx={{
-                        color: "var(--brand-amber)",
+                        color: theme.palette.primary.main,
                         fontFamily: "JUST Sans ExBold",
-                        borderBottom: "1px solid #333",
+                        borderBottom: `1px solid ${theme.palette.divider}`,
                         fontSize: "0.95rem",
                       }}
                     >
@@ -165,26 +93,26 @@ const Cart = () => {
                     key={it.productId}
                     sx={{
                       "&:hover": {
-                        backgroundColor: "rgba(255, 171, 70, 0.05)",
+                        backgroundColor: `${theme.palette.primary.main}05`,
                       },
                     }}
                   >
                     <TableCell
                       sx={{
-                        color: "#eee",
+                        color: theme.palette.text.primary,
                         fontFamily: "JUST Sans Regular",
                       }}
                     >
                       {it.name}
                     </TableCell>
 
-                    <TableCell sx={{ color: "#ddd" }}>
+                    <TableCell sx={{ color: theme.palette.text.primary }}>
                       <IconButton
                         onClick={() => decreaseQuantity(it.productId)}
                         size="small"
                         sx={{
-                          color: "#aaa",
-                          "&:hover": { color: "var(--brand-amber)" },
+                          color: theme.palette.text.secondary,
+                          "&:hover": { color: theme.palette.primary.main },
                         }}
                       >
                         <RemoveIcon />
@@ -194,19 +122,19 @@ const Cart = () => {
                         onClick={() => increaseQuantity(it.productId)}
                         size="small"
                         sx={{
-                          color: "#aaa",
-                          "&:hover": { color: "var(--brand-amber)" },
+                          color: theme.palette.text.secondary,
+                          "&:hover": { color: theme.palette.primary.main },
                         }}
                       >
                         <AddIcon />
                       </IconButton>
                     </TableCell>
 
-                    <TableCell sx={{ color: "#ccc" }} align="right">
+                    <TableCell sx={{ color: theme.palette.text.secondary }} align="right">
                       {formatNGN(it.price)}
                     </TableCell>
 
-                    <TableCell sx={{ color: "#fff" }} align="right">
+                    <TableCell sx={{ color: theme.palette.text.primary }} align="right">
                       {formatNGN(it.price * it.quantity)}
                     </TableCell>
 
@@ -228,7 +156,7 @@ const Cart = () => {
                   <TableCell colSpan={3} align="right">
                     <Typography
                       sx={{
-                        color: "var(--brand-amber)",
+                        color: theme.palette.primary.main,
                         fontFamily: "JUST Sans ExBold",
                       }}
                     >
@@ -239,7 +167,7 @@ const Cart = () => {
                     <Typography
                       sx={{
                         fontFamily: "JUST Sans ExBold",
-                        color: "var(--brand-green)",
+                        color: theme.palette.secondary.main,
                       }}
                     >
                       {formatNGN(total)}
@@ -281,13 +209,13 @@ const Cart = () => {
             href="/checkout"
             disabled={items.length === 0}
             sx={{
-              background: "var(--brand-green)",
-              color: "#fff",
+              background: theme.palette.secondary.main,
+              color: mode === 'dark' ? "#fff" : "#000",
               textTransform: "none",
               fontFamily: "JUST Sans ExBold",
               px: 4,
               "&:hover": {
-                background: "#36a15f",
+                background: theme.palette.secondary.dark,
               },
             }}
           >

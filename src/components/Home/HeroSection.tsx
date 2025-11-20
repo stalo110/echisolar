@@ -1,10 +1,11 @@
 import { Box, Container, Typography, Grid, Button, useMediaQuery } from "@mui/material";
 import { ChevronRight as ChevronRightIcon, Send as SendIcon } from "@mui/icons-material";
+import { useTheme } from "../../contexts/ThemeContext";
+import { Link } from "react-router-dom";
 
 export const HeroSection = () => {
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
-  const AMBER = "#FFAB46";
-  const GREEN = "#2E7D4D";
+  const isMobile = useMediaQuery((muiTheme) => muiTheme.breakpoints.down("md"));
+  const { theme } = useTheme();
 
   return (
     <Box
@@ -42,7 +43,7 @@ export const HeroSection = () => {
                 }}
               >
                 Powering a{" "}
-                <Box component="span" sx={{ color: AMBER, display: "inline-block" }}>
+                <Box component="span" sx={{ color: theme.palette.primary.main, display: "inline-block" }}>
                   Brighter Future
                 </Box>{" "}
                 with Solar Energy
@@ -71,11 +72,13 @@ export const HeroSection = () => {
                 }}
               >
                 <Button
+                  component={Link}
+                  to="/register"
                   variant="contained"
                   size="large"
                   endIcon={<SendIcon />}
                   sx={{
-                    background: `linear-gradient(90deg, ${GREEN}, #289b5a)`,
+                    background: `linear-gradient(90deg, ${theme.palette.secondary.main}, ${theme.palette.secondary.light})`,
                     color: "#fff",
                     px: 4,
                     py: 1.4,
@@ -87,7 +90,7 @@ export const HeroSection = () => {
                     "&:hover": {
                       transform: "translateY(-3px)",
                       boxShadow: "0 14px 40px rgba(46,125,77,0.22)",
-                      background: `linear-gradient(90deg, #245c41, ${GREEN})`,
+                      background: `linear-gradient(90deg, ${theme.palette.secondary.dark}, ${theme.palette.secondary.main})`,
                     },
                   }}
                 >
@@ -95,11 +98,13 @@ export const HeroSection = () => {
                 </Button>
 
                 <Button
+                  component={Link}
+                  to="/products"
                   variant="contained"
                   size="large"
                   endIcon={<ChevronRightIcon />}
                   sx={{
-                    background: `linear-gradient(90deg, ${AMBER}, #ffbf6d)`,
+                    background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
                     color: "#000",
                     px: 4,
                     py: 1.4,
@@ -131,9 +136,27 @@ export const HeroSection = () => {
                   { label: "Happy Customers", value: "500+" },
                   { label: "Installed Capacity", value: "5MW+" },
                   { label: "Average Savings", value: "85%" },
-                ].map((s) => (
-                  <Box key={s.label} sx={{ textAlign: "center" }}>
-                    <Typography sx={{ color: AMBER, fontWeight: 800, fontSize: "1.6rem", fontFamily: "JUST Sans ExBold" }}>
+                ].map((s, i) => (
+                  <Box key={s.label} sx={{ 
+                    textAlign: "center",
+                    animation: `fadeInUp 1s ease-out ${i * 0.2}s both`,
+                    "@keyframes fadeInUp": {
+                      "0%": { opacity: 0, transform: "translateY(30px)" },
+                      "100%": { opacity: 1, transform: "translateY(0)" }
+                    }
+                  }}>
+                    <Typography sx={{ 
+                      color: theme.palette.primary.main, 
+                      fontWeight: 800, 
+                      fontSize: "1.6rem", 
+                      fontFamily: "JUST Sans ExBold",
+                      animation: "countUp 2s ease-out",
+                      "@keyframes countUp": {
+                        "0%": { transform: "scale(0.5)" },
+                        "50%": { transform: "scale(1.1)" },
+                        "100%": { transform: "scale(1)" }
+                      }
+                    }}>
                       {s.value}
                     </Typography>
                     <Typography sx={{ color: "rgba(234,234,234,0.8)", fontFamily: "JUST Sans Regular" }}>{s.label}</Typography>

@@ -25,10 +25,10 @@ export const ConsentBanner = () => {
 
     return (
         <Box sx={{ p: 2, position: 'fixed', bottom: 0, left: 0, right: 0, bgcolor: 'background.paper', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Typography variant="body2" sx={{ mr: 2 }}>
+            <Typography variant="body2" sx={{ mr: 2, fontFamily: "JUST Sans Regular" }}>
                 We use cookies to ensure you get the best experience on our website.
             </Typography>
-            <Button variant="contained" onClick={handleAccept}>Accept</Button>
+            <Button variant="contained" onClick={handleAccept} sx={{ fontFamily: "JUST Sans ExBold" }}>Accept</Button>
         </Box>
     );
 };

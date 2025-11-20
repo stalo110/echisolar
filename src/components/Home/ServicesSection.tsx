@@ -1,31 +1,33 @@
 import { Box, Container, Typography, Grid, Card, IconButton } from "@mui/material";
+import { useTheme } from "../../contexts/ThemeContext";
 import {
   Lightbulb as LightbulbIcon,
   CheckCircle as CheckCircleIcon,
   ThumbUp as ThumbUpIcon,
   FormatQuote as QuoteIcon,
   ChevronRight as ChevronRightIcon,
-  Phone as PhoneIcon,
   Send as SendIcon,
 } from "@mui/icons-material";
+import { FaWhatsapp } from "react-icons/fa";
 
 export const ServicesSection = () => {
+  const { theme, mode } = useTheme();
   const services = [
     { icon: <LightbulbIcon />, title: "Solar System Design", desc: "Custom PV system design, shading analysis, maximize energy yield." },
     { icon: <CheckCircleIcon />, title: "Installation & Commissioning", desc: "Professional on-site installation of panels & inverters." },
     { icon: <ThumbUpIcon />, title: "Maintenance & Support", desc: "Preventive maintenance, checks and rapid troubleshooting." },
     { icon: <QuoteIcon />, title: "Battery & Energy Storage", desc: "Battery options, sizing and integration with solar systems." },
     { icon: <ChevronRightIcon />, title: "Inverters & Components", desc: "High-quality inverters & mounting systems supply." },
-    { icon: <PhoneIcon />, title: "Financing & Plans", desc: "Flexible payment options and financing partnerships." },
+    { icon: <FaWhatsapp />, title: "Financing & Plans", desc: "Flexible payment options and financing partnerships." },
   ];
 
   return (
-    <Box sx={{ py: 10, background: "#070707" }}>
+    <Box sx={{ py: 10, background: mode === 'dark' ? "#070707" : theme.palette.background.default }}>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: "center", mb: 6 }}>
-          <Typography variant="overline" sx={{ color: "#FFAB46", fontWeight: 800, fontFamily: "JUST Sans ExBold" }}>Our Services</Typography>
-          <Typography variant="h3" sx={{ fontWeight: 800, color: "#EAEAEA", mt: 1, fontFamily: "JUST Sans ExBold" }}>Clean, reliable solar solutions</Typography>
-          <Typography sx={{ color: "rgba(234,234,234,0.75)", maxWidth: 780, mx: "auto", mt: 2, fontFamily: "JUST Sans Regular" }}>
+          <Typography variant="h6" sx={{ color: theme.palette.primary.main, fontWeight: 800, fontFamily: "JUST Sans ExBold", textTransform: "uppercase", letterSpacing: 2, fontSize: { xs: "0.9rem", md: "1.25rem" } }}>Our Services</Typography>
+          <Typography variant="h2" sx={{ fontWeight: 800, color: theme.palette.text.primary, mt: 1, fontFamily: "JUST Sans ExBold", fontSize: { xs: "2.2rem", md: "3.8rem" } }}>Clean, reliable solar solutions</Typography>
+          <Typography sx={{ color: theme.palette.text.secondary, maxWidth: 780, mx: "auto", mt: 2, fontFamily: "JUST Sans Regular" }}>
             We design, install and maintain solar systems for homes and businesses, backed by monitoring and flexible payment options.
           </Typography>
         </Box>
@@ -38,18 +40,28 @@ export const ServicesSection = () => {
                   p: 3,
                   height: "100%",
                   borderRadius: 2,
-                  background: "linear-gradient(180deg,#111,#161616)",
-                  color: "#EAEAEA",
+                  background: mode === 'dark' ? "linear-gradient(180deg,#111,#161616)" : "linear-gradient(180deg,#ffffff,#f8f9fa)",
+                  color: theme.palette.text.primary,
                   transition: "transform .28s ease, box-shadow .28s ease",
+                  animation: `fadeInUp 0.6s ease-out ${i * 0.1}s both`,
+                  "@keyframes fadeInUp": {
+                    "0%": { opacity: 0, transform: "translateY(30px)" },
+                    "100%": { opacity: 1, transform: "translateY(0)" }
+                  },
                   "&:hover": { transform: "translateY(-8px)", boxShadow: "0 18px 40px rgba(0,0,0,0.6)" },
                 }}
               >
                 <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start", mb: 1 }}>
                   <IconButton
                     sx={{
-                      background: "rgba(255,255,255,0.03)",
-                      color: "#FFAB46",
-                      "&:hover": { filter: "drop-shadow(0 6px 16px rgba(255,171,70,0.18))" },
+                      background: mode === 'dark' ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.03)",
+                      color: theme.palette.primary.main,
+                      animation: "pulse 2s ease-in-out infinite",
+                      "@keyframes pulse": {
+                        "0%, 100%": { transform: "scale(1)" },
+                        "50%": { transform: "scale(1.05)" }
+                      },
+                      "&:hover": { filter: `drop-shadow(0 6px 16px ${theme.palette.primary.main}30)` },
                     }}
                     size="large"
                   >
@@ -57,7 +69,7 @@ export const ServicesSection = () => {
                   </IconButton>
                   <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: "JUST Sans ExBold" }}>{s.title}</Typography>
                 </Box>
-                <Typography sx={{ color: "rgba(234,234,234,0.75)", fontFamily: "JUST Sans Regular" }}>{s.desc}</Typography>
+                <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>{s.desc}</Typography>
               </Card>
             </Grid>
           ))}
@@ -69,7 +81,7 @@ export const ServicesSection = () => {
             px: 4,
             py: 1.2,
             borderRadius: 2,
-            background: "linear-gradient(90deg,#2E7D4D,#289b5a)",
+            background: `linear-gradient(90deg,${theme.palette.secondary.main},${theme.palette.secondary.light})`,
             color: "#fff",
             fontWeight: 800,
             fontFamily: "JUST Sans ExBold",
@@ -80,13 +92,25 @@ export const ServicesSection = () => {
             Contact Sales
           </Box>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <IconButton sx={{ background: "rgba(255,255,255,0.03)", color: "#FFAB46" }}>
-              <SendIcon />
+          <Box 
+            component="a"
+            href="https://wa.me/2347018090107"
+            target="_blank"
+            sx={{ 
+              display: "flex", 
+              alignItems: "center", 
+              gap: 1, 
+              textDecoration: "none",
+              "&:hover": { transform: "translateY(-2px)" },
+              transition: "transform 0.3s ease"
+            }}
+          >
+            <IconButton sx={{ background: mode === 'dark' ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.03)", color: theme.palette.primary.main }}>
+              <FaWhatsapp />
             </IconButton>
             <Box>
-              <Typography sx={{ fontWeight: 700, color: "#EAEAEA", fontFamily: "JUST Sans ExBold" }}>+234 701 809 0107</Typography>
-              <Typography sx={{ color: "rgba(234,234,234,0.7)", fontFamily: "JUST Sans Regular" }}>Talk to an Expert</Typography>
+              <Typography sx={{ fontWeight: 700, color: theme.palette.text.primary, fontFamily: "JUST Sans ExBold" }}>+234 701 809 0107</Typography>
+              <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>Chat on WhatsApp</Typography>
             </Box>
           </Box>
         </Box>

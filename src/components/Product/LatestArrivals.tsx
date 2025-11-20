@@ -34,6 +34,7 @@ export const LatestArrivals = () => {
             background: 'linear-gradient(90deg, #e48a1cff, #FFAB46)',
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
+            fontSize: { xs: "2.2rem", md: "3.8rem" },
           }}
         >
           Latest Arrivals

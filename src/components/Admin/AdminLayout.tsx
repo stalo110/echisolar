@@ -20,23 +20,23 @@ import {
   AttachMoney,
   Dashboard as DashboardIcon,
   Logout as LogoutIcon,
+  Brightness4,
+  Brightness7,
 } from "@mui/icons-material";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { useTheme } from "../../contexts/ThemeContext";
 
-const brandAmber = "#FFAB46";
 const drawerWidth = 240;
 
 const menuItems = [
   { text: "Dashboard", icon: <DashboardIcon />, path: "/admin/dashboard" },
   { text: "Products", icon: <Inventory />, path: "/admin/products" },
-    { text: "Projects", icon: <Inventory />, path: "/admin/projects" },
+  { text: "Projects", icon: <Inventory />, path: "/admin/projects" },
   { text: "Orders", icon: <ShoppingCart />, path: "/admin/orders" },
   { text: "Users", icon: <Group />, path: "/admin/users" },
   { text: "Revenue", icon: <AttachMoney />, path: "/admin/revenue" },
-
-  
 ];
 
 interface Props {
@@ -48,6 +48,7 @@ const AdminLayout = ({ children }: Props) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const { theme, mode, toggleTheme } = useTheme();
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
@@ -60,8 +61,8 @@ const AdminLayout = ({ children }: Props) => {
     <Box
       sx={{
         height: "100%",
-        background: "linear-gradient(180deg, #121212, #1E1E1E)",
-        color: "#fff",
+        background: mode === 'dark' ? "linear-gradient(180deg, #121212, #1E1E1E)" : "linear-gradient(180deg, #f8f9fa, #ffffff)",
+        color: theme.palette.text.primary,
       }}
     >
       {/* Header */}
@@ -78,7 +79,7 @@ const AdminLayout = ({ children }: Props) => {
           variant="h6"
           sx={{
             fontWeight: "bold",
-            color: brandAmber,
+            color: theme.palette.primary.main,
             letterSpacing: 1.2,
             fontFamily: "JUST Sans ExBold",
           }}
@@ -88,12 +89,41 @@ const AdminLayout = ({ children }: Props) => {
         <IconButton
           onClick={handleDrawerToggle}
           sx={{
-            color: brandAmber,
+            color: theme.palette.primary.main,
             display: { sm: "none" },
           }}
         >
           <CloseIcon />
         </IconButton>
+      </Box>
+
+      {/* Theme Toggle */}
+      <Box sx={{ px: 2, pb: 2 }}>
+        <Box
+          onClick={toggleTheme}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            p: 1,
+            borderRadius: 1,
+            cursor: "pointer",
+            "&:hover": { background: mode === 'dark' ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)" },
+            transition: "0.3s",
+          }}
+        >
+          <IconButton
+            size="small"
+            sx={{
+              color: theme.palette.primary.main,
+              mr: 1,
+            }}
+          >
+            {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
+          </IconButton>
+          <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+            {mode === 'dark' ? 'Light Mode' : 'Dark Mode'}
+          </Typography>
+        </Box>
       </Box>
 
       {/* Menu */}
@@ -102,24 +132,23 @@ const AdminLayout = ({ children }: Props) => {
           const active = location.pathname === item.path;
           return (
             <ListItem
-            //   button
               key={item.text}
               component={Link}
               to={item.path}
               sx={{
                 background: active
-                  ? "rgba(255,171,70,0.15)"
+                  ? `${theme.palette.primary.main}25`
                   : "transparent",
-                "&:hover": { background: "rgba(255,255,255,0.08)" },
+                "&:hover": { background: mode === 'dark' ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)" },
                 transition: "0.3s",
               }}
             >
-              <ListItemIcon sx={{ color: brandAmber }}>{item.icon}</ListItemIcon>
+              <ListItemIcon sx={{ color: theme.palette.primary.main }}>{item.icon}</ListItemIcon>
               <ListItemText
                 primary={item.text}
                 primaryTypographyProps={{
                   fontWeight: active ? "bold" : "normal",
-                  color: active ? brandAmber : "#fff",
+                  color: active ? theme.palette.primary.main : theme.palette.text.primary,
                   fontFamily: active ? "JUST Sans ExBold" : "JUST Sans Regular",
                 }}
               />
@@ -133,7 +162,7 @@ const AdminLayout = ({ children }: Props) => {
           sx={{
             mt: 2,
             cursor: "pointer",
-            "&:hover": { background: "rgba(255,255,255,0.08)" },
+            "&:hover": { background: mode === 'dark' ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)" },
             transition: "0.3s",
           }}
         >
@@ -154,15 +183,15 @@ const AdminLayout = ({ children }: Props) => {
   );
 
   return (
-    <Box sx={{ display: "flex", bgcolor: "#0D0D0D", minHeight: "100vh" }}>
+    <Box sx={{ display: "flex", bgcolor: theme.palette.background.default, minHeight: "100vh" }}>
       <CssBaseline />
 
       {/* Top AppBar */}
       <AppBar
         position="fixed"
         sx={{
-          background: "linear-gradient(90deg, #1B1B1B, #121212)",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.6)",
+          background: mode === 'dark' ? "linear-gradient(90deg, #1B1B1B, #121212)" : "linear-gradient(90deg, #ffffff, #f8f9fa)",
+          boxShadow: `0 2px 10px ${theme.palette.divider}`,
           zIndex: 1201,
         }}
       >
@@ -171,7 +200,7 @@ const AdminLayout = ({ children }: Props) => {
             color="inherit"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+            sx={{ mr: 2, display: { sm: "none" }, color: theme.palette.text.primary }}
           >
             <MenuIcon />
           </IconButton>
@@ -180,7 +209,7 @@ const AdminLayout = ({ children }: Props) => {
             sx={{
               fontWeight: "bold",
               flexGrow: 1,
-              color: brandAmber,
+              color: theme.palette.primary.main,
               fontFamily: "JUST Sans ExBold",
             }}
           >
@@ -223,12 +252,10 @@ const AdminLayout = ({ children }: Props) => {
 
       {/* Main Content */}
       <Box
-        // component="main"
         sx={{
           flexGrow: 1,
           p: { xs: 2, sm: 3 },
           mt: 8,
-        //   width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
         {children}

@@ -7,30 +7,33 @@ import {
   InputLabel,
   Grid,
 } from "@mui/material";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const categories = ["Solar Panels", "Inverters", "Batteries", "Accessories"];
 
 interface ProductFilterProps {
   setQuery: React.Dispatch<React.SetStateAction<string>>;
   setCategory: React.Dispatch<React.SetStateAction<string>>;
-  setPriceRange: React.Dispatch<React.SetStateAction<string>>;
+  setMaxPrice: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ProductFilter = ({
   setQuery,
   setCategory,
-  setPriceRange,
+  setMaxPrice,
 }: ProductFilterProps) => {
+  const { theme, mode } = useTheme();
+
   return (
     <Box
       sx={{
         my: 6,
         p: 3,
         borderRadius: 3,
-        background: "rgba(255,255,255,0.05)",
-        border: "1px solid rgba(255,255,255,0.08)",
+        background: theme.palette.background.paper,
+        border: `1px solid ${theme.palette.divider}`,
         backdropFilter: "blur(10px)",
-        boxShadow: "0 0 20px rgba(0,0,0,0.3)",
+        boxShadow: mode === 'dark' ? "0 0 20px rgba(0,0,0,0.3)" : "0 0 20px rgba(0,0,0,0.1)",
       }}
     >
       <Grid container spacing={3}>
@@ -41,11 +44,11 @@ const ProductFilter = ({
             label="Product Name"
             onChange={(e) => setQuery(e.target.value)}
             sx={{
-              input: { color: "#fff" },
-              label: { color: "rgba(255,255,255,0.7)" },
+              input: { color: theme.palette.text.primary },
+              label: { color: theme.palette.text.secondary },
               "& .MuiOutlinedInput-root": {
-                "& fieldset": { borderColor: "rgba(255,255,255,0.2)" },
-                "&:hover fieldset": { borderColor: "#FFAB46" },
+                "& fieldset": { borderColor: theme.palette.divider },
+                "&:hover fieldset": { borderColor: theme.palette.primary.main },
               },
             }}
           />
@@ -56,32 +59,32 @@ const ProductFilter = ({
             variant="outlined"
             label="Max Price"
             type="number"
-            onChange={(e) => setPriceRange(e.target.value)}
+            onChange={(e) => setMaxPrice(e.target.value)}
             sx={{
-              input: { color: "#fff" },
-              label: { color: "rgba(255,255,255,0.7)" },
+              input: { color: theme.palette.text.primary },
+              label: { color: theme.palette.text.secondary },
               "& .MuiOutlinedInput-root": {
-                "& fieldset": { borderColor: "rgba(255,255,255,0.2)" },
-                "&:hover fieldset": { borderColor: "#FFAB46" },
+                "& fieldset": { borderColor: theme.palette.divider },
+                "&:hover fieldset": { borderColor: theme.palette.primary.main },
               },
             }}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 4 }}>
           <FormControl fullWidth variant="outlined">
-            <InputLabel sx={{ color: "rgba(255,255,255,0.7)" }}>
+            <InputLabel sx={{ color: theme.palette.text.secondary }}>
               Category
             </InputLabel>
             <Select
               label="Category"
              onChange={(e) => setCategory(e.target.value as string)}
               sx={{
-                color: "#fff",
+                color: theme.palette.text.primary,
                 ".MuiOutlinedInput-notchedOutline": {
-                  borderColor: "rgba(255,255,255,0.2)",
+                  borderColor: theme.palette.divider,
                 },
                 "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#FFAB46",
+                  borderColor: theme.palette.primary.main,
                 },
               }}
             >

@@ -6,9 +6,11 @@ import {
   useMediaQuery,
   useTheme
 } from '@mui/material';
+import { useTheme as useCustomTheme } from '../../contexts/ThemeContext';
 
 export const HeroSection = () => {
   const theme = useTheme();
+  const { theme: customTheme } = useCustomTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
@@ -42,7 +44,7 @@ export const HeroSection = () => {
                   fontWeight: 800,
                   fontSize: isMobile ? '2.6rem' : '3.8rem',
                   lineHeight: 1.2,
-                  background: 'linear-gradient(90deg, #FFAB46, #e7922bff)',
+                  background: `linear-gradient(90deg, ${customTheme.palette.primary.main}, ${customTheme.palette.primary.light})`,
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   textShadow: '0 4px 15px rgba(0, 188, 212, 0.2)',

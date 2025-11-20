@@ -5,20 +5,20 @@ import {
   Typography,
 } from "@mui/material";
 import AdminLayout from "../../components/Admin/AdminLayout";
-
-const brandAmber = "#FFAB46";
-const brandGreen = "#2E7D4D";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const AdminDashboard = () => {
+  const { theme, mode } = useTheme();
+
   return (
     <AdminLayout>
-      <Box sx={{ bgcolor: "#0D0D0D", minHeight: "100vh", p: { xs: 2, sm: 3 } }}>
+      <Box sx={{ bgcolor: theme.palette.background.default, minHeight: "100vh", p: { xs: 2, sm: 3 } }}>
         {/* Header */}
         <Typography
           variant="h5"
           sx={{
             fontWeight: "bold",
-            color: brandAmber,
+            color: theme.palette.primary.main,
             mb: 4,
             fontFamily: "JUST Sans ExBold",
           }}
@@ -39,15 +39,14 @@ const AdminDashboard = () => {
                 sx={{
                   p: 3,
                   borderRadius: 3,
-                  background:
-                    "linear-gradient(145deg, rgba(255,171,70,0.1), rgba(46,125,77,0.15))",
-                  color: "#fff",
+                  background: theme.palette.background.paper,
+                  color: theme.palette.text.primary,
                   backdropFilter: "blur(8px)",
-                  boxShadow: "0 0 20px rgba(0,0,0,0.4)",
+                  boxShadow: mode === 'dark' ? "0 0 20px rgba(0,0,0,0.4)" : "0 0 20px rgba(0,0,0,0.1)",
                   transition: "all 0.3s ease",
                   "&:hover": {
                     transform: "translateY(-5px)",
-                    boxShadow: `0 0 25px ${brandAmber}`,
+                    boxShadow: `0 0 25px ${theme.palette.primary.main}40`,
                   },
                 }}
               >
@@ -68,12 +67,12 @@ const AdminDashboard = () => {
             mt: 5,
             p: 4,
             borderRadius: 3,
-            background: "linear-gradient(145deg, #181818, #1F1F1F)",
-            color: "#fff",
-            boxShadow: "0 0 25px rgba(0,0,0,0.5)",
+            background: theme.palette.background.paper,
+            color: theme.palette.text.primary,
+            boxShadow: mode === 'dark' ? "0 0 25px rgba(0,0,0,0.5)" : "0 0 25px rgba(0,0,0,0.1)",
           }}
         >
-          <Typography variant="h6" sx={{ mb: 2, color: brandGreen, fontFamily: "JUST Sans ExBold" }}>
+          <Typography variant="h6" sx={{ mb: 2, color: theme.palette.secondary.main, fontFamily: "JUST Sans ExBold" }}>
             Sales Analytics (Coming Soon)
           </Typography>
           <Typography variant="body2" sx={{ opacity: 0.7, fontFamily: "JUST Sans Regular" }}>

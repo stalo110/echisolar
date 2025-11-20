@@ -22,8 +22,7 @@ import {
 import { Edit, Delete, Add, Image } from "@mui/icons-material";
 import { useState, type ChangeEvent } from "react";
 import AdminLayout from "../../components/Admin/AdminLayout";
-
-const brandAmber = "#FFAB46";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface Project {
   id: number;
@@ -34,6 +33,7 @@ interface Project {
 }
 
 const AdminProjects = () => {
+  const { theme, mode } = useTheme();
   const [projects, setProjects] = useState<Project[]>([
     {
       id: 1,
@@ -176,8 +176,8 @@ const AdminProjects = () => {
 
   return (
     <AdminLayout>
-    <Box sx={{ p: 3, color: "#fff", bgcolor: "#0D0D0D", minHeight: "100vh" }}>
-      <Typography variant="h5" sx={{ fontWeight: "bold", color: brandAmber, mb: 3, fontFamily: "JUST Sans ExBold" }}>
+    <Box sx={{ p: 3, color: theme.palette.text.primary, bgcolor: theme.palette.background.default, minHeight: "100vh" }}>
+      <Typography variant="h5" sx={{ fontWeight: "bold", color: theme.palette.primary.main, mb: 3, fontFamily: "JUST Sans ExBold" }}>
         Manage Projects
       </Typography>
 
@@ -187,11 +187,11 @@ const AdminProjects = () => {
         onClick={() => handleOpen()}
         sx={{
           mb: 3,
-          bgcolor: brandAmber,
-          color: "#000",
+          bgcolor: theme.palette.primary.main,
+          color: mode === 'dark' ? "#000" : "#fff",
           fontWeight: "bold",
           fontFamily: "JUST Sans ExBold",
-          "&:hover": { bgcolor: "#FF9C25" },
+          "&:hover": { bgcolor: theme.palette.primary.dark },
         }}
       >
         Add Project
@@ -200,16 +200,16 @@ const AdminProjects = () => {
       <TableContainer
         component={Paper}
         sx={{
-          background: "rgba(255,255,255,0.05)",
+          background: theme.palette.background.paper,
           borderRadius: 3,
-          border: "1px solid rgba(255,255,255,0.08)",
+          border: `1px solid ${theme.palette.divider}`,
         }}
       >
         <Table>
           <TableHead>
             <TableRow>
               {["Images", "Title", "Location", "Description", "Actions"].map((h) => (
-                <TableCell key={h} sx={{ color: brandAmber, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+                <TableCell key={h} sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
                   {h}
                 </TableCell>
               ))}
@@ -239,24 +239,24 @@ const AdminProjects = () => {
                         sx={{
                           width: 50,
                           height: 50,
-                          bgcolor: "rgba(255,255,255,0.1)",
+                          bgcolor: theme.palette.divider,
                           borderRadius: "8px",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
                         }}
                       >
-                        <Image sx={{ color: "#555" }} />
+                        <Image sx={{ color: theme.palette.text.secondary }} />
                       </Box>
                     )}
                   </Box>
                 </TableCell>
-                <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>{p.title}</TableCell>
-                <TableCell sx={{ color: "#fff", fontFamily: "JUST Sans Regular" }}>{p.location}</TableCell>
-                <TableCell sx={{ color: "#ccc", fontFamily: "JUST Sans Regular" }}>{p.description}</TableCell>
+                <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{p.title}</TableCell>
+                <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{p.location}</TableCell>
+                <TableCell sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>{p.description}</TableCell>
                 <TableCell>
                   <IconButton color="inherit" size="small" onClick={() => handleOpen(p)}>
-                    <Edit sx={{ color: brandAmber }} />
+                    <Edit sx={{ color: theme.palette.primary.main }} />
                   </IconButton>
                   <IconButton
                     color="inherit"
@@ -279,13 +279,13 @@ const AdminProjects = () => {
         fullWidth
         PaperProps={{
           sx: {
-            bgcolor: "#1A1A1A",
-            color: "#fff",
+            bgcolor: theme.palette.background.paper,
+            color: theme.palette.text.primary,
             borderRadius: 3,
           },
         }}
       >
-        <DialogTitle sx={{ color: brandAmber, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+        <DialogTitle sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
           {editingProject ? "Edit Project" : "Add Project"}
         </DialogTitle>
         <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
@@ -295,8 +295,8 @@ const AdminProjects = () => {
             value={formData.title || ""}
             onChange={handleInputChange}
             fullWidth
-            InputLabelProps={{ style: { color: "#ccc" } }}
-            InputProps={{ sx: { color: "#fff" } }}
+            InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+            InputProps={{ sx: { color: theme.palette.text.primary } }}
           />
           <TextField
             label="Location"
@@ -304,8 +304,8 @@ const AdminProjects = () => {
             value={formData.location || ""}
             onChange={handleInputChange}
             fullWidth
-            InputLabelProps={{ style: { color: "#ccc" } }}
-            InputProps={{ sx: { color: "#fff" } }}
+            InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+            InputProps={{ sx: { color: theme.palette.text.primary } }}
           />
           <TextField
             label="Description"
@@ -315,8 +315,8 @@ const AdminProjects = () => {
             value={formData.description || ""}
             onChange={handleInputChange}
             fullWidth
-            InputLabelProps={{ style: { color: "#ccc" } }}
-            InputProps={{ sx: { color: "#fff" } }}
+            InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+            InputProps={{ sx: { color: theme.palette.text.primary } }}
           />
 
           <Box>
@@ -327,9 +327,9 @@ const AdminProjects = () => {
               variant="outlined"
               component="label"
               sx={{
-                borderColor: brandAmber,
-                color: brandAmber,
-                "&:hover": { borderColor: "#FF9C25" },
+                borderColor: theme.palette.primary.main,
+                color: theme.palette.primary.main,
+                "&:hover": { borderColor: theme.palette.primary.dark },
               }}
             >
               Upload
@@ -362,12 +362,12 @@ const AdminProjects = () => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} sx={{ color: "#ccc" }}>
+          <Button onClick={handleClose} sx={{ color: theme.palette.text.secondary }}>
             Cancel
           </Button>
           <Button
             variant="contained"
-            sx={{ bgcolor: brandAmber, color: "#000", fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}
+            sx={{ bgcolor: theme.palette.primary.main, color: mode === 'dark' ? "#000" : "#fff", fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}
             onClick={handleSave}
           >
             {editingProject ? "Save Changes" : "Add Project"}
@@ -381,21 +381,21 @@ const AdminProjects = () => {
         onClose={() => setConfirmOpen(false)}
         PaperProps={{
           sx: {
-            bgcolor: "#1A1A1A",
-            color: "#fff",
+            bgcolor: theme.palette.background.paper,
+            color: theme.palette.text.primary,
             borderRadius: 3,
             p: 2,
           },
         }}
       >
-        <DialogTitle sx={{ color: brandAmber, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+        <DialogTitle sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
           Confirm Deletion
         </DialogTitle>
         <DialogContent>
           <Typography sx={{ fontFamily: "JUST Sans Regular" }}>Are you sure you want to delete this project?</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setConfirmOpen(false)} sx={{ color: "#ccc" }}>
+          <Button onClick={() => setConfirmOpen(false)} sx={{ color: theme.palette.text.secondary }}>
             Cancel
           </Button>
           <Button

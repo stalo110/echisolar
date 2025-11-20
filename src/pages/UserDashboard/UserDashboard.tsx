@@ -1,9 +1,11 @@
 import { Box, Typography, Paper, Grid } from "@mui/material";
 import { useAuth } from "../../contexts/AuthContext";
 import UserDashboardLayout from "../../components/User/UserDashboardLayout";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const UserDashboardPage = () => {
   const { user } = useAuth();
+  const { theme, mode } = useTheme();
 
   const subscription = {
     plan: "6 Month Plan",
@@ -24,14 +26,14 @@ const UserDashboardPage = () => {
           <Paper
             sx={{
               p: 3,
-              background: "linear-gradient(135deg, #111, #1f1f1f)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              color: "#f5f5f5",
+              background: theme.palette.background.paper,
+              border: `1px solid ${theme.palette.divider}`,
+              color: theme.palette.text.primary,
               borderRadius: 3,
-              boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+              boxShadow: mode === 'dark' ? "0 4px 20px rgba(0,0,0,0.4)" : "0 4px 20px rgba(0,0,0,0.1)",
             }}
           >
-            <Typography variant="h6" sx={{ mb: 2, color: "#FFAB46", fontFamily: "JUST Sans ExBold" }}>
+            <Typography variant="h6" sx={{ mb: 2, color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>
               Subscription Details
             </Typography>
             <Typography sx={{ fontFamily: "JUST Sans Regular" }}>
@@ -51,14 +53,14 @@ const UserDashboardPage = () => {
           <Paper
             sx={{
               p: 3,
-              background: "linear-gradient(135deg, #111, #1f1f1f)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              color: "#f5f5f5",
+              background: theme.palette.background.paper,
+              border: `1px solid ${theme.palette.divider}`,
+              color: theme.palette.text.primary,
               borderRadius: 3,
-              boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+              boxShadow: mode === 'dark' ? "0 4px 20px rgba(0,0,0,0.4)" : "0 4px 20px rgba(0,0,0,0.1)",
             }}
           >
-            <Typography variant="h6" sx={{ mb: 2, color: "#FFAB46", fontFamily: "JUST Sans ExBold" }}>
+            <Typography variant="h6" sx={{ mb: 2, color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>
               User Information
             </Typography>
             <Typography sx={{ fontFamily: "JUST Sans Regular" }}>
@@ -75,14 +77,14 @@ const UserDashboardPage = () => {
           <Paper
             sx={{
               p: 3,
-              background: "linear-gradient(135deg, #111, #1f1f1f)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              color: "#f5f5f5",
+              background: theme.palette.background.paper,
+              border: `1px solid ${theme.palette.divider}`,
+              color: theme.palette.text.primary,
               borderRadius: 3,
-              boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+              boxShadow: mode === 'dark' ? "0 4px 20px rgba(0,0,0,0.4)" : "0 4px 20px rgba(0,0,0,0.1)",
             }}
           >
-            <Typography variant="h6" sx={{ mb: 2, color: "#FFAB46", fontFamily: "JUST Sans ExBold" }}>
+            <Typography variant="h6" sx={{ mb: 2, color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>
               Order History
             </Typography>
             {orders.map((order) => (
@@ -90,7 +92,7 @@ const UserDashboardPage = () => {
                 key={order.id}
                 sx={{
                   py: 1.5,
-                  borderBottom: "1px solid rgba(255,255,255,0.1)",
+                  borderBottom: `1px solid ${theme.palette.divider}`,
                   display: "flex",
                   flexDirection: { xs: "column", sm: "row" },
                   justifyContent: "space-between",

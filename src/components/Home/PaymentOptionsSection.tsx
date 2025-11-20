@@ -5,8 +5,35 @@ export const PaymentOptionsSection = () => {
   const GREEN = "#2E7D4D";
 
   return (
-    <Box sx={{ py: 8, px: { xs: 2, md: 6 }, background: "#0b0b0b" }}>
-      <Typography variant="h4" sx={{ textAlign: "center", mb: 6, fontWeight: 800, color: "#EAEAEA", fontFamily: "JUST Sans ExBold" }}>
+    <Box sx={{ 
+      py: 8, 
+      px: { xs: 2, md: 6 }, 
+      background: "#0b0b0b",
+      position: "relative",
+      overflow: "hidden"
+    }}>
+      {/* Circuit Board Pattern */}
+      <Box sx={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        opacity: 0.03,
+        backgroundImage: `
+          linear-gradient(90deg, ${AMBER}20 1px, transparent 1px),
+          linear-gradient(${GREEN}20 1px, transparent 1px),
+          radial-gradient(circle at 20% 30%, ${AMBER}30 2px, transparent 2px),
+          radial-gradient(circle at 80% 70%, ${GREEN}25 1px, transparent 1px)
+        `,
+        backgroundSize: "50px 50px, 50px 50px, 100px 100px, 80px 80px",
+        animation: "circuit 12s linear infinite",
+        "@keyframes circuit": {
+          "0%": { backgroundPosition: "0 0, 0 0, 0 0, 0 0" },
+          "100%": { backgroundPosition: "50px 0, 0 50px, 100px 100px, 80px 80px" }
+        }
+      }} />
+      <Typography variant="h2" sx={{ textAlign: "center", mb: 6, fontWeight: 800, color: "#EAEAEA", fontFamily: "JUST Sans ExBold", fontSize: { xs: "2.2rem", md: "3.8rem" } }}>
         Flexible Payment Options
       </Typography>
 

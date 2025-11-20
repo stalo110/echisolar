@@ -1,6 +1,8 @@
 import { Box, Container, Typography, Grid, useMediaQuery } from "@mui/material";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export const HeroSection = () => {
+  const { theme } = useTheme();
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   return (
@@ -32,10 +34,10 @@ export const HeroSection = () => {
                 sx={{
                   fontWeight: 800,
                   fontSize: isMobile ? "2.8rem" : "4rem",
-                  background: "linear-gradient(90deg, #FFAB46, #FFD18A)",
+                  background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
-                  textShadow: "0 0 15px rgba(255,171,70,0.4)",
+                  textShadow: `0 0 15px ${theme.palette.primary.main}40`,
                   fontFamily: "JUST Sans ExBold",
                 }}
               >

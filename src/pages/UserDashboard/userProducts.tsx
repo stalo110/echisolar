@@ -1,19 +1,21 @@
 import { Box, Typography, Grid, Paper, Button } from "@mui/material";
 import UserDashboardLayout from "../../components/User/UserDashboardLayout";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const UserProducts = () => {
+  const { theme, mode } = useTheme();
   const products = [
     {
-      name: "Luxury Hair Serum",
-      price: "$60",
+      name: "Solar Panel 250W",
+      price: "₦95,000",
       status: "Delivered",
-      image: "/images/product1.jpg",
+      image: "/images/solar.jpg",
     },
     {
-      name: "Moisture Lock Conditioner",
-      price: "$45",
+      name: "Inverter 5KVA",
+      price: "₦220,000",
       status: "Shipped",
-      image: "/images/product2.jpg",
+      image: "/images/solar2.jpg",
     },
   ];
 
@@ -21,7 +23,7 @@ const UserProducts = () => {
     <UserDashboardLayout>
       <Typography
         variant="h4"
-        sx={{ fontWeight: "700", color: "#C79B3B", mb: 4, fontFamily: "JUST Sans ExBold" }}
+        sx={{ fontWeight: "700", color: theme.palette.primary.main, mb: 4, fontFamily: "JUST Sans ExBold" }}
       >
         My Products
       </Typography>
@@ -32,11 +34,11 @@ const UserProducts = () => {
             <Paper
             sx={{
               p: 3,
-              background: "linear-gradient(135deg, #111, #1f1f1f)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              color: "#f5f5f5",
+              background: theme.palette.background.paper,
+              border: `1px solid ${theme.palette.divider}`,
+              color: theme.palette.text.primary,
               borderRadius: 3,
-              boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+              boxShadow: mode === 'dark' ? "0 4px 20px rgba(0,0,0,0.4)" : "0 4px 20px rgba(0,0,0,0.1)",
             }}
           >
               <Box
@@ -52,20 +54,20 @@ const UserProducts = () => {
                 }}
               />
               <Typography variant="h6" sx={{ fontFamily: "JUST Sans ExBold" }}>{product.name}</Typography>
-              <Typography sx={{ color: "#C79B3B", mb: 1, fontFamily: "JUST Sans ExBold" }}>
+              <Typography sx={{ color: theme.palette.primary.main, mb: 1, fontFamily: "JUST Sans ExBold" }}>
                 {product.price}
               </Typography>
-              <Typography variant="body2" sx={{ color: "#ccc", mb: 2, fontFamily: "JUST Sans Regular" }}>
+              <Typography variant="body2" sx={{ color: theme.palette.text.secondary, mb: 2, fontFamily: "JUST Sans Regular" }}>
                 Status: {product.status}
               </Typography>
               <Button
                 variant="contained"
                 sx={{
-                  bgcolor: "#C79B3B",
-                  color: "#000",
+                  bgcolor: theme.palette.primary.main,
+                  color: mode === 'dark' ? "#000" : "#fff",
                   fontWeight: "600",
                   fontFamily: "JUST Sans ExBold",
-                  "&:hover": { bgcolor: "#e1b860" },
+                  "&:hover": { bgcolor: theme.palette.primary.dark },
                 }}
               >
                 View Details

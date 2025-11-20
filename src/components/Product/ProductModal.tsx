@@ -81,6 +81,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import type { Product } from "../../services/productService";
 import { useState } from "react";
 import { useCart } from "../../contexts/CartContext";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface ProductModalProps {
   product: Product;
@@ -90,6 +91,7 @@ interface ProductModalProps {
 
 const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
   const { add } = useCart();
+  const { theme, mode } = useTheme();
   const [quantity, setQuantity] = useState(1);
 
   if (!product) return null;
@@ -112,12 +114,12 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
       fullWidth
       PaperProps={{
         sx: {
-          background: "linear-gradient(180deg, #0A0A0A, #111)",
-          color: "#fff",
+          background: mode === 'dark' ? "linear-gradient(180deg, #0A0A0A, #111)" : "linear-gradient(180deg, #ffffff, #f8f9fa)",
+          color: theme.palette.text.primary,
           borderRadius: 3,
-          border: "1px solid rgba(255,255,255,0.08)",
+          border: `1px solid ${theme.palette.divider}`,
           backdropFilter: "blur(8px)",
-          boxShadow: "0 0 25px rgba(255,171,70,0.2)",
+          boxShadow: `0 0 25px ${theme.palette.primary.main}20`,
         },
       }}
     >
@@ -141,7 +143,7 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
           >
             {product.name}
           </Typography>
-          <IconButton onClick={onClose} sx={{ color: "#fff" }}>
+          <IconButton onClick={onClose} sx={{ color: theme.palette.text.primary }}>
             <CloseIcon />
           </IconButton>
         </Box>
@@ -168,7 +170,7 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
           </Box>
 
           <Box sx={{ flex: 1 }}>
-            <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, fontFamily: "JUST Sans ExBold" }}>
+            <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, fontFamily: "JUST Sans ExBold", color: theme.palette.text.primary }}>
               {product.name}
             </Typography>
             <Rating value={product.rating} readOnly />
@@ -176,7 +178,7 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
               variant="h6"
               sx={{
                 my: 2,
-                color: "#FFAB46",
+                color: theme.palette.primary.main,
                 fontWeight: "bold",
                 fontFamily: "JUST Sans ExBold",
               }}
@@ -184,13 +186,13 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
               ${(product.price * quantity).toFixed(2)}
             </Typography>
 
-            <Typography variant="body1" paragraph color="rgba(255,255,255,0.85)" sx={{ fontFamily: "JUST Sans Regular" }}>
+            <Typography variant="body1" paragraph sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
               {product.description}
             </Typography>
-            <Typography variant="body2" color="rgba(255,255,255,0.7)" sx={{ fontFamily: "JUST Sans Regular" }}>
+            <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
               <strong>Category:</strong> {product.category}
             </Typography>
-            <Typography variant="body2" color="rgba(255,255,255,0.7)" sx={{ fontFamily: "JUST Sans Regular" }}>
+            <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
               <strong>Availability:</strong>{" "}
               {product.availability ? "In Stock" : "Out of Stock"}
             </Typography>
@@ -205,13 +207,13 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
                 sx={{
                   width: 100,
                   mr: 2,
-                  input: { color: "#fff" },
-                  label: { color: "rgba(255,255,255,0.7)" },
+                  input: { color: theme.palette.text.primary },
+                  label: { color: theme.palette.text.secondary },
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": {
-                      borderColor: "rgba(255,255,255,0.2)",
+                      borderColor: theme.palette.divider,
                     },
-                    "&:hover fieldset": { borderColor: "#FFAB46" },
+                    "&:hover fieldset": { borderColor: theme.palette.primary.main },
                   },
                 }}
               />
@@ -219,13 +221,13 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
                 variant="contained"
                 onClick={handleAddToCart}
                 sx={{
-                  background: "linear-gradient(90deg, #FFAB46, #FFD18A)",
-                  color: "#000",
+                  background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+                  color: mode === 'dark' ? "#000" : "#fff",
                   fontWeight: "bold",
                   fontFamily: "JUST Sans ExBold",
                   px: 3,
                   "&:hover": {
-                    background: "linear-gradient(90deg, #FFD18A, #FFAB46)",
+                    background: `linear-gradient(90deg, ${theme.palette.primary.light}, ${theme.palette.primary.main})`,
                   },
                 }}
               >
