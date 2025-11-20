@@ -15,7 +15,7 @@ import { WhyChooseUsSection } from "../components/Home/WhyChooseUsSection";
 import { PartnersSection } from "../components/Home/PartnersSection";
 import { useTheme } from "../contexts/ThemeContext";
 
-const brandAmber = "#FFAB46";
+// const brandAmber = "#FFAB46";
 
 const sampleProjects = [
   {

@@ -6,7 +6,7 @@ import {
   ThumbUp as ThumbUpIcon,
   FormatQuote as QuoteIcon,
   ChevronRight as ChevronRightIcon,
-  Send as SendIcon,
+  // Send as SendIcon,
 } from "@mui/icons-material";
 import { FaWhatsapp } from "react-icons/fa";
 
