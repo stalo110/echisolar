@@ -22,6 +22,8 @@ import {
   Logout as LogoutIcon,
   Brightness4,
   Brightness7,
+  MailOutline,
+  LocalOffer,
 } from "@mui/icons-material";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -33,9 +35,11 @@ const drawerWidth = 240;
 const menuItems = [
   { text: "Dashboard", icon: <DashboardIcon />, path: "/admin/dashboard" },
   { text: "Products", icon: <Inventory />, path: "/admin/products" },
+  { text: "Packages", icon: <LocalOffer />, path: "/admin/packages" },
   { text: "Projects", icon: <Inventory />, path: "/admin/projects" },
   { text: "Orders", icon: <ShoppingCart />, path: "/admin/orders" },
   { text: "Users", icon: <Group />, path: "/admin/users" },
+  { text: "Messages", icon: <MailOutline />, path: "/admin/messages" },
   { text: "Revenue", icon: <AttachMoney />, path: "/admin/revenue" },
 ];
 

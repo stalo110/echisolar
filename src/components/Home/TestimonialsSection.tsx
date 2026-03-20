@@ -1,4 +1,5 @@
 import { Box, Container, Typography, Grid, Card, CardContent, Avatar, Rating } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import { FormatQuote as QuoteIcon } from "@mui/icons-material";
 import { useTheme } from "../../contexts/ThemeContext";
 
@@ -13,45 +14,32 @@ export const TestimonialsSection = () => {
   return (
     <Box sx={{ 
       py: 10, 
-      background: mode === 'dark' ? "#050505" : "#f0f2f5",
+      background: "transparent",
       position: "relative",
       overflow: "hidden"
     }}>
-      {/* Wave Pattern Background */}
       <Box sx={{
         position: "absolute",
         top: 0,
         left: 0,
-        width: "120%",
+        width: "100%",
         height: "100%",
-        opacity: mode === 'dark' ? 0.04 : 0.025,
-        background: `
-          repeating-linear-gradient(
-            45deg,
-            ${theme.palette.primary.main}20,
-            ${theme.palette.primary.main}20 2px,
-            transparent 2px,
-            transparent 20px
-          ),
-          repeating-linear-gradient(
-            -45deg,
-            ${theme.palette.secondary.main}15,
-            ${theme.palette.secondary.main}15 1px,
-            transparent 1px,
-            transparent 30px
-          )
+        opacity: mode === "dark" ? 0.16 : 0.24,
+        backgroundImage: `
+          linear-gradient(${alpha(theme.palette.divider, 0.4)} 1px, transparent 1px),
+          linear-gradient(90deg, ${alpha(theme.palette.divider, 0.4)} 1px, transparent 1px)
         `,
-        animation: "wave 18s ease-in-out infinite",
-        "@keyframes wave": {
-          "0%, 100%": { transform: "translateX(-10%) skewX(0deg)" },
-          "50%": { transform: "translateX(0%) skewX(2deg)" }
-        }
+        backgroundSize: "88px 88px",
       }} />
       <Container maxWidth="lg">
         <Box sx={{ textAlign: "center", mb: 6 }}>
-          <Typography variant="h6" sx={{ color: theme.palette.primary.main, fontWeight: 800, fontFamily: "JUST Sans ExBold", textTransform: "uppercase", letterSpacing: 2, fontSize: { xs: "0.9rem", md: "1.25rem" } }}>Testimonials</Typography>
-          <Typography variant="h2" sx={{ fontWeight: 800, color: theme.palette.text.primary, mt: 1, fontFamily: "JUST Sans ExBold", fontSize: { xs: "2.2rem", md: "3.8rem" } }}>What Our Customers Say</Typography>
-          <Typography sx={{ color: theme.palette.text.secondary, maxWidth: 760, mx: "auto", mt: 2, fontFamily: "JUST Sans Regular" }}>
+          <Typography variant="h6" sx={{ color: theme.palette.primary.main, fontWeight: 700, fontFamily: "JUST Sans ExBold", textTransform: "uppercase", letterSpacing: 2, fontSize: { xs: "0.82rem", md: "1.05rem" } }}>
+            Testimonials
+          </Typography>
+          <Typography variant="h2" sx={{ fontWeight: 700, color: theme.palette.text.primary, mt: 1, fontFamily: "JUST Sans ExBold", fontSize: { xs: "1.95rem", md: "3.1rem" } }}>
+            What our customers say
+          </Typography>
+          <Typography sx={{ color: theme.palette.text.secondary, maxWidth: 760, mx: "auto", mt: 2, fontFamily: "JUST Sans Regular", lineHeight: 1.8 }}>
             Hear from homeowners and businesses who have transformed their energy consumption with our solar solutions.
           </Typography>
         </Box>
@@ -62,17 +50,20 @@ export const TestimonialsSection = () => {
               <Card
                 sx={{
                   p: 3,
-                  borderRadius: 2,
-                  background: theme.palette.background.paper,
+                  height: "100%",
+                  borderRadius: 4,
+                  border: `1px solid ${theme.palette.divider}`,
+                  background: mode === "dark" ? alpha("#10202A", 0.76) : alpha("#FFFFFF", 0.82),
                   color: theme.palette.text.primary,
                   position: "relative",
                   overflow: "hidden",
-                  animation: `slideInFromRight 0.8s ease-out ${i * 0.2}s both`,
-                  "@keyframes slideInFromRight": {
-                    "0%": { opacity: 0, transform: "translateX(50px)" },
-                    "100%": { opacity: 1, transform: "translateX(0)" }
+                  boxShadow: mode === "dark" ? "0 20px 48px rgba(3,10,18,0.24)" : "0 18px 46px rgba(15,23,42,0.08)",
+                  transition: "transform .28s ease, box-shadow .28s ease, border-color .28s ease",
+                  "&:hover": {
+                    transform: "translateY(-8px)",
+                    borderColor: alpha(theme.palette.primary.main, 0.28),
+                    boxShadow: mode === 'dark' ? "0 24px 54px rgba(3,10,18,0.3)" : "0 22px 50px rgba(15,23,42,0.12)",
                   },
-                  "&:hover": { transform: "translateY(-8px)", boxShadow: mode === 'dark' ? "0 18px 40px rgba(0,0,0,0.6)" : "0 18px 40px rgba(0,0,0,0.15)" },
                 }}
               >
                 <QuoteIcon sx={{ 
@@ -82,19 +73,23 @@ export const TestimonialsSection = () => {
                   fontSize: 42, 
                   color: theme.palette.secondary.main, 
                   opacity: 0.08,
-                  animation: "float 3s ease-in-out infinite",
-                  "@keyframes float": {
-                    "0%, 100%": { transform: "translateY(0px)" },
-                    "50%": { transform: "translateY(-5px)" }
-                  }
                 }} />
                 <CardContent sx={{ p: 0 }}>
                   <Rating value={t.rating} readOnly sx={{ mb: 2 }} />
-                  <Typography sx={{ mb: 2, color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>"{t.content}"</Typography>
+                  <Typography sx={{ mb: 2, color: theme.palette.text.primary, fontFamily: "JUST Sans Regular", lineHeight: 1.8 }}>"{t.content}"</Typography>
                   <Box sx={{ display: "flex", alignItems: "center", mt: 3 }}>
-                    <Avatar src={t.avatar} alt={t.name} sx={{ mr: 2, width: 48, height: 48 }} />
+                    <Avatar
+                      src={t.avatar}
+                      alt={t.name}
+                      sx={{
+                        mr: 2,
+                        width: 50,
+                        height: 50,
+                        border: `2px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                      }}
+                    />
                     <Box>
-                      <Typography sx={{ fontWeight: 800, fontFamily: "JUST Sans ExBold" }}>{t.name}</Typography>
+                      <Typography sx={{ fontWeight: 700, fontFamily: "JUST Sans ExBold" }}>{t.name}</Typography>
                       <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>{t.company}</Typography>
                     </Box>
                   </Box>
@@ -107,4 +102,3 @@ export const TestimonialsSection = () => {
     </Box>
   );
 };
-

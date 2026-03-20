@@ -9,7 +9,14 @@ import {
 } from "@mui/material";
 import { useTheme } from "../../contexts/ThemeContext";
 
-const categories = ["Solar Panels", "Inverters", "Batteries", "Accessories"];
+const categories = [
+  { value: "Panels", label: "Solar Panels" },
+  { value: "Inverters", label: "Inverters" },
+  { value: "Batteries", label: "Batteries" },
+  { value: "Solar Cameras", label: "Solar Cameras" },
+  { value: "Solar Streetlights", label: "Solar Streetlights" },
+  { value: "Accessories", label: "Accessories" },
+];
 
 interface ProductFilterProps {
   setQuery: React.Dispatch<React.SetStateAction<string>>;
@@ -77,7 +84,7 @@ const ProductFilter = ({
             </InputLabel>
             <Select
               label="Category"
-             onChange={(e) => setCategory(e.target.value as string)}
+              onChange={(e) => setCategory(e.target.value as string)}
               sx={{
                 color: theme.palette.text.primary,
                 ".MuiOutlinedInput-notchedOutline": {
@@ -92,8 +99,8 @@ const ProductFilter = ({
                 <em>All</em>
               </MenuItem>
               {categories.map((category) => (
-                <MenuItem key={category} value={category}>
-                  {category}
+                <MenuItem key={category.value} value={category.value}>
+                  {category.label}
                 </MenuItem>
               ))}
             </Select>

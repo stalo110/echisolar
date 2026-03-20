@@ -23,10 +23,12 @@ import { Brightness4, Brightness7 } from "@mui/icons-material";
 import { useAuth } from "../contexts/AuthContext";
 import { useCart } from "../contexts/CartContext";
 import { useTheme } from "../contexts/ThemeContext";
+import { COMPANY_WHATSAPP_URL } from "../config/company";
 
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Products", href: "/products" },
+  { label: "Packages", href: "/packages" },
   { label: "Projects", href: "/projects" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
@@ -44,8 +46,8 @@ export default function TopNav() {
       sx={{
         width: "100%",
         height: "100vh",
-        background: mode === 'dark' ? "rgba(0,0,0,0.95)" : "rgba(255,255,255,0.95)",
-        backdropFilter: "blur(8px)",
+        background: mode === 'dark' ? "rgba(7,17,27,0.96)" : "rgba(255,255,255,0.94)",
+        backdropFilter: "blur(18px)",
         color: theme.palette.text.primary,
         display: "flex",
         flexDirection: "column",
@@ -114,10 +116,11 @@ export default function TopNav() {
               primary={link.label}
               primaryTypographyProps={{
                 fontSize: "1.1rem",
-                fontWeight: 600,
+                fontWeight: 500,
                 color: theme.palette.text.primary,
                 fontFamily: "JUST Sans Regular",
                 sx: {
+                  letterSpacing: "0.01em",
                   transition: "color 0.3s ease",
                   "&:hover": { color: theme.palette.primary.main },
                 },
@@ -155,7 +158,7 @@ export default function TopNav() {
               onClick={handleDrawerToggle}
               sx={{
                 color: theme.palette.text.primary,
-                fontWeight: 600,
+                fontWeight: 500,
                 "&:hover": { color: theme.palette.primary.main },
               }}
             >
@@ -217,7 +220,7 @@ export default function TopNav() {
           textAlign: "center",
           mt: "auto",
           opacity: 0.6,
-          fontSize: "0.8rem",
+          fontSize: "0.76rem",
           color: theme.palette.text.secondary,
         }}
       >
@@ -233,8 +236,8 @@ export default function TopNav() {
       sx={{
         top: 0,
         zIndex: 1100,
-        background: mode === 'dark' ? "rgba(0,0,0,0.85)" : "rgba(255,255,255,0.95)",
-        backdropFilter: "blur(8px)",
+        background: mode === 'dark' ? "rgba(7,17,27,0.78)" : "rgba(255,255,255,0.82)",
+        backdropFilter: "blur(18px) saturate(160%)",
         color: theme.palette.text.primary,
         borderBottom: `1px solid ${theme.palette.divider}`,
         px: { xs: 2, md: 6 },
@@ -255,7 +258,7 @@ export default function TopNav() {
             component="img"
             src="/images/logo.png"
             alt="Echi Solar"
-            sx={{ height: 20, filter: mode === 'dark' ? "brightness(0) invert(1)" : "none" }}
+            sx={{ height: 24, filter: mode === 'dark' ? "brightness(0) invert(1)" : "none" }}
           />
         </Box>
 
@@ -264,6 +267,11 @@ export default function TopNav() {
             display: { xs: "none", md: "flex" },
             gap: 3,
             alignItems: "center",
+            px: 1.25,
+            py: 0.75,
+            borderRadius: 999,
+            border: `1px solid ${theme.palette.divider}`,
+            background: mode === "dark" ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.56)",
           }}
         >
           {navLinks.map((link) => (
@@ -272,7 +280,8 @@ export default function TopNav() {
               href={link.href}
               sx={{
                 color: theme.palette.text.primary,
-                fontWeight: "bold",
+                fontWeight: 500,
+                fontSize: "0.94rem",
                 fontFamily: "JUST Sans Regular",
                 textTransform: "none",
                 position: "relative",
@@ -297,10 +306,9 @@ export default function TopNav() {
           {!user ? (
             <Button
               href="/login"
-              startIcon={<AccountCircle sx={{ color: theme.palette.primary.main }} />}
               sx={{
                 color: theme.palette.primary.main,
-                fontWeight: "bold",
+                fontWeight: 600,
                 fontFamily: "JUST Sans Regular",
                 textTransform: "none",
                 border: `1px solid ${theme.palette.primary.main}`,
@@ -318,19 +326,15 @@ export default function TopNav() {
             <>
               <Button
                 href="/user/profile"
-                startIcon={
-                  <AccountCircle sx={{ color: theme.palette.secondary.main }} />
-                }
-                sx={{ color: theme.palette.secondary.main, fontWeight: "bold", fontFamily: "JUST Sans Regular" }}
+                sx={{ color: theme.palette.secondary.main, fontWeight: 600, fontFamily: "JUST Sans Regular" }}
               >
                 {user.name}
               </Button>
               <Button
                 onClick={logout}
-                startIcon={<LogoutIcon sx={{ color: theme.palette.text.primary }} />}
                 sx={{
                   color: theme.palette.text.primary,
-                  fontWeight: "bold",
+                  fontWeight: 600,
                   fontFamily: "JUST Sans Regular",
                   "&:hover": { color: theme.palette.primary.main },
                 }}
@@ -353,7 +357,7 @@ export default function TopNav() {
           </IconButton>
 
           <IconButton
-            href="https://wa.me/2347018090107"
+            href={COMPANY_WHATSAPP_URL}
             target="_blank"
             sx={{
               background: mode === 'dark' ? "linear-gradient(145deg, #1a1a1a, #111)" : "linear-gradient(145deg, #f5f5f5, #e0e0e0)",
@@ -374,16 +378,16 @@ export default function TopNav() {
             }
             href="/cart"
             sx={{
-              background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-              color: mode === 'dark' ? "white" : "#000",
-              fontWeight: "bold",
+              backgroundColor: theme.palette.primary.main,
+              color: "#10202A",
+              fontWeight: 600,
               fontFamily: "JUST Sans Regular",
               borderRadius: 2,
               px: 3,
               boxShadow: `0 0 15px ${theme.palette.primary.main}40`,
               "&:hover": {
-                background: `linear-gradient(90deg, ${theme.palette.primary.light}, ${theme.palette.primary.main})`,
-                color: mode === 'dark' ? "#000" : "white",
+                backgroundColor: "#F19A30",
+                color: "#10202A",
               },
               display: { xs: "none", md: "flex" },
             }}

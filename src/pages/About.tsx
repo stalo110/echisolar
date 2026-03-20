@@ -4,14 +4,16 @@ import {
   Typography,
   Grid,
   Paper,
+  Link,
 } from "@mui/material";
 import TopNav from "../navigation/TopNav";
 import Footer from "../navigation/Footer";
 import { HeroSection } from "../components/About/HeroSection";
 import { AboutSection } from "../components/Home/AboutSection";
 import { PartnersSection } from "../components/Home/PartnersSection";
-import { TeamSection } from "../components/Home/TeamSection";
+// import { TeamSection } from "../components/Home/TeamSection";
 import { useTheme } from "../contexts/ThemeContext";
+import { COMPANY_ADDRESS, COMPANY_PHONE, COMPANY_WHATSAPP_URL } from "../config/company";
 
 const About = () => {
   const { theme, mode } = useTheme();
@@ -69,7 +71,7 @@ const About = () => {
 
         {/* Intro Section */}
         <Box mt={{ xs: 4, md: 2 }}>
-          <AboutSection />
+          <AboutSection showButton={false} />
         </Box>
 
         {/* Mission & Vision */}
@@ -183,9 +185,32 @@ const About = () => {
             ))}
           </Grid>
         </Box>
+
+        <Paper
+          sx={{
+            mt: 8,
+            p: { xs: 3, md: 4 },
+            borderRadius: 3,
+            border: `1px solid ${theme.palette.divider}`,
+            background: mode === "dark" ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.02)",
+          }}
+        >
+          <Typography sx={{ fontFamily: "JUST Sans ExBold", color: theme.palette.primary.main, mb: 1.5 }}>
+            Visit or Contact Us
+          </Typography>
+          <Typography sx={{ fontFamily: "JUST Sans Regular", color: theme.palette.text.secondary }}>
+            Address: {COMPANY_ADDRESS}
+          </Typography>
+          <Typography sx={{ fontFamily: "JUST Sans Regular", color: theme.palette.text.secondary, mt: 1 }}>
+            WhatsApp/Phone:{" "}
+            <Link href={COMPANY_WHATSAPP_URL} target="_blank" underline="hover" color={theme.palette.primary.main}>
+              {COMPANY_PHONE}
+            </Link>
+          </Typography>
+        </Paper>
       </Container>
 
-      <TeamSection />
+      {/* <TeamSection /> */}
         <PartnersSection />
         <Footer />
       </Box>

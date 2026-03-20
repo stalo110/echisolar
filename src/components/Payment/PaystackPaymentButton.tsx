@@ -11,7 +11,7 @@ const PaystackPaymentButton = ({ amount, email, onSuccess, onClose }: PaystackPa
   const handlePay = () => {
     const paystack = new (window as any).PaystackPop();
     paystack.newTransaction({
-      key: "pk_test_YOUR_PAYSTACK_PUBLIC_KEY", // Replace with your actual Paystack public key
+      key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
       email: email,
       amount: amount,
       currency: "NGN",

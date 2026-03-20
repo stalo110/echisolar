@@ -35,14 +35,17 @@ const createAppTheme = (mode: ThemeMode) => createTheme({
       dark: '#245c41',
     },
     background: {
-      default: mode === 'dark' ? '#0B0C10' : '#FFFFFF',
-      paper: mode === 'dark' ? '#1F2833' : '#F8F9FA',
+      default: mode === 'dark' ? '#07111B' : '#F5F8F7',
+      paper: mode === 'dark' ? '#10202A' : '#FFFFFF',
     },
     text: {
-      primary: mode === 'dark' ? '#EAEAEA' : '#1A1A1A',
-      secondary: mode === 'dark' ? 'rgba(234,234,234,0.7)' : 'rgba(26,26,26,0.7)',
+      primary: mode === 'dark' ? '#F4F7F8' : '#10202A',
+      secondary: mode === 'dark' ? 'rgba(244,247,248,0.72)' : 'rgba(16,32,42,0.68)',
     },
-    divider: mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+    divider: mode === 'dark' ? 'rgba(148,163,184,0.16)' : 'rgba(15,23,42,0.08)',
+  },
+  shape: {
+    borderRadius: 20,
   },
   typography: {
     fontFamily: 'JUST Sans Regular, Arial, sans-serif',
@@ -60,10 +63,27 @@ const createAppTheme = (mode: ThemeMode) => createTheme({
         root: {
           textTransform: 'none',
           fontFamily: 'JUST Sans ExBold',
+          fontWeight: 600,
+          borderRadius: 999,
+          letterSpacing: '0.01em',
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: 24,
         },
       },
     },
     MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundImage: 'none',
+        },
+      },
+    },
+    MuiAppBar: {
       styleOverrides: {
         root: {
           backgroundImage: 'none',

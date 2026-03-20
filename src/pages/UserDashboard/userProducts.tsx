@@ -1,23 +1,75 @@
 import { Box, Typography, Grid, Paper, Button } from "@mui/material";
 import UserDashboardLayout from "../../components/User/UserDashboardLayout";
 import { useTheme } from "../../contexts/ThemeContext";
+import { useEffect, useState } from "react";
+import { getOrderById, getUserOrders } from "../../services/orderService";
+
+type PurchasedProduct = {
+  key: string;
+  orderId: number;
+  itemType: "product" | "package";
+  name: string;
+  unitPrice: number;
+  quantity: number;
+  status: string;
+  image?: string;
+};
+
+const parseImages = (value: string | string[] | undefined) => {
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  try {
+    const parsed = JSON.parse(value) as unknown;
+    return Array.isArray(parsed) ? parsed.filter((item): item is string => typeof item === "string") : [];
+  } catch {
+    return value ? [value] : [];
+  }
+};
 
 const UserProducts = () => {
   const { theme, mode } = useTheme();
-  const products = [
-    {
-      name: "Solar Panel 250W",
-      price: "₦95,000",
-      status: "Delivered",
-      image: "/images/solar.jpg",
-    },
-    {
-      name: "Inverter 5KVA",
-      price: "₦220,000",
-      status: "Shipped",
-      image: "/images/solar2.jpg",
-    },
-  ];
+  const [products, setProducts] = useState<PurchasedProduct[]>([]);
+
+  useEffect(() => {
+    getUserOrders()
+      .then(async (orders) => {
+        if (!orders.length) {
+          setProducts([]);
+          return;
+        }
+
+        const orderDetails = await Promise.all(
+          orders.slice(0, 12).map((order) =>
+            getOrderById(order.id)
+              .then((detail) => ({ order, detail }))
+              .catch(() => null)
+          )
+        );
+
+        const purchased = orderDetails
+          .filter((entry): entry is { order: (typeof orders)[number]; detail: Awaited<ReturnType<typeof getOrderById>> } => Boolean(entry))
+          .flatMap(({ order, detail }) =>
+            detail.items.map((item, index) => {
+              const images = parseImages(item.images);
+              return {
+                key: `${order.id}-${item.productId || item.packageId || index}`,
+                orderId: order.id,
+                itemType: item.itemType === "package" ? ("package" as const) : ("product" as const),
+                name: item.name,
+                unitPrice: Number(item.unitPrice || 0),
+                quantity: Number(item.quantity || 0),
+                status: order.paymentStatus || order.status,
+                image: images[0],
+              };
+            })
+          );
+
+        setProducts(purchased);
+      })
+      .catch(() => {
+        setProducts([]);
+      });
+  }, []);
 
   return (
     <UserDashboardLayout>
@@ -25,12 +77,12 @@ const UserProducts = () => {
         variant="h4"
         sx={{ fontWeight: "700", color: theme.palette.primary.main, mb: 4, fontFamily: "JUST Sans ExBold" }}
       >
-        My Products
+        My Purchases
       </Typography>
 
       <Grid container spacing={3}>
-        {products.map((product, index) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+        {products.map((product) => (
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={product.key}>
             <Paper
             sx={{
               p: 3,
@@ -43,7 +95,7 @@ const UserProducts = () => {
           >
               <Box
                 component="img"
-                src={product.image}
+                src={product.image || "/images/solar.jpg"}
                 alt={product.name}
                 sx={{
                   width: "100%",
@@ -55,10 +107,10 @@ const UserProducts = () => {
               />
               <Typography variant="h6" sx={{ fontFamily: "JUST Sans ExBold" }}>{product.name}</Typography>
               <Typography sx={{ color: theme.palette.primary.main, mb: 1, fontFamily: "JUST Sans ExBold" }}>
-                {product.price}
+                ₦{product.unitPrice.toLocaleString()}
               </Typography>
               <Typography variant="body2" sx={{ color: theme.palette.text.secondary, mb: 2, fontFamily: "JUST Sans Regular" }}>
-                Status: {product.status}
+                Type: {product.itemType === "package" ? "Package" : "Product"} | Qty: {product.quantity} | Status: {product.status}
               </Typography>
               <Button
                 variant="contained"
@@ -70,11 +122,18 @@ const UserProducts = () => {
                   "&:hover": { bgcolor: theme.palette.primary.dark },
                 }}
               >
-                View Details
+                Order #{product.orderId}
               </Button>
             </Paper>
           </Grid>
         ))}
+        {products.length === 0 && (
+          <Grid size={{ xs: 12 }}>
+            <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+              No purchases found yet.
+            </Typography>
+          </Grid>
+        )}
       </Grid>
     </UserDashboardLayout>
   );

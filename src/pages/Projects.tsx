@@ -10,50 +10,31 @@ import {
 } from "@mui/material";
 import TopNav from "../navigation/TopNav";
 import Footer from "../navigation/Footer";
+import { useEffect, useState } from "react";
 import { HeroSection } from "../components/Projects/Hero";
 import { WhyChooseUsSection } from "../components/Home/WhyChooseUsSection";
 import { PartnersSection } from "../components/Home/PartnersSection";
 import { useTheme } from "../contexts/ThemeContext";
+import { fetchProjects } from "../services/projectService";
+import type { Project } from "../services/projectService";
 
 // const brandAmber = "#FFAB46";
 
-const sampleProjects = [
-  {
-    id: 1,
-    title: "Benin Solar Rooftop",
-    summary:
-      "A 5kW rooftop solar installation for a residential home in Benin City. The project provides clean, uninterrupted power and reduces grid dependence by over 60%.",
-    images: [
-      "/images/solar4.jpg",
-      "/images/solar5.jpg",
-    ],
-  },
-  {
-    id: 2,
-    title: "Lagos Community Microgrid",
-    summary:
-      "A 50kW hybrid microgrid serving a community clinic and surrounding homes in Lagos. This system integrates solar PV and battery storage for stable, 24/7 energy.",
-    images: [
-      "/images/solar.jpg",
-      "/images/solar2.jpg",
-      "/images/solar3.jpg",
-          "/images/solar4.jpg",
-      "/images/solar5.jpg",
-    ],
-  },
-  {
-    id: 3,
-    title: "Ibadan Commercial PV",
-    summary:
-      "A 20kW solar setup for a small business park in Ibadan. The system powers offices, cooling units, and signage while cutting electricity bills by 45%.",
-    images: [
-      "/images/solar.jpg",
-    ],
-  },
-];
-
 export default function Projects() {
   const { theme, mode } = useTheme();
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProjects()
+      .then(setProjects)
+      .catch(() => {
+        setProjects([]);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <Box sx={{ 
@@ -104,7 +85,7 @@ export default function Projects() {
         </Typography>
 
         <Grid container spacing={4}>
-          {sampleProjects.map((p) => (
+          {projects.map((p) => (
             <Grid size={{ xs: 12, md: 6, lg: 4 }} key={p.id}>
               <Card
                 sx={{
@@ -129,7 +110,7 @@ export default function Projects() {
                     "&::-webkit-scrollbar": { display: "none" },
                   }}
                 >
-                  {p.images.map((img, i) => (
+                  {(p.images.length ? p.images : ["/images/solar.jpg"]).map((img, i) => (
                     <CardMedia
                       key={i}
                       component="img"
@@ -167,13 +148,25 @@ export default function Projects() {
                       fontFamily: "JUST Sans Regular",
                     }}
                   >
-                    {p.summary}
+                    {p.description || "No project summary available yet."}
                   </Typography>
                 </CardContent>
               </Card>
             </Grid>
           ))}
         </Grid>
+        {!loading && projects.length === 0 && (
+          <Typography
+            sx={{
+              mt: 3,
+              textAlign: "center",
+              color: theme.palette.text.secondary,
+              fontFamily: "JUST Sans Regular",
+            }}
+          >
+            No active projects are available at the moment.
+          </Typography>
+        )}
       </Container>
             <WhyChooseUsSection />
             <PartnersSection />
@@ -183,4 +176,3 @@ export default function Projects() {
     </Box>
   );
 }
-

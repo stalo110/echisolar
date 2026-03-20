@@ -8,7 +8,7 @@ import ProductCard from "../components/Product/ProductCard";
 import { HeroSection } from "../components/Product/HeroSection";
 import ProductFilter from "../components/Product/Filter";
 import { useTheme } from "../contexts/ThemeContext";
-import { FaSolarPanel, FaBolt, FaBatteryFull, FaCog, FaTools } from "react-icons/fa";
+import { FaSolarPanel, FaBolt, FaBatteryFull, FaTools, FaCamera, FaLightbulb } from "react-icons/fa";
 
 const Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -22,12 +22,15 @@ const Products = () => {
     { name: "Panels", label: "Solar Panels", icon: <FaSolarPanel />, count: 0 },
     { name: "Inverters", label: "Inverters", icon: <FaBolt />, count: 0 },
     { name: "Batteries", label: "Batteries", icon: <FaBatteryFull />, count: 0 },
-    { name: "Controllers", label: "Controllers", icon: <FaCog />, count: 0 },
+    { name: "Solar Cameras", label: "Solar Cameras", icon: <FaCamera />, count: 0 },
+    { name: "Solar Streetlights", label: "Solar Streetlights", icon: <FaLightbulb />, count: 0 },
     { name: "Accessories", label: "Accessories", icon: <FaTools />, count: 0 },
   ];
 
   useEffect(() => {
-    fetchProducts().then(setProducts);
+    fetchProducts()
+      .then(setProducts)
+      .catch(() => setProducts([]));
   }, []);
 
   const checkPrice = (price: number, maxPriceStr: string) => {

@@ -14,7 +14,8 @@ import {
 } from "@mui/material";
 import TopNav from "../navigation/TopNav";
 import Footer from "../navigation/Footer";
-import { useCart } from "../contexts/CartContext";
+import { getCartItemKey, useCart } from "../contexts/CartContext";
+import { useAuth } from "../contexts/AuthContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -27,6 +28,7 @@ function formatNGN(n: number) {
 const Cart = () => {
   const { theme, mode } = useTheme();
   const { items, remove, clear, increaseQuantity, decreaseQuantity } = useCart();
+  const { user } = useAuth();
   const total = items.reduce((s, i) => s + i.price * i.quantity, 0);
 
   return (
@@ -46,6 +48,19 @@ const Cart = () => {
         >
           Your Cart
         </Typography>
+
+        {!user && (
+          <Typography
+            sx={{
+              textAlign: "center",
+              color: theme.palette.text.secondary,
+              fontFamily: "JUST Sans Regular",
+              mb: 3,
+            }}
+          >
+            Sign in to persist your cart across devices and continue to checkout.
+          </Typography>
+        )}
 
         {items.length === 0 ? (
           <Typography
@@ -71,7 +86,7 @@ const Cart = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  {["Product", "Qty", "Unit", "Total", ""].map((h) => (
+                  {["Item", "Qty", "Unit", "Total", ""].map((h) => (
                     <TableCell
                       key={h}
                       sx={{
@@ -88,9 +103,12 @@ const Cart = () => {
               </TableHead>
 
               <TableBody>
-                {items.map((it) => (
+                {items.map((it) => {
+                  const itemKey = getCartItemKey(it);
+                  const isPackage = it.itemType === "package";
+                  return (
                   <TableRow
-                    key={it.productId}
+                    key={`${itemKey}-${it.cartItemId ?? "guest"}`}
                     sx={{
                       "&:hover": {
                         backgroundColor: `${theme.palette.primary.main}05`,
@@ -103,12 +121,23 @@ const Cart = () => {
                         fontFamily: "JUST Sans Regular",
                       }}
                     >
-                      {it.name}
+                      {it.name}{" "}
+                      <Typography
+                        component="span"
+                        sx={{
+                          color: theme.palette.text.secondary,
+                          fontSize: "0.8rem",
+                          fontFamily: "JUST Sans Regular",
+                        }}
+                      >
+                        ({isPackage ? "Package" : "Product"})
+                      </Typography>
                     </TableCell>
 
                     <TableCell sx={{ color: theme.palette.text.primary }}>
                       <IconButton
-                        onClick={() => decreaseQuantity(it.productId)}
+                        onClick={() => decreaseQuantity(itemKey)}
+                        disabled={isPackage}
                         size="small"
                         sx={{
                           color: theme.palette.text.secondary,
@@ -119,7 +148,8 @@ const Cart = () => {
                       </IconButton>
                       {it.quantity}
                       <IconButton
-                        onClick={() => increaseQuantity(it.productId)}
+                        onClick={() => increaseQuantity(itemKey)}
+                        disabled={isPackage}
                         size="small"
                         sx={{
                           color: theme.palette.text.secondary,
@@ -140,7 +170,7 @@ const Cart = () => {
 
                     <TableCell align="right">
                       <IconButton
-                        onClick={() => remove(it.productId)}
+                        onClick={() => remove(itemKey)}
                         sx={{
                           color: "#ff5555",
                           "&:hover": { color: "#ff7777" },
@@ -150,7 +180,7 @@ const Cart = () => {
                       </IconButton>
                     </TableCell>
                   </TableRow>
-                ))}
+                )})}
 
                 <TableRow>
                   <TableCell colSpan={3} align="right">

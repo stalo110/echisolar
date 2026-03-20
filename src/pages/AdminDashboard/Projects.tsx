@@ -18,66 +18,110 @@ import {
   Snackbar,
   Alert,
   Grid,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
-import { Edit, Delete, Add, Image } from "@mui/icons-material";
-import { useState, type ChangeEvent } from "react";
+import { Edit, Delete, Image } from "@mui/icons-material";
+import { useEffect, useState, type ChangeEvent } from "react";
 import AdminLayout from "../../components/Admin/AdminLayout";
 import { useTheme } from "../../contexts/ThemeContext";
+import {
+  createProject,
+  deleteProject,
+  fetchAdminProjects,
+  type Project,
+  updateProject,
+} from "../../services/projectService";
 
-interface Project {
-  id: number;
+type ProjectForm = {
   title: string;
   description: string;
-  location: string;
-  images: string[];
-}
+  link: string;
+  isFeatured: boolean;
+  existingImages: string[];
+  newImageFiles: File[];
+  imagePreviews: string[];
+};
+
+const createEmptyFormData = (): ProjectForm => ({
+  title: "",
+  description: "",
+  link: "",
+  isFeatured: false,
+  existingImages: [],
+  newImageFiles: [],
+  imagePreviews: [],
+});
+
+const revokeBlobUrls = (urls: string[]) => {
+  for (const url of urls) {
+    if (url.startsWith("blob:")) {
+      URL.revokeObjectURL(url);
+    }
+  }
+};
 
 const AdminProjects = () => {
   const { theme, mode } = useTheme();
-  const [projects, setProjects] = useState<Project[]>([
-    {
-      id: 1,
-      title: "Lagos Community Microgrid",
-      description:
-        "A 50kW hybrid microgrid powering a community clinic and 12 homes in Lagos.",
-      location: "Lagos, Nigeria",
-      images: [],
-    },
-    {
-      id: 2,
-      title: "Benin Rooftop Solar",
-      description:
-        "5kW rooftop solar installation for residential use, with battery storage.",
-      location: "Benin City, Nigeria",
-      images: [],
-    },
-  ]);
-
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [selectedDeleteId, setSelectedDeleteId] = useState<number | null>(null);
-
   const [editingProject, setEditingProject] = useState<Project | null>(null);
-  const [formData, setFormData] = useState<Partial<Project>>({
-    title: "",
-    description: "",
-    location: "",
-    images: [],
-  });
-
+  const [formData, setFormData] = useState<ProjectForm>(createEmptyFormData);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
     severity: "success" as "success" | "info" | "error",
   });
 
+  const loadProjects = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchAdminProjects();
+      setProjects(data);
+    } catch {
+      setSnackbar({ open: true, message: "Unable to load projects.", severity: "error" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadProjects();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      revokeBlobUrls(formData.imagePreviews);
+    };
+  }, [formData.imagePreviews]);
+
   const handleOpen = (project?: Project) => {
+    setFormData((prev) => {
+      revokeBlobUrls(prev.imagePreviews);
+
+      if (project) {
+        const existingImages = project.images || [];
+        return {
+          title: project.title || "",
+          description: project.description || "",
+          link: project.link || "",
+          isFeatured: Boolean(project.isFeatured),
+          existingImages,
+          newImageFiles: [],
+          imagePreviews: existingImages,
+        };
+      }
+
+      return createEmptyFormData();
+    });
+
     if (project) {
       setEditingProject(project);
-      setFormData(project);
     } else {
       setEditingProject(null);
-      setFormData({ title: "", description: "", location: "", images: [] });
     }
     setOpen(true);
   };
@@ -85,10 +129,14 @@ const AdminProjects = () => {
   const handleClose = () => {
     setOpen(false);
     setEditingProject(null);
+    setFormData((prev) => {
+      revokeBlobUrls(prev.imagePreviews);
+      return createEmptyFormData();
+    });
   };
 
   const handleSnackbarClose = () => {
-    setSnackbar({ ...snackbar, open: false });
+    setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -98,62 +146,51 @@ const AdminProjects = () => {
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (!files) return;
+    if (!files?.length) return;
 
-    const newImages: string[] = [];
+    const selectedFiles = Array.from(files);
+    const previews = selectedFiles.map((file) => URL.createObjectURL(file));
 
-    Array.from(files).forEach((file) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        newImages.push(reader.result as string);
-        setFormData((prev) => ({
-          ...prev,
-          images: [...(prev.images || []), ...newImages],
-        }));
-      };
-      reader.readAsDataURL(file);
-    });
+    setFormData((prev) => ({
+      ...prev,
+      newImageFiles: [...prev.newImageFiles, ...selectedFiles],
+      imagePreviews: [...prev.imagePreviews, ...previews],
+    }));
   };
 
-  const handleSave = () => {
-    if (!formData.title || !formData.description) {
+  const handleSave = async () => {
+    if (!formData.title.trim() || !formData.description.trim()) {
       setSnackbar({
         open: true,
-        message: "Please fill in all required fields.",
+        message: "Please fill in title and description.",
         severity: "error",
       });
       return;
     }
 
-    if (editingProject) {
-      setProjects((prev) =>
-        prev.map((p) =>
-          p.id === editingProject.id ? { ...editingProject, ...formData } : p
-        )
-      );
-      setSnackbar({
-        open: true,
-        message: "Project updated successfully!",
-        severity: "success",
-      });
-    } else {
-      setProjects((prev) => [
-        ...prev,
-        {
-          id: prev.length + 1,
-          title: formData.title || "",
-          description: formData.description || "",
-          location: formData.location || "",
-          images: formData.images || [],
-        },
-      ]);
-      setSnackbar({
-        open: true,
-        message: "Project added successfully!",
-        severity: "success",
-      });
+    try {
+      const payload = {
+        title: formData.title.trim(),
+        description: formData.description.trim(),
+        link: formData.link.trim() || undefined,
+        images: formData.newImageFiles.length ? formData.newImageFiles : formData.existingImages,
+        isFeatured: formData.isFeatured,
+        isActive: true,
+      };
+
+      if (editingProject) {
+        await updateProject(editingProject.id, payload);
+        setSnackbar({ open: true, message: "Project updated successfully.", severity: "success" });
+      } else {
+        await createProject(payload);
+        setSnackbar({ open: true, message: "Project added successfully.", severity: "success" });
+      }
+
+      handleClose();
+      await loadProjects();
+    } catch {
+      setSnackbar({ open: true, message: "Unable to save project.", severity: "error" });
     }
-    handleClose();
   };
 
   const confirmDelete = (id: number) => {
@@ -161,271 +198,290 @@ const AdminProjects = () => {
     setConfirmOpen(true);
   };
 
-  const handleConfirmDelete = () => {
-    if (selectedDeleteId !== null) {
-      setProjects((prev) => prev.filter((p) => p.id !== selectedDeleteId));
+  const handleConfirmDelete = async () => {
+    if (!selectedDeleteId) return;
+    try {
+      await deleteProject(selectedDeleteId);
       setSnackbar({
         open: true,
-        message: "Project deleted successfully!",
+        message: "Project deleted successfully.",
         severity: "info",
       });
+      await loadProjects();
+    } catch {
+      setSnackbar({
+        open: true,
+        message: "Unable to delete project.",
+        severity: "error",
+      });
+    } finally {
+      setConfirmOpen(false);
+      setSelectedDeleteId(null);
     }
-    setConfirmOpen(false);
-    setSelectedDeleteId(null);
   };
 
   return (
     <AdminLayout>
-    <Box sx={{ p: 3, color: theme.palette.text.primary, bgcolor: theme.palette.background.default, minHeight: "100vh" }}>
-      <Typography variant="h5" sx={{ fontWeight: "bold", color: theme.palette.primary.main, mb: 3, fontFamily: "JUST Sans ExBold" }}>
-        Manage Projects
-      </Typography>
+      <Box sx={{ p: 3, color: theme.palette.text.primary, bgcolor: theme.palette.background.default, minHeight: "100vh" }}>
+        <Typography variant="h5" sx={{ fontWeight: "bold", color: theme.palette.primary.main, mb: 3, fontFamily: "JUST Sans ExBold" }}>
+          Manage Projects
+        </Typography>
 
-      <Button
-        variant="contained"
-        startIcon={<Add />}
-        onClick={() => handleOpen()}
-        sx={{
-          mb: 3,
-          bgcolor: theme.palette.primary.main,
-          color: mode === 'dark' ? "#000" : "#fff",
-          fontWeight: "bold",
-          fontFamily: "JUST Sans ExBold",
-          "&:hover": { bgcolor: theme.palette.primary.dark },
-        }}
-      >
-        Add Project
-      </Button>
+        <Button
+          variant="contained"
+          onClick={() => handleOpen()}
+          sx={{
+            mb: 3,
+            bgcolor: theme.palette.primary.main,
+            color: mode === "dark" ? "#000" : "#fff",
+            fontWeight: "bold",
+            fontFamily: "JUST Sans ExBold",
+            "&:hover": { bgcolor: theme.palette.primary.dark },
+          }}
+        >
+          Add Project
+        </Button>
 
-      <TableContainer
-        component={Paper}
-        sx={{
-          background: theme.palette.background.paper,
-          borderRadius: 3,
-          border: `1px solid ${theme.palette.divider}`,
-        }}
-      >
-        <Table>
-          <TableHead>
-            <TableRow>
-              {["Images", "Title", "Location", "Description", "Actions"].map((h) => (
-                <TableCell key={h} sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
-                  {h}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {projects.map((p) => (
-              <TableRow key={p.id}>
-                <TableCell>
-                  <Box sx={{ display: "flex", gap: 1 }}>
-                    {p.images && p.images.length > 0 ? (
-                      p.images.map((img, idx) => (
-                        <img
-                          key={idx}
-                          src={img}
-                          alt={p.title}
-                          style={{
+        <TableContainer
+          component={Paper}
+          sx={{
+            background: theme.palette.background.paper,
+            borderRadius: 3,
+            border: `1px solid ${theme.palette.divider}`,
+          }}
+        >
+          <Table>
+            <TableHead>
+              <TableRow>
+                {["Images", "Title", "Featured", "Link", "Description", "Actions"].map((header) => (
+                  <TableCell key={header} sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+                    {header}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {projects.map((project) => (
+                <TableRow key={project.id}>
+                  <TableCell>
+                    <Box sx={{ display: "flex", gap: 1 }}>
+                      {project.images && project.images.length > 0 ? (
+                        project.images.slice(0, 3).map((image, idx) => (
+                          <img
+                            key={idx}
+                            src={image}
+                            alt={project.title}
+                            style={{
+                              width: 50,
+                              height: 50,
+                              borderRadius: "8px",
+                              objectFit: "cover",
+                            }}
+                          />
+                        ))
+                      ) : (
+                        <Box
+                          sx={{
                             width: 50,
                             height: 50,
+                            bgcolor: theme.palette.divider,
                             borderRadius: "8px",
-                            objectFit: "cover",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
                           }}
-                        />
-                      ))
+                        >
+                          <Image sx={{ color: theme.palette.text.secondary }} />
+                        </Box>
+                      )}
+                    </Box>
+                  </TableCell>
+                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{project.title}</TableCell>
+                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
+                    {project.isFeatured ? "Yes" : "No"}
+                  </TableCell>
+                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
+                    {project.link ? (
+                      <a href={project.link} target="_blank" rel="noreferrer" style={{ color: theme.palette.primary.main }}>
+                        {project.link}
+                      </a>
                     ) : (
-                      <Box
-                        sx={{
-                          width: 50,
-                          height: 50,
-                          bgcolor: theme.palette.divider,
-                          borderRadius: "8px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <Image sx={{ color: theme.palette.text.secondary }} />
-                      </Box>
+                      "N/A"
                     )}
-                  </Box>
-                </TableCell>
-                <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{p.title}</TableCell>
-                <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{p.location}</TableCell>
-                <TableCell sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>{p.description}</TableCell>
-                <TableCell>
-                  <IconButton color="inherit" size="small" onClick={() => handleOpen(p)}>
-                    <Edit sx={{ color: theme.palette.primary.main }} />
-                  </IconButton>
-                  <IconButton
-                    color="inherit"
-                    size="small"
-                    onClick={() => confirmDelete(p.id)}
-                  >
-                    <Delete sx={{ color: "red" }} />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      {/* Add/Edit Modal */}
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        fullWidth
-        PaperProps={{
-          sx: {
-            bgcolor: theme.palette.background.paper,
-            color: theme.palette.text.primary,
-            borderRadius: 3,
-          },
-        }}
-      >
-        <DialogTitle sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
-          {editingProject ? "Edit Project" : "Add Project"}
-        </DialogTitle>
-        <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
-          <TextField
-            label="Project Title"
-            name="title"
-            value={formData.title || ""}
-            onChange={handleInputChange}
-            fullWidth
-            InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
-            InputProps={{ sx: { color: theme.palette.text.primary } }}
-          />
-          <TextField
-            label="Location"
-            name="location"
-            value={formData.location || ""}
-            onChange={handleInputChange}
-            fullWidth
-            InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
-            InputProps={{ sx: { color: theme.palette.text.primary } }}
-          />
-          <TextField
-            label="Description"
-            name="description"
-            multiline
-            rows={4}
-            value={formData.description || ""}
-            onChange={handleInputChange}
-            fullWidth
-            InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
-            InputProps={{ sx: { color: theme.palette.text.primary } }}
-          />
-
-          <Box>
-            <Typography variant="body2" sx={{ mb: 1, fontFamily: "JUST Sans Regular" }}>
-              Upload Project Images
+                  </TableCell>
+                  <TableCell sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+                    {project.description || "N/A"}
+                  </TableCell>
+                  <TableCell>
+                    <IconButton color="inherit" size="small" onClick={() => handleOpen(project)}>
+                      <Edit sx={{ color: theme.palette.primary.main }} />
+                    </IconButton>
+                    <IconButton color="inherit" size="small" onClick={() => confirmDelete(project.id)}>
+                      <Delete sx={{ color: "red" }} />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          {!projects.length && (
+            <Typography sx={{ p: 2, color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+              {loading ? "Loading projects..." : "No projects found."}
             </Typography>
-            <Button
-              variant="outlined"
-              component="label"
-              sx={{
-                borderColor: theme.palette.primary.main,
-                color: theme.palette.primary.main,
-                "&:hover": { borderColor: theme.palette.primary.dark },
-              }}
-            >
-              Upload
-              <input
-                hidden
-                multiple
-                accept="image/*"
-                type="file"
-                onChange={handleImageChange}
-              />
-            </Button>
+          )}
+        </TableContainer>
 
-            {formData.images && formData.images.length > 0 && (
-              <Grid container spacing={1} sx={{ mt: 2 }}>
-                {formData.images.map((img, idx) => (
-                  <Grid size={{xs:4}} key={idx}>
-                    <img
-                      src={img}
-                      alt="preview"
-                      style={{
-                        width: "100%",
-                        borderRadius: 8,
-                        objectFit: "cover",
-                      }}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            )}
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} sx={{ color: theme.palette.text.secondary }}>
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ bgcolor: theme.palette.primary.main, color: mode === 'dark' ? "#000" : "#fff", fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}
-            onClick={handleSave}
-          >
-            {editingProject ? "Save Changes" : "Add Project"}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Confirm Delete Modal */}
-      <Dialog
-        open={confirmOpen}
-        onClose={() => setConfirmOpen(false)}
-        PaperProps={{
-          sx: {
-            bgcolor: theme.palette.background.paper,
-            color: theme.palette.text.primary,
-            borderRadius: 3,
-            p: 2,
-          },
-        }}
-      >
-        <DialogTitle sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
-          Confirm Deletion
-        </DialogTitle>
-        <DialogContent>
-          <Typography sx={{ fontFamily: "JUST Sans Regular" }}>Are you sure you want to delete this project?</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setConfirmOpen(false)} sx={{ color: theme.palette.text.secondary }}>
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ bgcolor: "red", color: "#fff", fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}
-            onClick={handleConfirmDelete}
-          >
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Snackbar Notifications */}
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity={snackbar.severity}
-          sx={{ width: "100%" }}
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          fullWidth
+          PaperProps={{
+            sx: {
+              bgcolor: theme.palette.background.paper,
+              color: theme.palette.text.primary,
+              borderRadius: 3,
+            },
+          }}
         >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
-    </Box>
-    </AdminLayout>
+          <DialogTitle sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+            {editingProject ? "Edit Project" : "Add Project"}
+          </DialogTitle>
+          <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
+            <TextField
+              label="Project Title"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              fullWidth
+              InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+              InputProps={{ sx: { color: theme.palette.text.primary } }}
+            />
+            <TextField
+              label="Project Link"
+              name="link"
+              value={formData.link}
+              onChange={handleInputChange}
+              fullWidth
+              InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+              InputProps={{ sx: { color: theme.palette.text.primary } }}
+            />
+            <TextField
+              label="Description"
+              name="description"
+              multiline
+              rows={4}
+              value={formData.description}
+              onChange={handleInputChange}
+              fullWidth
+              InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+              InputProps={{ sx: { color: theme.palette.text.primary } }}
+            />
 
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formData.isFeatured}
+                  onChange={(event) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      isFeatured: event.target.checked,
+                    }))
+                  }
+                />
+              }
+              label="Mark as featured"
+            />
+
+            <Box>
+              <Typography variant="body2" sx={{ mb: 1, fontFamily: "JUST Sans Regular" }}>
+                Upload Project Images
+              </Typography>
+              <Button
+                variant="outlined"
+                component="label"
+                sx={{
+                  borderColor: theme.palette.primary.main,
+                  color: theme.palette.primary.main,
+                  "&:hover": { borderColor: theme.palette.primary.dark },
+                }}
+              >
+                Upload
+                <input hidden multiple accept="image/*" type="file" onChange={handleImageChange} />
+              </Button>
+
+              {formData.imagePreviews.length > 0 && (
+                <Grid container spacing={1} sx={{ mt: 2 }}>
+                  {formData.imagePreviews.map((image, idx) => (
+                    <Grid size={{ xs: 4 }} key={idx}>
+                      <img
+                        src={image}
+                        alt="preview"
+                        style={{
+                          width: "100%",
+                          borderRadius: 8,
+                          objectFit: "cover",
+                        }}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              )}
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} sx={{ color: theme.palette.text.secondary }}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              sx={{ bgcolor: theme.palette.primary.main, color: mode === "dark" ? "#000" : "#fff", fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}
+              onClick={handleSave}
+            >
+              {editingProject ? "Save Changes" : "Add Project"}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={confirmOpen}
+          onClose={() => setConfirmOpen(false)}
+          PaperProps={{
+            sx: {
+              bgcolor: theme.palette.background.paper,
+              color: theme.palette.text.primary,
+              borderRadius: 3,
+              p: 2,
+            },
+          }}
+        >
+          <DialogTitle sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+            Confirm Deletion
+          </DialogTitle>
+          <DialogContent>
+            <Typography sx={{ fontFamily: "JUST Sans Regular" }}>Are you sure you want to delete this project?</Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setConfirmOpen(false)} sx={{ color: theme.palette.text.secondary }}>
+              Cancel
+            </Button>
+            <Button variant="contained" sx={{ bgcolor: "red", color: "#fff", fontWeight: "bold", fontFamily: "JUST Sans ExBold" }} onClick={handleConfirmDelete}>
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={3000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: "100%" }}>
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
+      </Box>
+    </AdminLayout>
   );
 };
 

@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Let existing files/folders be served normally
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Do not rewrite backend/service paths if they are on the same host
+  RewriteCond %{REQUEST_URI} !^/api/ [NC]
+  RewriteCond %{REQUEST_URI} !^/webhook/ [NC]
+  RewriteCond %{REQUEST_URI} !^/health$ [NC]
+  RewriteCond %{REQUEST_URI} !^/verify-payment$ [NC]
+
+  # Route everything else to the SPA entry point
+  RewriteRule . /index.html [L]
+</IfModule>

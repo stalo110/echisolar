@@ -106,6 +106,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
               variant="contained"
               onClick={() =>
                 add({
+                  itemType: "product",
                   productId: product.id,
                   name: product.name,
                   price: product.price,

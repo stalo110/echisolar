@@ -5,13 +5,19 @@ import {
   TextField,
   Typography,
   Paper,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import TopNav from "../../navigation/TopNav";
 import Footer from "../../navigation/Footer";
 import { useTheme } from "../../contexts/ThemeContext";
+import { toast } from "material-react-toastify";
+import { getApiErrorMessage } from "../../utils/apiError";
 
 const RegisterPage = () => {
   const { theme, mode } = useTheme();
@@ -19,17 +25,25 @@ const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [country, setCountry] = useState("NG");
+  const { register } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert("Passwords don't match");
+      toast.error("Passwords must match");
       return;
     }
-    login({ id: "3", name, email, role: "customer" });
-    navigate("/dashboard");
+    try {
+      await register({ name, email, password, country });
+      navigate("/user/dashboard");
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, "Unable to register. Try again."));
+      console.error(err);
+    }
   };
 
   return (
@@ -111,10 +125,9 @@ const RegisterPage = () => {
               fullWidth
               required
               margin="normal"
-              label="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              label="Country"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
               InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
               InputProps={{
                 style: {
@@ -129,12 +142,54 @@ const RegisterPage = () => {
               fullWidth
               required
               margin="normal"
+              label="Password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      edge="end"
+                      sx={{ color: theme.palette.text.secondary }}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+                style: {
+                  color: theme.palette.text.primary,
+                  background: mode === 'dark' ? "#121212" : "#f5f5f5",
+                  borderRadius: "8px",
+                },
+              }}
+            />
+
+            <TextField
+              fullWidth
+              required
+              margin="normal"
               label="Confirm Password"
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
               InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                      onClick={() => setShowConfirmPassword((prev) => !prev)}
+                      edge="end"
+                      sx={{ color: theme.palette.text.secondary }}
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
                 style: {
                   color: theme.palette.text.primary,
                   background: mode === 'dark' ? "#121212" : "#f5f5f5",

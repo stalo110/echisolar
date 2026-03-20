@@ -1,4 +1,5 @@
-import { Box, Container, Typography, Grid, Card, IconButton } from "@mui/material";
+import { Box, Container, Typography, Grid, Card } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import { useTheme } from "../../contexts/ThemeContext";
 import {
   Lightbulb as LightbulbIcon,
@@ -9,9 +10,14 @@ import {
   // Send as SendIcon,
 } from "@mui/icons-material";
 import { FaWhatsapp } from "react-icons/fa";
+import { COMPANY_PHONE, COMPANY_WHATSAPP_URL } from "../../config/company";
 
 export const ServicesSection = () => {
   const { theme, mode } = useTheme();
+  const displayPhone = COMPANY_PHONE.replace(
+    /^(\+\d{3})(\d{3})(\d{3})(\d{4})$/,
+    "$1 $2 $3 $4"
+  );
   const services = [
     { icon: <LightbulbIcon />, title: "Solar System Design", desc: "Custom PV system design, shading analysis, maximize energy yield." },
     { icon: <CheckCircleIcon />, title: "Installation & Commissioning", desc: "Professional on-site installation of panels & inverters." },
@@ -22,12 +28,16 @@ export const ServicesSection = () => {
   ];
 
   return (
-    <Box sx={{ py: 10, background: mode === 'dark' ? "#070707" : theme.palette.background.default }}>
+    <Box sx={{ py: 10, background: "transparent" }}>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: "center", mb: 6 }}>
-          <Typography variant="h6" sx={{ color: theme.palette.primary.main, fontWeight: 800, fontFamily: "JUST Sans ExBold", textTransform: "uppercase", letterSpacing: 2, fontSize: { xs: "0.9rem", md: "1.25rem" } }}>Our Services</Typography>
-          <Typography variant="h2" sx={{ fontWeight: 800, color: theme.palette.text.primary, mt: 1, fontFamily: "JUST Sans ExBold", fontSize: { xs: "2.2rem", md: "3.8rem" } }}>Clean, reliable solar solutions</Typography>
-          <Typography sx={{ color: theme.palette.text.secondary, maxWidth: 780, mx: "auto", mt: 2, fontFamily: "JUST Sans Regular" }}>
+          <Typography variant="h6" sx={{ color: theme.palette.primary.main, fontWeight: 700, fontFamily: "JUST Sans ExBold", textTransform: "uppercase", letterSpacing: 2, fontSize: { xs: "0.82rem", md: "1.05rem" } }}>
+            Our Services
+          </Typography>
+          <Typography variant="h2" sx={{ fontWeight: 700, color: theme.palette.text.primary, mt: 1, fontFamily: "JUST Sans ExBold", fontSize: { xs: "1.95rem", md: "3.1rem" } }}>
+            Clean, reliable solar solutions
+          </Typography>
+          <Typography sx={{ color: theme.palette.text.secondary, maxWidth: 780, mx: "auto", mt: 2, fontFamily: "JUST Sans Regular", lineHeight: 1.8 }}>
             We design, install and maintain solar systems for homes and businesses, backed by monitoring and flexible payment options.
           </Typography>
         </Box>
@@ -37,85 +47,121 @@ export const ServicesSection = () => {
             <Grid size={{ xs: 12, sm: 6, md: 4 }} key={i}>
               <Card
                 sx={{
-                  p: 3,
+                  p: 3.2,
                   height: "100%",
-                  borderRadius: 2,
-                  background: mode === 'dark' ? "linear-gradient(180deg,#111,#161616)" : "linear-gradient(180deg,#ffffff,#f8f9fa)",
+                  borderRadius: 4,
+                  border: `1px solid ${theme.palette.divider}`,
+                  background: mode === "dark" ? alpha("#10202A", 0.76) : alpha("#FFFFFF", 0.8),
+                  backdropFilter: "blur(14px)",
                   color: theme.palette.text.primary,
-                  transition: "transform .28s ease, box-shadow .28s ease",
-                  animation: `fadeInUp 0.6s ease-out ${i * 0.1}s both`,
-                  "@keyframes fadeInUp": {
-                    "0%": { opacity: 0, transform: "translateY(30px)" },
-                    "100%": { opacity: 1, transform: "translateY(0)" }
+                  boxShadow: mode === "dark" ? "0 20px 48px rgba(3,10,18,0.26)" : "0 18px 42px rgba(15,23,42,0.08)",
+                  transition: "transform .28s ease, box-shadow .28s ease, border-color .28s ease",
+                  "&:hover": {
+                    transform: "translateY(-8px)",
+                    borderColor: alpha(theme.palette.secondary.main, 0.32),
+                    boxShadow: mode === "dark" ? "0 24px 54px rgba(3,10,18,0.34)" : "0 22px 52px rgba(15,23,42,0.11)",
                   },
-                  "&:hover": { transform: "translateY(-8px)", boxShadow: "0 18px 40px rgba(0,0,0,0.6)" },
                 }}
               >
-                <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start", mb: 1 }}>
-                  <IconButton
+                <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start", mb: 1.5 }}>
+                  <Box
                     sx={{
-                      background: mode === 'dark' ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.03)",
+                      width: 52,
+                      height: 52,
+                      borderRadius: 3,
+                      display: "grid",
+                      placeItems: "center",
+                      background: alpha(theme.palette.primary.main, 0.12),
                       color: theme.palette.primary.main,
-                      animation: "pulse 2s ease-in-out infinite",
-                      "@keyframes pulse": {
-                        "0%, 100%": { transform: "scale(1)" },
-                        "50%": { transform: "scale(1.05)" }
-                      },
-                      "&:hover": { filter: `drop-shadow(0 6px 16px ${theme.palette.primary.main}30)` },
+                      border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                      flexShrink: 0,
                     }}
-                    size="large"
                   >
                     {s.icon}
-                  </IconButton>
-                  <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: "JUST Sans ExBold" }}>{s.title}</Typography>
+                  </Box>
+                  <Typography variant="h6" sx={{ fontWeight: 700, fontFamily: "JUST Sans ExBold", lineHeight: 1.35 }}>
+                    {s.title}
+                  </Typography>
                 </Box>
-                <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>{s.desc}</Typography>
+                <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular", lineHeight: 1.75 }}>
+                  {s.desc}
+                </Typography>
               </Card>
             </Grid>
           ))}
         </Grid>
 
-        <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 6 }}>
-          <Box component="button" sx={{
-            border: "none",
-            px: 4,
-            py: 1.2,
-            borderRadius: 2,
-            background: `linear-gradient(90deg,${theme.palette.secondary.main},${theme.palette.secondary.light})`,
-            color: "#fff",
-            fontWeight: 800,
-            fontFamily: "JUST Sans ExBold",
-            cursor: "pointer",
-            boxShadow: "0 10px 30px rgba(46,125,77,0.14)",
-            "&:hover": { transform: "translateY(-3px)" }
-          }}>
-            Contact Sales
-          </Box>
-
-          <Box 
-            component="a"
-            href="https://wa.me/2347018090107"
-            target="_blank"
-            sx={{ 
-              display: "flex", 
-              alignItems: "center", 
-              gap: 1, 
-              textDecoration: "none",
-              "&:hover": { transform: "translateY(-2px)" },
-              transition: "transform 0.3s ease"
+        <Box
+          component="a"
+          href={COMPANY_WHATSAPP_URL}
+          target="_blank"
+          rel="noreferrer"
+          sx={{
+            mt: 6,
+            mx: "auto",
+            maxWidth: 1040,
+            px: { xs: 2, md: 4 },
+            py: { xs: 2.25, md: 2.8 },
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexDirection: { xs: "column", md: "row" },
+            gap: 2.5,
+            textDecoration: "none",
+            borderRadius: 5,
+            border: "1px solid rgba(0, 166, 81, 0.72)",
+            background: "linear-gradient(135deg, #020B08 0%, #03110B 55%, #071810 100%)",
+            boxShadow: "0 24px 56px rgba(1, 10, 7, 0.36)",
+            transition: "transform 0.25s ease, box-shadow 0.25s ease",
+            "&:hover": {
+              transform: "translateY(-4px)",
+              boxShadow: "0 28px 62px rgba(1, 10, 7, 0.45)",
+            },
+          }}
+        >
+          <Box
+            sx={{
+              px: { xs: 2.4, md: 4.4 },
+              py: { xs: 1.5, md: 1.8 },
+              minWidth: { md: 320 },
+              borderRadius: 3.5,
+              background: "linear-gradient(90deg, #00A63F 0%, #0CB24A 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 1.3,
             }}
           >
-            <IconButton sx={{ background: mode === 'dark' ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.03)", color: theme.palette.primary.main }}>
-              <FaWhatsapp />
-            </IconButton>
-            <Box>
-              <Typography sx={{ fontWeight: 700, color: theme.palette.text.primary, fontFamily: "JUST Sans ExBold" }}>+234 701 809 0107</Typography>
-              <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>Chat on WhatsApp</Typography>
-            </Box>
+            <FaWhatsapp style={{ color: "#ffffff", fontSize: 22 }} />
+            <Typography
+              sx={{
+                color: "#ffffff",
+                fontWeight: 700,
+                fontFamily: "JUST Sans ExBold",
+                fontSize: { xs: "1rem", md: "1.55rem" },
+                letterSpacing: "-0.01em",
+                textAlign: "center",
+              }}
+            >
+              CHAT ON WHATSAPP
+            </Typography>
           </Box>
+
+          <Typography
+            sx={{
+              color: "#ffffff",
+              fontWeight: 700,
+              fontFamily: "JUST Sans ExBold",
+              fontSize: { xs: "1.5rem", sm: "2rem", md: "3.3rem" },
+              lineHeight: 1,
+              letterSpacing: "-0.03em",
+              textAlign: "center",
+            }}
+          >
+            {displayPhone}
+          </Typography>
         </Box>
       </Container>
     </Box>
   );
 };
-

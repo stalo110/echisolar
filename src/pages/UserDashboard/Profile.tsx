@@ -6,18 +6,83 @@ import {
   Button,
   Avatar,
   Divider,
+  TextField,
 } from "@mui/material";
 import UserDashboardLayout from "../../components/User/UserDashboardLayout";
 import { useTheme } from "../../contexts/ThemeContext";
+import { useEffect, useState } from "react";
+import { getProfile, updateProfile } from "../../services/userService";
+import { toast } from "material-react-toastify";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Profile = () => {
   const { theme, mode } = useTheme();
-  const user = {
-    name: "John Doe",
-    email: "john@example.com",
-    phone: "+1 234 567 890",
-    address: "123 Luxury Avenue, Lagos, Nigeria",
-    joined: "March 2024",
+  const { updateUser } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [profile, setProfile] = useState({
+    name: "",
+    email: "",
+    address: "",
+    country: "",
+    joined: "",
+  });
+  const [form, setForm] = useState({
+    name: "",
+    address: "",
+    country: "",
+  });
+
+  useEffect(() => {
+    setLoading(true);
+    getProfile()
+      .then((data) => {
+        setProfile({
+          name: data.name || "",
+          email: data.email || "",
+          address: data.address || "",
+          country: data.country || "",
+          joined: data.createdAt ? new Date(data.createdAt).toLocaleDateString() : "",
+        });
+        setForm({
+          name: data.name || "",
+          address: data.address || "",
+          country: data.country || "",
+        });
+      })
+      .catch(() => {
+        toast.error("Unable to load profile.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  const handleSave = async () => {
+    if (!form.name.trim()) {
+      toast.error("Name is required.");
+      return;
+    }
+    setSaving(true);
+    try {
+      await updateProfile({
+        name: form.name.trim(),
+        address: form.address.trim(),
+        country: form.country.trim(),
+      });
+      setProfile((prev) => ({
+        ...prev,
+        name: form.name.trim(),
+        address: form.address.trim(),
+        country: form.country.trim(),
+      }));
+      updateUser({ name: form.name.trim(), country: form.country.trim() || null });
+      toast.success("Profile updated.");
+    } catch {
+      toast.error("Unable to update profile.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -53,24 +118,26 @@ const Profile = () => {
                   fontSize: 32,
                 }}
               >
-                {user.name.charAt(0)}
+                {(profile.name || "?").charAt(0)}
               </Avatar>
-              <Typography variant="h6" sx={{ fontFamily: "JUST Sans ExBold" }}>{user.name}</Typography>
+              <Typography variant="h6" sx={{ fontFamily: "JUST Sans ExBold" }}>
+                {profile.name || (loading ? "Loading..." : "—")}
+              </Typography>
               <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
-                {user.email}
+                {profile.email || "—"}
               </Typography>
             </Box>
 
             <Divider sx={{ my: 3, borderColor: theme.palette.divider }} />
 
             <Typography variant="body2" sx={{ fontFamily: "JUST Sans Regular" }}>
-              <strong>Phone:</strong> {user.phone}
+              <strong>Country:</strong> {profile.country || "—"}
             </Typography>
             <Typography variant="body2" sx={{ fontFamily: "JUST Sans Regular" }}>
-              <strong>Address:</strong> {user.address}
+              <strong>Address:</strong> {profile.address || "—"}
             </Typography>
             <Typography variant="body2" sx={{ fontFamily: "JUST Sans Regular" }}>
-              <strong>Member since:</strong> {user.joined}
+              <strong>Member since:</strong> {profile.joined || "—"}
             </Typography>
           </Paper>
         </Grid>
@@ -90,15 +157,40 @@ const Profile = () => {
             <Typography variant="h6" sx={{ color: theme.palette.primary.main, mb: 2, fontFamily: "JUST Sans ExBold" }}>
               Account Overview
             </Typography>
-            <Typography sx={{ mb: 1, fontFamily: "JUST Sans Regular" }}>Orders: 12</Typography>
-            <Typography sx={{ mb: 1, fontFamily: "JUST Sans Regular" }}>Wishlist Items: 8</Typography>
-            <Typography sx={{ mb: 1, fontFamily: "JUST Sans Regular" }}>Active Subscription: Yes</Typography>
-            <Typography sx={{ mb: 1, fontFamily: "JUST Sans Regular" }}>Total Spent: $1,200</Typography>
-
             <Box mt={3}>
+              <TextField
+                label="Full Name"
+                value={form.name}
+                onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
+                fullWidth
+                margin="dense"
+                InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+                sx={{ input: { color: theme.palette.text.primary } }}
+              />
+              <TextField
+                label="Address"
+                value={form.address}
+                onChange={(e) => setForm((prev) => ({ ...prev, address: e.target.value }))}
+                fullWidth
+                margin="dense"
+                InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+                sx={{ input: { color: theme.palette.text.primary } }}
+              />
+              <TextField
+                label="Country"
+                value={form.country}
+                onChange={(e) => setForm((prev) => ({ ...prev, country: e.target.value }))}
+                fullWidth
+                margin="dense"
+                InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+                sx={{ input: { color: theme.palette.text.primary } }}
+              />
               <Button
                 variant="contained"
+                onClick={handleSave}
+                disabled={saving || loading}
                 sx={{
+                  mt: 2,
                   bgcolor: theme.palette.primary.main,
                   color: mode === 'dark' ? "#000" : "#fff",
                   fontWeight: "600",
@@ -106,7 +198,7 @@ const Profile = () => {
                   "&:hover": { bgcolor: theme.palette.primary.dark },
                 }}
               >
-                Edit Profile
+                {saving ? "Saving..." : "Save Profile"}
               </Button>
             </Box>
           </Paper>

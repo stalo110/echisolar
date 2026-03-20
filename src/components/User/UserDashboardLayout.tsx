@@ -17,6 +17,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import {
   Dashboard,
   ShoppingBag,
+  LocalOffer,
   Subscriptions,
   AccountCircle,
   Menu as MenuIcon,
@@ -36,6 +37,12 @@ const menuItems = [
     text: "Products",
     icon: <ShoppingBag />,
     route: "/user/products",
+  },
+  {
+    id: "packages",
+    text: "Packages",
+    icon: <LocalOffer />,
+    route: "/user/packages",
   },
   {
     id: "subscriptions",
@@ -63,6 +70,7 @@ const UserDashboardLayout = ({ children }: UserDashboardLayoutProps) => {
 
   const getActiveSection = () => {
     if (location.pathname.includes("products")) return "products";
+    if (location.pathname.includes("packages")) return "packages";
     if (location.pathname.includes("subscriptions")) return "subscriptions";
     if (location.pathname.includes("profile")) return "profile";
     return "dashboard";

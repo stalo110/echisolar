@@ -1,26 +1,69 @@
 import { Typography, Paper, Grid, Chip } from "@mui/material";
 import UserDashboardLayout from "../../components/User/UserDashboardLayout";
 import { useTheme } from "../../contexts/ThemeContext";
+import { useEffect, useState } from "react";
+import { getOrderById, getUserOrders } from "../../services/orderService";
+
+type SubscriptionItem = {
+  key: string;
+  orderId: number;
+  plan: string;
+  status: string;
+  nextPayment?: string;
+  ended?: string;
+  price: string;
+};
+
+const formatDate = (value?: string) => {
+  if (!value) return "N/A";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString();
+};
 
 const UserSubscriptions = () => {
   const { theme, mode } = useTheme();
-  const activeSubs = [
-    {
-      plan: "6-Month Solar Plan",
-      status: "Active",
-      nextPayment: "2025-12-01",
-      price: "₦150,000",
-    },
-  ];
+  const [activeSubs, setActiveSubs] = useState<SubscriptionItem[]>([]);
+  const [pastSubs, setPastSubs] = useState<SubscriptionItem[]>([]);
 
-  const pastSubs = [
-    {
-      plan: "3-Month Solar Plan",
-      status: "Expired",
-      ended: "2025-09-01",
-      price: "₦90,000",
-    },
-  ];
+  useEffect(() => {
+    getUserOrders()
+      .then(async (orders) => {
+        if (!orders.length) {
+          setActiveSubs([]);
+          setPastSubs([]);
+          return;
+        }
+
+        const orderDetails = await Promise.all(
+          orders.slice(0, 12).map((order) =>
+            getOrderById(order.id)
+              .then((detail) => ({ order, detail }))
+              .catch(() => null)
+          )
+        );
+
+        const installments = orderDetails
+          .filter((entry): entry is { order: (typeof orders)[number]; detail: Awaited<ReturnType<typeof getOrderById>> } => Boolean(entry))
+          .flatMap(({ order, detail }) =>
+            detail.installments.map((installment) => ({
+              key: `${order.id}-${installment.installmentNumber}`,
+              orderId: order.id,
+              plan: `${detail.installments.length}-Installment Plan`,
+              status: installment.status,
+              nextPayment: installment.status === "pending" ? formatDate(installment.dueDate) : undefined,
+              ended: installment.status !== "pending" ? formatDate(installment.dueDate) : undefined,
+              price: `₦${Number(installment.amount || 0).toLocaleString()}`,
+            }))
+          );
+
+        setActiveSubs(installments.filter((item) => item.status === "pending"));
+        setPastSubs(installments.filter((item) => item.status !== "pending"));
+      })
+      .catch(() => {
+        setActiveSubs([]);
+        setPastSubs([]);
+      });
+  }, []);
 
   return (
     <UserDashboardLayout>
@@ -32,8 +75,8 @@ const UserSubscriptions = () => {
       </Typography>
 
       <Grid container spacing={3}>
-        {activeSubs.map((sub, index) => (
-          <Grid size={{ xs: 12, md: 6 }} key={index}>
+        {activeSubs.map((sub) => (
+          <Grid size={{ xs: 12, md: 6 }} key={sub.key}>
            <Paper
             sx={{
               p: 3,
@@ -52,17 +95,25 @@ const UserSubscriptions = () => {
               </Typography>
               <Typography sx={{ fontFamily: "JUST Sans Regular" }}>Next Payment: {sub.nextPayment}</Typography>
               <Typography sx={{ fontFamily: "JUST Sans Regular" }}>Amount: {sub.price}</Typography>
+              <Typography sx={{ fontFamily: "JUST Sans Regular" }}>Order ID: {sub.orderId}</Typography>
             </Paper>
           </Grid>
         ))}
+        {activeSubs.length === 0 && (
+          <Grid size={{ xs: 12 }}>
+            <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+              No active installment plans found.
+            </Typography>
+          </Grid>
+        )}
       </Grid>
 
       <Typography variant="h6" sx={{ mt: 5, mb: 2, color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>
         Past Subscriptions
       </Typography>
       <Grid container spacing={3}>
-        {pastSubs.map((sub, index) => (
-          <Grid size={{ xs: 12, md: 6 }} key={index}>
+        {pastSubs.map((sub) => (
+          <Grid size={{ xs: 12, md: 6 }} key={sub.key}>
            <Paper
             sx={{
               p: 3,
@@ -75,13 +126,21 @@ const UserSubscriptions = () => {
           >
               <Typography variant="h6" sx={{ fontFamily: "JUST Sans ExBold" }}>{sub.plan}</Typography>
               <Typography sx={{ fontFamily: "JUST Sans Regular" }}>
-                Status: <Chip label={sub.status} color="error" />
+                Status: <Chip label={sub.status} color={sub.status === "paid" ? "success" : "error"} />
               </Typography>
               <Typography sx={{ fontFamily: "JUST Sans Regular" }}>Ended: {sub.ended}</Typography>
               <Typography sx={{ fontFamily: "JUST Sans Regular" }}>Amount: {sub.price}</Typography>
+              <Typography sx={{ fontFamily: "JUST Sans Regular" }}>Order ID: {sub.orderId}</Typography>
             </Paper>
           </Grid>
         ))}
+        {pastSubs.length === 0 && (
+          <Grid size={{ xs: 12 }}>
+            <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+              No completed installment records yet.
+            </Typography>
+          </Grid>
+        )}
       </Grid>
     </UserDashboardLayout>
   );

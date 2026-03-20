@@ -14,6 +14,14 @@ import { HeroSection } from "../components/Contact/HeroSection";
 import { useState } from "react";
 import { useTheme } from "../contexts/ThemeContext";
 import { FaWhatsapp } from "react-icons/fa";
+import {
+  COMPANY_ADDRESS,
+  COMPANY_EMAIL,
+  COMPANY_PHONE,
+  COMPANY_WHATSAPP_URL,
+} from "../config/company";
+import { submitContactMessage } from "../services/contactService";
+import { toast } from "material-react-toastify";
 
 const Contact = () => {
   const { theme, mode } = useTheme();
@@ -21,11 +29,31 @@ const Contact = () => {
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ name, email, subject, message });
-    alert('Message sent! We will get back to you soon.');
+    if (!name.trim() || !email.trim() || !subject.trim() || !message.trim()) {
+      toast.error("Please fill in all fields.");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await submitContactMessage({
+        name: name.trim(),
+        email: email.trim(),
+        subject: subject.trim(),
+        message: message.trim(),
+      });
+      toast.success("Message sent. We will get back to you shortly.");
+    } catch (err: any) {
+      toast.error(err?.response?.data?.error || "Unable to send message. Please try again.");
+      return;
+    } finally {
+      setSubmitting(false);
+    }
+
     setName('');
     setEmail('');
     setSubject('');
@@ -96,10 +124,12 @@ const Contact = () => {
               <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2, color: theme.palette.text.primary, fontFamily: "JUST Sans ExBold" }}>
                 Contact Information
               </Typography>
-              <Typography sx={{ mb: 1, color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>📍 123 Solar Street, Lagos, Nigeria</Typography>
+              <Typography sx={{ mb: 1, color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
+                📍 {COMPANY_ADDRESS}
+              </Typography>
               <Typography 
                 component="a"
-                href="https://wa.me/2347018090107"
+                href={COMPANY_WHATSAPP_URL}
                 target="_blank"
                 sx={{ 
                   mb: 1, 
@@ -112,14 +142,16 @@ const Contact = () => {
                   "&:hover": { color: theme.palette.primary.main }
                 }}
               >
-                <FaWhatsapp style={{ color: theme.palette.secondary.main }} /> +234 701 809 0107
+                <FaWhatsapp style={{ color: theme.palette.secondary.main }} /> {COMPANY_PHONE}
               </Typography>
               <Typography sx={{ mb: 1, color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                ✉️ <Link href="mailto:info@echisolar.com" underline="hover" color={theme.palette.primary.main}>
-                  info@echisolar.com
+                ✉️ <Link href={`mailto:${COMPANY_EMAIL}`} underline="hover" color={theme.palette.primary.main}>
+                  {COMPANY_EMAIL}
                 </Link>
               </Typography>
-              <Typography sx={{ mt: 2, color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>🕒 Mon - Fri: 9:00 AM - 5:00 PM</Typography>
+              <Typography sx={{ mt: 2, color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
+                🕒 Mon - Sat: 9:00 AM - 6:00 PM
+              </Typography>
             </Paper>
           </Grid>
 
@@ -185,19 +217,20 @@ const Contact = () => {
                   type="submit"
                   variant="contained"
                   fullWidth
+                  disabled={submitting}
                   sx={{
                     mt: 3,
                     py: 1.4,
                     fontWeight: 'bold',
                     fontFamily: "JUST Sans ExBold",
-                    background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+                    bgcolor: theme.palette.primary.main,
                     '&:hover': {
-                      background: `linear-gradient(90deg, ${theme.palette.primary.light}, ${theme.palette.primary.main})`,
+                      bgcolor: "#F19A30",
                     },
                     borderRadius: '10px',
                   }}
                 >
-                  Send Message
+                  {submitting ? "Sending..." : "Send Message"}
                 </Button>
               </Box>
             </Paper>
@@ -220,19 +253,25 @@ const Contact = () => {
             <Box
               sx={{
                 width: '100%',
-                height: '400px',
+                height: { xs: '280px', md: '400px' },
                 borderRadius: 2,
                 overflow: 'hidden',
                 bgcolor: theme.palette.background.default,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: theme.palette.primary.main,
                 border: `1px solid ${theme.palette.divider}`
               }}
             >
-              Google Map Placeholder
+              <Box
+                component="iframe"
+                title="EchiSolar Office Location"
+                src="https://www.google.com/maps?q=6.4685,3.2737&z=16&output=embed"
+                sx={{ border: 0, width: "100%", height: "100%" }}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </Box>
+            <Typography sx={{ mt: 2, color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+              {COMPANY_ADDRESS}
+            </Typography>
           </Paper>
         </Box>
       </Container>
@@ -243,4 +282,3 @@ const Contact = () => {
 };
 
 export default Contact;
-

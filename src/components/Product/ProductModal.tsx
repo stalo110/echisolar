@@ -98,6 +98,7 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
 
   const handleAddToCart = () => {
     add({
+      itemType: "product",
       productId: product.id,
       name: product.name,
       price: product.price,

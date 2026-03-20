@@ -15,7 +15,10 @@ const ProductDetail = () => {
   const navigate = useNavigate();
 
   useEffect(()=>{
-    if(id) fetchProductById(id).then(p => setProduct(p));
+    if (!id) return;
+    fetchProductById(id)
+      .then((p) => setProduct(p))
+      .catch(() => setProduct(null));
   },[id])
 
   if(!product) return (
@@ -32,7 +35,9 @@ const ProductDetail = () => {
   const [related, setRelated] = useState<typeof product[]>([]);
 
   useEffect(()=>{
-    fetchRelated(product.category, product.id).then(setRelated);
+    fetchRelated(product.category, product.id)
+      .then(setRelated)
+      .catch(() => setRelated([]));
   },[product])
 
   return (
@@ -58,8 +63,8 @@ const ProductDetail = () => {
 
             <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mt: 2 }}>
               <TextField type="number" size="small" value={qty} onChange={(e)=> setQty(Math.max(1, Number(e.target.value)))} sx={{ width: 100 }} />
-              <Button variant="contained" color="success" sx={{ fontFamily: "JUST Sans ExBold" }} onClick={()=> add({ productId: product.id, name: product.name, price: product.price, quantity: qty })}>Add to Cart</Button>
-              <Button variant="outlined" sx={{ fontFamily: "JUST Sans ExBold" }} onClick={()=> { clear(); add({ productId: product.id, name: product.name, price: product.price, quantity: qty }); navigate('/checkout'); }}>Buy Now</Button>
+              <Button variant="contained" color="success" sx={{ fontFamily: "JUST Sans ExBold" }} onClick={()=> add({ itemType: "product", productId: product.id, name: product.name, price: product.price, quantity: qty })}>Add to Cart</Button>
+              <Button variant="outlined" sx={{ fontFamily: "JUST Sans ExBold" }} onClick={()=> { clear(); add({ itemType: "product", productId: product.id, name: product.name, price: product.price, quantity: qty }); navigate('/checkout'); }}>Buy Now</Button>
             </Box>
           </Grid>
         </Grid>

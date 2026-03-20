@@ -61,43 +61,54 @@
 //   );
 // };
 
-
 import { Box, Container, Typography, Grid } from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import {
+  Groups2Outlined,
+  TuneOutlined,
+  WorkspacePremiumOutlined,
+} from "@mui/icons-material";
 import { useTheme } from "../../contexts/ThemeContext";
 
 export const FeaturesSection = () => {
   const { theme, mode } = useTheme();
   const features = [
-    { icon: "🏆", title: "Consistent Quality", desc: "We deliver high-quality results that consistently meet expectations." },
-    { icon: "👥", title: "Professional Team", desc: "Experienced professionals who bring expertise and care." },
-    { icon: "🔧", title: "Tailored Solutions", desc: "Customized solutions designed to meet your unique needs." },
+    {
+      icon: <WorkspacePremiumOutlined />,
+      title: "Consistent Quality",
+      desc: "We deliver high-quality results that consistently meet expectations.",
+    },
+    {
+      icon: <Groups2Outlined />,
+      title: "Professional Team",
+      desc: "Experienced professionals who bring expertise and care.",
+    },
+    {
+      icon: <TuneOutlined />,
+      title: "Tailored Solutions",
+      desc: "Customized solutions designed to meet your unique needs.",
+    },
   ];
 
   return (
     <Box sx={{ 
       py: 10, 
-      background: mode === 'dark' ? "#070707" : theme.palette.background.default,
+      background: "transparent",
       position: "relative",
       overflow: "hidden"
     }}>
-      {/* Interactive Background Pattern */}
       <Box sx={{
         position: "absolute",
         top: 0,
         left: 0,
         width: "100%",
         height: "100%",
-        opacity: mode === 'dark' ? 0.03 : 0.02,
+        opacity: mode === "dark" ? 0.14 : 0.22,
         backgroundImage: `
-          conic-gradient(from 0deg at 50% 50%, ${theme.palette.primary.main}00, ${theme.palette.primary.main}40, ${theme.palette.primary.main}00),
-          conic-gradient(from 180deg at 25% 75%, ${theme.palette.secondary.main}00, ${theme.palette.secondary.main}30, ${theme.palette.secondary.main}00)
+          linear-gradient(${alpha(theme.palette.divider, 0.38)} 1px, transparent 1px),
+          linear-gradient(90deg, ${alpha(theme.palette.divider, 0.38)} 1px, transparent 1px)
         `,
-        backgroundSize: "400px 400px, 300px 300px",
-        animation: "rotate 20s linear infinite",
-        "@keyframes rotate": {
-          "0%": { transform: "rotate(0deg)" },
-          "100%": { transform: "rotate(360deg)" }
-        }
+        backgroundSize: "88px 88px",
       }} />
       <Container maxWidth="lg">
         <Grid container spacing={4}>
@@ -106,21 +117,41 @@ export const FeaturesSection = () => {
               <Box sx={{
                 textAlign: "center",
                 p: 4,
-                borderRadius: 2,
-                background: mode === 'dark' ? "linear-gradient(180deg,#0f0f0f,#131313)" : "linear-gradient(180deg,#ffffff,#f8f9fa)",
-                transition: "transform .4s ease, box-shadow .4s ease",
-                animation: `slideInUp 0.8s ease-out ${i * 0.2}s both`,
-                "@keyframes slideInUp": {
-                  "0%": { opacity: 0, transform: "translateY(50px)" },
-                  "100%": { opacity: 1, transform: "translateY(0)" }
+                height: "100%",
+                borderRadius: 4,
+                border: `1px solid ${theme.palette.divider}`,
+                background: mode === "dark" ? alpha("#10202A", 0.74) : alpha("#FFFFFF", 0.8),
+                boxShadow: mode === "dark" ? "0 20px 48px rgba(3,10,18,0.22)" : "0 18px 46px rgba(15,23,42,0.08)",
+                transition: "transform .3s ease, box-shadow .3s ease, border-color .3s ease",
+                "&:hover": {
+                  transform: "translateY(-8px)",
+                  borderColor: alpha(theme.palette.secondary.main, 0.26),
+                  boxShadow: mode === "dark" ? "0 24px 54px rgba(3,10,18,0.3)" : "0 22px 52px rgba(15,23,42,0.12)",
                 },
-                "&:hover": { transform: "translateY(-8px)", boxShadow: "0 20px 60px rgba(0,0,0,0.6)" }
               }}>
-                <Box sx={{ fontSize: 48, mb: 2, animation: "pulse 2.6s infinite", color: theme.palette.primary.main }}>
+                <Box
+                  sx={{
+                    width: 64,
+                    height: 64,
+                    mx: "auto",
+                    mb: 2,
+                    borderRadius: 3,
+                    display: "grid",
+                    placeItems: "center",
+                    fontSize: 34,
+                    color: theme.palette.primary.main,
+                    background: alpha(theme.palette.primary.main, 0.12),
+                    border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                  }}
+                >
                   {f.icon}
                 </Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontFamily: "JUST Sans ExBold" }}>{f.title}</Typography>
-                <Typography sx={{ color: theme.palette.text.secondary, mt: 1, fontFamily: "JUST Sans Regular" }}>{f.desc}</Typography>
+                <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.text.primary, fontFamily: "JUST Sans ExBold", fontSize: "1.35rem" }}>
+                  {f.title}
+                </Typography>
+                <Typography sx={{ color: theme.palette.text.secondary, mt: 1, fontFamily: "JUST Sans Regular", lineHeight: 1.8 }}>
+                  {f.desc}
+                </Typography>
               </Box>
             </Grid>
           ))}

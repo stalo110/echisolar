@@ -110,63 +110,47 @@
 //     </Box>
 //   );
 // };
-
-
-
-import { Box, Container, Typography, Grid, Card, CardContent, Button, Chip } from "@mui/material";
-import { ChevronRight as ChevronRightIcon, SolarPower as SolarPowerIcon, EmojiObjects as EmojiObjectsIcon } from "@mui/icons-material";
-import { FaSun, FaBolt } from "react-icons/fa";
+import { Box, Container, Typography, Grid, Card, CardContent, Button } from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import { SolarPower as SolarPowerIcon, EmojiObjects as EmojiObjectsIcon } from "@mui/icons-material";
 import { useTheme } from "../../contexts/ThemeContext";
 import { Link } from "react-router-dom";
 
-export const AboutSection = () => {
+type AboutSectionProps = {
+  showButton?: boolean;
+};
+
+export const AboutSection = ({ showButton = true }: AboutSectionProps) => {
   const { theme, mode } = useTheme();
   
   return (
     <Box sx={{ 
       py: 10, 
-      background: mode === 'dark' ? "#0b0b0b" : theme.palette.background.paper,
+      background: "transparent",
       position: "relative",
       overflow: "hidden"
     }}>
-      {/* Animated background elements */}
-      <Box sx={{
-        position: "absolute",
-        top: 50,
-        left: -50,
-        fontSize: 200,
-        opacity: 0.05,
-        color: theme.palette.primary.main,
-        animation: "rotate 20s linear infinite",
-        "@keyframes rotate": {
-          "0%": { transform: "rotate(0deg)" },
-          "100%": { transform: "rotate(360deg)" }
-        }
-      }}>
-        <FaSun />
-      </Box>
-      
-      <Box sx={{
-        position: "absolute",
-        bottom: 100,
-        right: -30,
-        fontSize: 150,
-        opacity: 0.08,
-        color: theme.palette.secondary.main,
-        animation: "bounce 4s ease-in-out infinite",
-        "@keyframes bounce": {
-          "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-20px)" }
-        }
-      }}>
-        <FaBolt />
-      </Box>
       <Container maxWidth="lg">
         <Grid container spacing={6} alignItems="center">
           <Grid size={{xs:12, md:6}}>
-            <Chip icon={<SolarPowerIcon />} label="About EchiSolar" sx={{ mb: 2, background: `${theme.palette.primary.main}15`, color: theme.palette.primary.main, fontWeight: 700 }} />
-            <Typography variant="h2" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontFamily: "JUST Sans ExBold", fontSize: { xs: "1.8rem", md: "3.75rem" } }}>Leading Solar Solutions for Nigeria</Typography>
-            <Typography sx={{ color: theme.palette.text.secondary, mt: 2, fontFamily: "JUST Sans Regular" }}>
+            <Typography
+              variant="h6"
+              sx={{
+                color: theme.palette.primary.main,
+                fontWeight: 700,
+                fontFamily: "JUST Sans ExBold",
+                textTransform: "uppercase",
+                letterSpacing: 2,
+                fontSize: { xs: "0.82rem", md: "1.05rem" },
+                mb: 2,
+              }}
+            >
+              About EchiSolar
+            </Typography>
+            <Typography variant="h2" sx={{ fontWeight: 700, color: theme.palette.text.primary, fontFamily: "JUST Sans ExBold", fontSize: { xs: "1.95rem", md: "3.05rem" }, lineHeight: 1.08 }}>
+              Leading solar solutions for Nigeria
+            </Typography>
+            <Typography sx={{ color: theme.palette.text.secondary, mt: 2, fontFamily: "JUST Sans Regular", lineHeight: 1.8 }}>
               At EchiSolar, we're committed to powering Nigeria's future with clean, affordable, and reliable solar energy solutions. Our expert team designs, installs, and maintains solar systems that help homes and businesses become energy independent.
             </Typography>
 
@@ -174,31 +158,66 @@ export const AboutSection = () => {
               <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
                 <SolarPowerIcon sx={{ color: theme.palette.secondary.main, mt: 0.5 }} />
                 <Box>
-                  <Typography sx={{ fontWeight: 800, color: theme.palette.text.primary, fontFamily: "JUST Sans ExBold" }}>End-to-End Solar Solutions</Typography>
-                  <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>From consultation to installation and maintenance, we provide comprehensive solar services tailored to your needs.</Typography>
+                  <Typography sx={{ fontWeight: 700, color: theme.palette.text.primary, fontFamily: "JUST Sans ExBold" }}>End-to-End Solar Solutions</Typography>
+                  <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular", lineHeight: 1.8 }}>From consultation to installation and maintenance, we provide comprehensive solar services tailored to your needs.</Typography>
                 </Box>
               </Box>
 
               <Box sx={{ display: "flex", gap: 2 }}>
                 <EmojiObjectsIcon sx={{ color: theme.palette.primary.main, mt: 0.5 }} />
                 <Box>
-                  <Typography sx={{ fontWeight: 800, color: theme.palette.text.primary, fontFamily: "JUST Sans ExBold" }}>Sustainable Energy Future</Typography>
-                  <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>We're dedicated to promoting renewable energy adoption and reducing carbon footprints across Nigeria.</Typography>
+                  <Typography sx={{ fontWeight: 700, color: theme.palette.text.primary, fontFamily: "JUST Sans ExBold" }}>Sustainable Energy Future</Typography>
+                  <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular", lineHeight: 1.8 }}>We're dedicated to promoting renewable energy adoption and reducing carbon footprints across Nigeria.</Typography>
                 </Box>
               </Box>
             </Box>
 
-            <Button component={Link} to="/about" variant="outlined" endIcon={<ChevronRightIcon />} sx={{ color: theme.palette.text.primary, borderColor: theme.palette.divider, borderRadius: 2, fontFamily: "JUST Sans ExBold" }}>
-              More About Us
-            </Button>
+            {showButton && (
+              <Button
+                component={Link}
+                to="/about"
+                variant="outlined"
+                sx={{
+                  color: theme.palette.text.primary,
+                  borderColor: theme.palette.divider,
+                  borderRadius: 999,
+                  px: 3,
+                  fontFamily: "JUST Sans ExBold",
+                }}
+              >
+                More About Us
+              </Button>
+            )}
           </Grid>
 
           <Grid size={{xs:12, md:6}}>
-            <Box sx={{ position: "relative" }}>
-              <Box component="img" src="/images/solar2.jpg" alt="Solar Installation" sx={{ width: "100%", borderRadius: 2, boxShadow: "0 18px 40px rgba(0,0,0,0.6)" }} />
-              <Card sx={{ position: "absolute", bottom: -18, right: -18, borderRadius: 2, background: `linear-gradient(90deg,${theme.palette.secondary.main},${theme.palette.secondary.light})`, color: "#fff", boxShadow: `0 10px 30px ${theme.palette.secondary.main}33` }}>
+            <Box sx={{ position: "relative", p: { md: 1 } }}>
+              <Box
+                sx={{
+                  p: 1.2,
+                  borderRadius: 5,
+                  border: `1px solid ${theme.palette.divider}`,
+                  background: mode === "dark" ? alpha("#10202A", 0.74) : alpha("#FFFFFF", 0.82),
+                  boxShadow: mode === "dark" ? "0 24px 58px rgba(3,10,18,0.28)" : "0 20px 52px rgba(15,23,42,0.1)",
+                }}
+              >
+                <Box
+                  component="img"
+                  src="/images/aboutImage.png"
+                  alt="Professional solar installation"
+                  sx={{
+                    width: "100%",
+                    height: { xs: 280, md: 420 },
+                    objectFit: "cover",
+                    objectPosition: "center",
+                    borderRadius: 4,
+                    display: "block",
+                  }}
+                />
+              </Box>
+              <Card sx={{ position: "absolute", bottom: -10, right: -10, borderRadius: 4, background: `linear-gradient(90deg,${theme.palette.secondary.main},${theme.palette.secondary.light})`, color: "#fff", boxShadow: `0 18px 42px ${alpha(theme.palette.secondary.main, 0.28)}` }}>
                 <CardContent sx={{ p: 2, textAlign: "center", minWidth: 140 }}>
-                  <Typography variant="h4" sx={{ fontWeight: 800, fontFamily: "JUST Sans ExBold" }}>500+</Typography>
+                  <Typography variant="h4" sx={{ fontWeight: 700, fontFamily: "JUST Sans ExBold" }}>500+</Typography>
                   <Typography variant="body2" sx={{ fontFamily: "JUST Sans Regular" }}>Solar Installations</Typography>
                 </CardContent>
               </Card>

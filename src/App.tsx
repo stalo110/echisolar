@@ -18,6 +18,7 @@ const theme = createTheme({
 import { ToastContainer } from 'material-react-toastify';
 import 'material-react-toastify/dist/ReactToastify.css';
 import { ConsentBanner } from "./ConsentBanner";
+import WhatsAppFloatingButton from "./components/WhatsAppFloatingButton";
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
             <ScrollToTop />
             <Navigation />
             <ToastContainer />
+            <WhatsAppFloatingButton />
             <ConsentBanner />
           </Box>
         </CartProvider>
