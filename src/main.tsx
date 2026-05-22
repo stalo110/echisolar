@@ -10,11 +10,11 @@ import { ThemeProvider } from "./contexts/ThemeContext.tsx"
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     {/* <Provider store={store}> */}
-    <ThemeProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <ThemeProvider>
         <App />
-      </BrowserRouter>
-    </ThemeProvider>
+      </ThemeProvider>
+    </BrowserRouter>
     {/* </Provider> */}
   </StrictMode>
 )

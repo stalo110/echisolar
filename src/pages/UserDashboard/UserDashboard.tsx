@@ -20,18 +20,28 @@ const UserDashboardPage = () => {
   const { theme, mode } = useTheme();
   const [orders, setOrders] = useState<OrderSummary[]>([]);
   const [latestOrderDetail, setLatestOrderDetail] = useState<OrderDetail | null>(null);
-  const [profileEmail, setProfileEmail] = useState<string>("");
+  const [profileDetails, setProfileDetails] = useState<{ email: string; phone: string }>({ email: "", phone: "" });
   const [packageEnrollments, setPackageEnrollments] = useState<PackageEnrollment[]>([]);
 
   useEffect(() => {
-    if (user?.email) {
-      setProfileEmail(user.email);
+    if (user?.email && user?.phone) {
+      setProfileDetails({ email: user.email, phone: user.phone || "" });
       return;
     }
     getProfile()
-      .then((data) => setProfileEmail(data.email || ""))
-      .catch(() => setProfileEmail(""));
-  }, [user?.email]);
+      .then((data) =>
+        setProfileDetails({
+          email: data.email || user?.email || "",
+          phone: data.phone || user?.phone || "",
+        })
+      )
+      .catch(() =>
+        setProfileDetails({
+          email: user?.email || "",
+          phone: user?.phone || "",
+        })
+      );
+  }, [user?.email, user?.phone]);
 
   useEffect(() => {
     getUserOrders()
@@ -154,7 +164,10 @@ const UserDashboardPage = () => {
               <strong>Name:</strong> {user?.name}
             </Typography>
             <Typography sx={{ fontFamily: "JUST Sans Regular" }}>
-              <strong>Email:</strong> {user?.email || profileEmail || "N/A"}
+              <strong>Email:</strong> {user?.email || profileDetails.email || "N/A"}
+            </Typography>
+            <Typography sx={{ fontFamily: "JUST Sans Regular" }}>
+              <strong>Phone:</strong> {user?.phone || profileDetails.phone || "N/A"}
             </Typography>
           </Paper>
         </Grid>

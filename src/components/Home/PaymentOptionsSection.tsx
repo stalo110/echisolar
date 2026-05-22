@@ -76,7 +76,7 @@ export const PaymentOptionsSection = () => {
           <Typography
             sx={{
               color: theme.palette.primary.main,
-              fontWeight: 700,
+              fontWeight: 600,
               fontFamily: "JUST Sans ExBold",
               textTransform: "uppercase",
               letterSpacing: 2,
@@ -89,7 +89,7 @@ export const PaymentOptionsSection = () => {
             variant="h2"
             sx={{
               mt: 1,
-              fontWeight: 700,
+              fontWeight: 600,
               color: theme.palette.text.primary,
               fontFamily: "JUST Sans ExBold",
               fontSize: { xs: "1.95rem", md: "3.1rem" },

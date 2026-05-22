@@ -64,8 +64,10 @@ import {
   Grid,
   useMediaQuery
 } from "@mui/material";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export const HeroSection = () => {
+  const { theme } = useTheme();
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   return (
@@ -99,14 +101,16 @@ export const HeroSection = () => {
                 fontSize: isMobile ? "2.5rem" : "3.8rem",
                 fontWeight: 800,
                 lineHeight: 1.2,
-                background: "linear-gradient(90deg, #FFAB46, #FFD18A)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                textShadow: "0 0 15px rgba(255,171,70,0.4)",
+                color: theme.palette.primary.main,
                 fontFamily: "JUST Sans ExBold",
               }}
             >
-              About Echi Solar
+              <Box component="span" sx={{ display: "block" }}>
+                About
+              </Box>
+              <Box component="span" sx={{ display: "block" }}>
+                EchiSolar
+              </Box>
             </Typography>
 
             <Typography

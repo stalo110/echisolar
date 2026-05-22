@@ -10,6 +10,7 @@ const AdminDashboard = () => {
   const { theme, mode } = useTheme();
   const [stats, setStats] = useState<AdminDashboardStats | null>(null);
   const [error, setError] = useState("");
+  const adminHeadingColor = mode === "dark" ? theme.palette.text.primary : theme.palette.primary.main;
 
   useEffect(() => {
     fetchAdminDashboardStats()
@@ -37,7 +38,7 @@ const AdminDashboard = () => {
           variant="h5"
           sx={{
             fontWeight: "bold",
-            color: theme.palette.primary.main,
+            color: adminHeadingColor,
             mb: 4,
             fontFamily: "JUST Sans ExBold",
           }}
@@ -78,7 +79,7 @@ const AdminDashboard = () => {
             boxShadow: mode === "dark" ? "0 0 25px rgba(0,0,0,0.5)" : "0 0 25px rgba(0,0,0,0.1)",
           }}
         >
-          <Typography variant="h6" sx={{ mb: 1, color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>
+          <Typography variant="h6" sx={{ mb: 1, color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>
             Live Metrics
           </Typography>
           {error ? (

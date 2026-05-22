@@ -96,7 +96,10 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
 
   if (!product) return null;
 
+  const inStock = product.stock > 0;
+
   const handleAddToCart = () => {
+    if (!inStock) return;
     add({
       itemType: "product",
       productId: product.id,
@@ -184,7 +187,7 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
                 fontFamily: "JUST Sans ExBold",
               }}
             >
-              ${(product.price * quantity).toFixed(2)}
+              ₦{(product.price * quantity).toLocaleString()}
             </Typography>
 
             <Typography variant="body1" paragraph sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
@@ -193,9 +196,15 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
             <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
               <strong>Category:</strong> {product.category}
             </Typography>
-            <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+            <Typography
+              variant="body2"
+              sx={{
+                color: inStock ? theme.palette.success.main : theme.palette.error.main,
+                fontFamily: "JUST Sans Regular",
+              }}
+            >
               <strong>Availability:</strong>{" "}
-              {product.availability ? "In Stock" : "Out of Stock"}
+              {inStock ? `In Stock (${product.stock} available)` : "Out of Stock"}
             </Typography>
 
             <Box sx={{ display: "flex", alignItems: "center", mt: 3 }}>
@@ -203,8 +212,16 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
                 type="number"
                 label="Quantity"
                 value={quantity}
-                onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
-                inputProps={{ min: 1 }}
+                disabled={!inStock}
+                onChange={(e) =>
+                  setQuantity(
+                    Math.min(
+                      Math.max(1, Number(e.target.value)),
+                      Math.max(1, product.stock)
+                    )
+                  )
+                }
+                inputProps={{ min: 1, max: Math.max(1, product.stock) }}
                 sx={{
                   width: 100,
                   mr: 2,
@@ -221,6 +238,7 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
               <Button
                 variant="contained"
                 onClick={handleAddToCart}
+                disabled={!inStock}
                 sx={{
                   background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
                   color: mode === 'dark' ? "#000" : "#fff",
@@ -232,7 +250,7 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
                   },
                 }}
               >
-                Add to Cart
+                {inStock ? "Add to Cart" : "Out of Stock"}
               </Button>
             </Box>
           </Box>

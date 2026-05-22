@@ -80,7 +80,7 @@ export const HeroSection = () => {
                 component="h1"
                 variant="h1"
                 sx={{
-                  fontWeight: 700,
+                  fontWeight: 600,
                   fontSize: { xs: "2rem", md: "3.3rem", lg: "3.75rem" },
                   lineHeight: 1.02,
                   mb: 2,
@@ -196,13 +196,13 @@ export const HeroSection = () => {
                   }}>
                     <Typography sx={{ 
                       color: theme.palette.primary.main, 
-                      fontWeight: 700, 
+                      fontWeight: 600, 
                       fontSize: { xs: "1.35rem", md: "1.6rem" }, 
                       fontFamily: "JUST Sans ExBold",
                     }}>
                       {s.value}
                     </Typography>
-                    <Typography sx={{ color: "rgba(234,234,234,0.8)", fontFamily: "JUST Sans Regular", fontSize: "0.92rem" }}>
+                    <Typography sx={{ color: "rgba(234,234,234,0.8)", fontFamily: "JUST Sans ExBold", fontSize: "0.92rem", fontWeight: 600 }}>
                       {s.label}
                     </Typography>
                   </Box>

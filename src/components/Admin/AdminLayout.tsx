@@ -11,6 +11,7 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import {
   Menu as MenuIcon,
   Close as CloseIcon,
@@ -53,6 +54,10 @@ const AdminLayout = ({ children }: Props) => {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const { theme, mode, toggleTheme } = useTheme();
+  const adminHeadingColor = mode === "dark" ? theme.palette.text.primary : theme.palette.primary.main;
+  const sidebarBaseColor = theme.palette.text.primary;
+  const sidebarAccentColor = theme.palette.primary.main;
+  const sidebarHoverBg = mode === "dark" ? alpha(theme.palette.primary.main, 0.08) : alpha(theme.palette.primary.main, 0.06);
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
@@ -83,7 +88,7 @@ const AdminLayout = ({ children }: Props) => {
           variant="h6"
           sx={{
             fontWeight: "bold",
-            color: theme.palette.primary.main,
+            color: adminHeadingColor,
             letterSpacing: 1.2,
             fontFamily: "JUST Sans ExBold",
           }}
@@ -93,8 +98,11 @@ const AdminLayout = ({ children }: Props) => {
         <IconButton
           onClick={handleDrawerToggle}
           sx={{
-            color: theme.palette.primary.main,
+            color: mode === "dark" ? sidebarBaseColor : theme.palette.primary.main,
             display: { sm: "none" },
+            "&:hover": {
+              color: sidebarAccentColor,
+            },
           }}
         >
           <CloseIcon />
@@ -111,20 +119,31 @@ const AdminLayout = ({ children }: Props) => {
             p: 1,
             borderRadius: 1,
             cursor: "pointer",
-            "&:hover": { background: mode === 'dark' ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)" },
+            "&:hover": { background: sidebarHoverBg },
+            "&:hover .theme-toggle-icon, &:hover .theme-toggle-label": {
+              color: sidebarAccentColor,
+            },
             transition: "0.3s",
           }}
         >
           <IconButton
             size="small"
             sx={{
-              color: theme.palette.primary.main,
+              color: mode === "dark" ? sidebarBaseColor : theme.palette.text.secondary,
               mr: 1,
             }}
           >
-            {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
+            {mode === 'dark' ? <Brightness7 className="theme-toggle-icon" /> : <Brightness4 className="theme-toggle-icon" />}
           </IconButton>
-          <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+          <Typography
+            variant="body2"
+            className="theme-toggle-label"
+            sx={{
+              color: mode === "dark" ? sidebarBaseColor : theme.palette.text.secondary,
+              fontFamily: "JUST Sans Regular",
+              transition: "color 0.3s ease",
+            }}
+          >
             {mode === 'dark' ? 'Light Mode' : 'Dark Mode'}
           </Typography>
         </Box>
@@ -140,19 +159,33 @@ const AdminLayout = ({ children }: Props) => {
               component={Link}
               to={item.path}
               sx={{
+                borderRadius: 2,
+                mx: 1,
+                mb: 0.5,
                 background: active
-                  ? `${theme.palette.primary.main}25`
+                  ? alpha(theme.palette.primary.main, mode === "dark" ? 0.16 : 0.12)
                   : "transparent",
-                "&:hover": { background: mode === 'dark' ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)" },
+                "& .MuiListItemIcon-root": {
+                  color: active ? sidebarAccentColor : sidebarBaseColor,
+                  minWidth: 40,
+                  transition: "color 0.3s ease",
+                },
+                "& .MuiListItemText-primary": {
+                  color: active ? sidebarAccentColor : sidebarBaseColor,
+                  transition: "color 0.3s ease",
+                },
+                "&:hover": { background: sidebarHoverBg },
+                "&:hover .MuiListItemIcon-root, &:hover .MuiListItemText-primary": {
+                  color: sidebarAccentColor,
+                },
                 transition: "0.3s",
               }}
             >
-              <ListItemIcon sx={{ color: theme.palette.primary.main }}>{item.icon}</ListItemIcon>
+              <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText
                 primary={item.text}
                 primaryTypographyProps={{
-                  fontWeight: active ? "bold" : "normal",
-                  color: active ? theme.palette.primary.main : theme.palette.text.primary,
+                  fontWeight: active ? "bold" : 500,
                   fontFamily: active ? "JUST Sans ExBold" : "JUST Sans Regular",
                 }}
               />
@@ -166,6 +199,8 @@ const AdminLayout = ({ children }: Props) => {
           sx={{
             mt: 2,
             cursor: "pointer",
+            borderRadius: 2,
+            mx: 1,
             "&:hover": { background: mode === 'dark' ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)" },
             transition: "0.3s",
           }}
@@ -213,7 +248,7 @@ const AdminLayout = ({ children }: Props) => {
             sx={{
               fontWeight: "bold",
               flexGrow: 1,
-              color: theme.palette.primary.main,
+              color: adminHeadingColor,
               fontFamily: "JUST Sans ExBold",
             }}
           >

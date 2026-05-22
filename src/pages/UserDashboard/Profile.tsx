@@ -17,18 +17,20 @@ import { useAuth } from "../../contexts/AuthContext";
 
 const Profile = () => {
   const { theme, mode } = useTheme();
-  const { updateUser } = useAuth();
+  const { updateUser, user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [profile, setProfile] = useState({
     name: "",
     email: "",
+    phone: "",
     address: "",
     country: "",
     joined: "",
   });
   const [form, setForm] = useState({
     name: "",
+    phone: "",
     address: "",
     country: "",
   });
@@ -38,25 +40,40 @@ const Profile = () => {
     getProfile()
       .then((data) => {
         setProfile({
-          name: data.name || "",
-          email: data.email || "",
+          name: data.name || user?.name || "",
+          email: data.email || user?.email || "",
+          phone: data.phone || user?.phone || "",
           address: data.address || "",
-          country: data.country || "",
+          country: data.country || user?.country || "",
           joined: data.createdAt ? new Date(data.createdAt).toLocaleDateString() : "",
         });
         setForm({
-          name: data.name || "",
+          name: data.name || user?.name || "",
+          phone: data.phone || user?.phone || "",
           address: data.address || "",
-          country: data.country || "",
+          country: data.country || user?.country || "",
         });
       })
       .catch(() => {
+        setProfile((prev) => ({
+          ...prev,
+          name: user?.name || prev.name,
+          email: user?.email || prev.email,
+          phone: user?.phone || prev.phone,
+          country: user?.country || prev.country,
+        }));
+        setForm((prev) => ({
+          ...prev,
+          name: user?.name || prev.name,
+          phone: user?.phone || prev.phone,
+          country: user?.country || prev.country,
+        }));
         toast.error("Unable to load profile.");
       })
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [user?.country, user?.email, user?.name, user?.phone]);
 
   const handleSave = async () => {
     if (!form.name.trim()) {
@@ -67,16 +84,22 @@ const Profile = () => {
     try {
       await updateProfile({
         name: form.name.trim(),
+        phone: form.phone.trim() || null,
         address: form.address.trim(),
         country: form.country.trim(),
       });
       setProfile((prev) => ({
         ...prev,
         name: form.name.trim(),
+        phone: form.phone.trim(),
         address: form.address.trim(),
         country: form.country.trim(),
       }));
-      updateUser({ name: form.name.trim(), country: form.country.trim() || null });
+      updateUser({
+        name: form.name.trim(),
+        phone: form.phone.trim() || null,
+        country: form.country.trim() || null,
+      });
       toast.success("Profile updated.");
     } catch {
       toast.error("Unable to update profile.");
@@ -131,6 +154,9 @@ const Profile = () => {
             <Divider sx={{ my: 3, borderColor: theme.palette.divider }} />
 
             <Typography variant="body2" sx={{ fontFamily: "JUST Sans Regular" }}>
+              <strong>Phone:</strong> {profile.phone || "—"}
+            </Typography>
+            <Typography variant="body2" sx={{ fontFamily: "JUST Sans Regular" }}>
               <strong>Country:</strong> {profile.country || "—"}
             </Typography>
             <Typography variant="body2" sx={{ fontFamily: "JUST Sans Regular" }}>
@@ -171,6 +197,16 @@ const Profile = () => {
                 label="Address"
                 value={form.address}
                 onChange={(e) => setForm((prev) => ({ ...prev, address: e.target.value }))}
+                fullWidth
+                margin="dense"
+                InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+                sx={{ input: { color: theme.palette.text.primary } }}
+              />
+              <TextField
+                label="Phone Number"
+                type="tel"
+                value={form.phone}
+                onChange={(e) => setForm((prev) => ({ ...prev, phone: e.target.value }))}
                 fullWidth
                 margin="dense"
                 InputLabelProps={{ style: { color: theme.palette.text.secondary } }}

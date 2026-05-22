@@ -5,11 +5,13 @@
     @font-face {
       font-family: "JUST Sans ExBold";
       src: url("./assets/fonts/just_sans/JUST Sans ExBold.otf") format("opentype");
+      font-display: swap;
     }
 
         @font-face {
       font-family: "JUST Sans Regular";
       src: url("./assets/fonts/just_sans/JUST Sans Regular.otf") format("opentype");
+      font-display: swap;
     }
   
 
@@ -18,17 +20,25 @@
   
 
 :root{
+  --font-sans: "JUST Sans Regular", Arial, sans-serif;
   --brand-amber: #FFAB46;
   --brand-green: #2E7D4D;
 }
 
-body{
-  font-family: "JUST Sans Regular";
+html,
+body,
+#root{
+  font-family: var(--font-sans);
   color: #fff;
 }
 
-h1, h2, h3, h4, h5, h6, b, strong {
-  font-family: "JUST Sans ExBold";
+body,
+body *,
+body *::before,
+body *::after,
+button,
+input,
+textarea,
+select {
+  font-family: var(--font-sans) !important;
 }
-
-

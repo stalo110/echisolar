@@ -20,6 +20,7 @@ import {
   Grid,
   Checkbox,
   FormControlLabel,
+  CircularProgress,
 } from "@mui/material";
 import { Edit, Delete, Image } from "@mui/icons-material";
 import { useEffect, useState, type ChangeEvent } from "react";
@@ -41,6 +42,9 @@ type ProjectForm = {
   existingImages: string[];
   newImageFiles: File[];
   imagePreviews: string[];
+  existingVideos: string[];
+  newVideoFiles: File[];
+  videoPreviews: string[];
 };
 
 const createEmptyFormData = (): ProjectForm => ({
@@ -51,7 +55,14 @@ const createEmptyFormData = (): ProjectForm => ({
   existingImages: [],
   newImageFiles: [],
   imagePreviews: [],
+  existingVideos: [],
+  newVideoFiles: [],
+  videoPreviews: [],
 });
+
+// Keep video uploads light: cap count and per-file size.
+const MAX_PROJECT_VIDEOS = 3;
+const MAX_VIDEO_SIZE_BYTES = 60 * 1024 * 1024; // 60MB
 
 const revokeBlobUrls = (urls: string[]) => {
   for (const url of urls) {
@@ -63,8 +74,10 @@ const revokeBlobUrls = (urls: string[]) => {
 
 const AdminProjects = () => {
   const { theme, mode } = useTheme();
+  const adminHeadingColor = mode === "dark" ? theme.palette.text.primary : theme.palette.primary.main;
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [open, setOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [selectedDeleteId, setSelectedDeleteId] = useState<number | null>(null);
@@ -98,12 +111,20 @@ const AdminProjects = () => {
     };
   }, [formData.imagePreviews]);
 
+  useEffect(() => {
+    return () => {
+      revokeBlobUrls(formData.videoPreviews);
+    };
+  }, [formData.videoPreviews]);
+
   const handleOpen = (project?: Project) => {
     setFormData((prev) => {
       revokeBlobUrls(prev.imagePreviews);
+      revokeBlobUrls(prev.videoPreviews);
 
       if (project) {
         const existingImages = project.images || [];
+        const existingVideos = project.videos || [];
         return {
           title: project.title || "",
           description: project.description || "",
@@ -112,6 +133,9 @@ const AdminProjects = () => {
           existingImages,
           newImageFiles: [],
           imagePreviews: existingImages,
+          existingVideos,
+          newVideoFiles: [],
+          videoPreviews: existingVideos,
         };
       }
 
@@ -131,6 +155,7 @@ const AdminProjects = () => {
     setEditingProject(null);
     setFormData((prev) => {
       revokeBlobUrls(prev.imagePreviews);
+      revokeBlobUrls(prev.videoPreviews);
       return createEmptyFormData();
     });
   };
@@ -158,7 +183,47 @@ const AdminProjects = () => {
     }));
   };
 
+  const handleVideoChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files?.length) return;
+
+    const selectedFiles = Array.from(files);
+    const oversized = selectedFiles.find((file) => file.size > MAX_VIDEO_SIZE_BYTES);
+    if (oversized) {
+      setSnackbar({
+        open: true,
+        message: "Each video must be 60MB or smaller.",
+        severity: "error",
+      });
+      e.target.value = "";
+      return;
+    }
+
+    const availableSlots = Math.max(0, MAX_PROJECT_VIDEOS - formData.videoPreviews.length);
+    if (availableSlots <= 0) {
+      setSnackbar({
+        open: true,
+        message: `You can upload up to ${MAX_PROJECT_VIDEOS} videos per project.`,
+        severity: "info",
+      });
+      e.target.value = "";
+      return;
+    }
+
+    const limitedFiles = selectedFiles.slice(0, availableSlots);
+    const previews = limitedFiles.map((file) => URL.createObjectURL(file));
+
+    setFormData((prev) => ({
+      ...prev,
+      newVideoFiles: [...prev.newVideoFiles, ...limitedFiles],
+      videoPreviews: [...prev.videoPreviews, ...previews],
+    }));
+    e.target.value = "";
+  };
+
   const handleSave = async () => {
+    if (saving) return;
+
     if (!formData.title.trim() || !formData.description.trim()) {
       setSnackbar({
         open: true,
@@ -168,12 +233,14 @@ const AdminProjects = () => {
       return;
     }
 
+    setSaving(true);
     try {
       const payload = {
         title: formData.title.trim(),
         description: formData.description.trim(),
         link: formData.link.trim() || undefined,
         images: formData.newImageFiles.length ? formData.newImageFiles : formData.existingImages,
+        videos: formData.newVideoFiles.length ? formData.newVideoFiles : formData.existingVideos,
         isFeatured: formData.isFeatured,
         isActive: true,
       };
@@ -190,6 +257,8 @@ const AdminProjects = () => {
       await loadProjects();
     } catch {
       setSnackbar({ open: true, message: "Unable to save project.", severity: "error" });
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -223,7 +292,7 @@ const AdminProjects = () => {
   return (
     <AdminLayout>
       <Box sx={{ p: 3, color: theme.palette.text.primary, bgcolor: theme.palette.background.default, minHeight: "100vh" }}>
-        <Typography variant="h5" sx={{ fontWeight: "bold", color: theme.palette.primary.main, mb: 3, fontFamily: "JUST Sans ExBold" }}>
+        <Typography variant="h5" sx={{ fontWeight: "bold", color: adminHeadingColor, mb: 3, fontFamily: "JUST Sans ExBold" }}>
           Manage Projects
         </Typography>
 
@@ -254,7 +323,7 @@ const AdminProjects = () => {
             <TableHead>
               <TableRow>
                 {["Images", "Title", "Featured", "Link", "Description", "Actions"].map((header) => (
-                  <TableCell key={header} sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+                  <TableCell key={header} sx={{ color: adminHeadingColor, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
                     {header}
                   </TableCell>
                 ))}
@@ -309,7 +378,7 @@ const AdminProjects = () => {
                       "N/A"
                     )}
                   </TableCell>
-                  <TableCell sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+                  <TableCell sx={{ color: mode === "dark" ? theme.palette.text.primary : theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
                     {project.description || "N/A"}
                   </TableCell>
                   <TableCell>
@@ -343,7 +412,7 @@ const AdminProjects = () => {
             },
           }}
         >
-          <DialogTitle sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+          <DialogTitle sx={{ color: adminHeadingColor, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
             {editingProject ? "Edit Project" : "Add Project"}
           </DialogTitle>
           <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
@@ -427,17 +496,68 @@ const AdminProjects = () => {
                 </Grid>
               )}
             </Box>
+
+            <Box>
+              <Typography variant="body2" sx={{ mb: 1, fontFamily: "JUST Sans Regular" }}>
+                Upload Project Videos (optional, up to {MAX_PROJECT_VIDEOS} — 60MB each)
+              </Typography>
+              <Button
+                variant="outlined"
+                component="label"
+                sx={{
+                  borderColor: theme.palette.primary.main,
+                  color: theme.palette.primary.main,
+                  "&:hover": { borderColor: theme.palette.primary.dark },
+                }}
+              >
+                Upload Video
+                <input hidden multiple accept="video/*" type="file" onChange={handleVideoChange} />
+              </Button>
+
+              {formData.videoPreviews.length > 0 && (
+                <Grid container spacing={1} sx={{ mt: 2 }}>
+                  {formData.videoPreviews.map((video, idx) => (
+                    <Grid size={{ xs: 6 }} key={idx}>
+                      <video
+                        src={video}
+                        controls
+                        preload="metadata"
+                        style={{
+                          width: "100%",
+                          borderRadius: 8,
+                          backgroundColor: "#000",
+                        }}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              )}
+            </Box>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} sx={{ color: theme.palette.text.secondary }}>
+            <Button onClick={handleClose} disabled={saving} sx={{ color: theme.palette.text.secondary }}>
               Cancel
             </Button>
             <Button
               variant="contained"
-              sx={{ bgcolor: theme.palette.primary.main, color: mode === "dark" ? "#000" : "#fff", fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}
+              disabled={saving}
+              startIcon={saving ? <CircularProgress size={18} color="inherit" /> : undefined}
+              sx={{
+                bgcolor: theme.palette.primary.main,
+                color: mode === "dark" ? "#000" : "#fff",
+                fontWeight: "bold",
+                fontFamily: "JUST Sans ExBold",
+                "&.Mui-disabled": { bgcolor: theme.palette.primary.main, opacity: 0.7, color: mode === "dark" ? "#000" : "#fff" },
+              }}
               onClick={handleSave}
             >
-              {editingProject ? "Save Changes" : "Add Project"}
+              {saving
+                ? editingProject
+                  ? "Saving..."
+                  : "Adding..."
+                : editingProject
+                ? "Save Changes"
+                : "Add Project"}
             </Button>
           </DialogActions>
         </Dialog>
@@ -454,7 +574,7 @@ const AdminProjects = () => {
             },
           }}
         >
-          <DialogTitle sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+          <DialogTitle sx={{ color: adminHeadingColor, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
             Confirm Deletion
           </DialogTitle>
           <DialogContent>

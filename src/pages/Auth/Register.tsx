@@ -23,6 +23,7 @@ const RegisterPage = () => {
   const { theme, mode } = useTheme();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -30,6 +31,23 @@ const RegisterPage = () => {
   const [country, setCountry] = useState("NG");
   const { register } = useAuth();
   const navigate = useNavigate();
+  const inputLabelSx = {
+    color: theme.palette.text.secondary,
+    fontSize: "0.92rem",
+    "&.MuiInputLabel-shrink": {
+      fontSize: "0.92rem",
+    },
+  };
+  const inputFieldSx = {
+    color: theme.palette.text.primary,
+    background: mode === "dark" ? "#121212" : "#f5f5f5",
+    borderRadius: "8px",
+    fontSize: "0.95rem",
+    "& input": {
+      fontSize: "0.95rem",
+      py: 1.35,
+    },
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,7 +56,13 @@ const RegisterPage = () => {
       return;
     }
     try {
-      await register({ name, email, password, country });
+      await register({
+        name: name.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
+        password,
+        country: country.trim(),
+      });
       navigate("/user/dashboard");
     } catch (err) {
       toast.error(getApiErrorMessage(err, "Unable to register. Try again."));
@@ -89,64 +113,71 @@ const RegisterPage = () => {
             <TextField
               fullWidth
               required
+              size="small"
               margin="normal"
               label="Full Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+              InputLabelProps={{ sx: inputLabelSx }}
               InputProps={{
-                style: {
-                  color: theme.palette.text.primary,
-                  background: mode === 'dark' ? "#121212" : "#f5f5f5",
-                  borderRadius: "8px",
-                },
+                sx: inputFieldSx,
               }}
             />
 
             <TextField
               fullWidth
               required
+              size="small"
               margin="normal"
               label="Email Address"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+              InputLabelProps={{ sx: inputLabelSx }}
               InputProps={{
-                style: {
-                  color: theme.palette.text.primary,
-                  background: mode === 'dark' ? "#121212" : "#f5f5f5",
-                  borderRadius: "8px",
-                },
+                sx: inputFieldSx,
               }}
             />
 
             <TextField
               fullWidth
               required
+              size="small"
+              margin="normal"
+              label="Phone Number"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              InputLabelProps={{ sx: inputLabelSx }}
+              InputProps={{
+                sx: inputFieldSx,
+              }}
+            />
+
+            <TextField
+              fullWidth
+              required
+              size="small"
               margin="normal"
               label="Country"
               value={country}
               onChange={(e) => setCountry(e.target.value)}
-              InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+              InputLabelProps={{ sx: inputLabelSx }}
               InputProps={{
-                style: {
-                  color: theme.palette.text.primary,
-                  background: mode === 'dark' ? "#121212" : "#f5f5f5",
-                  borderRadius: "8px",
-                },
+                sx: inputFieldSx,
               }}
             />
 
             <TextField
               fullWidth
               required
+              size="small"
               margin="normal"
               label="Password"
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+              InputLabelProps={{ sx: inputLabelSx }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -160,23 +191,20 @@ const RegisterPage = () => {
                     </IconButton>
                   </InputAdornment>
                 ),
-                style: {
-                  color: theme.palette.text.primary,
-                  background: mode === 'dark' ? "#121212" : "#f5f5f5",
-                  borderRadius: "8px",
-                },
+                sx: inputFieldSx,
               }}
             />
 
             <TextField
               fullWidth
               required
+              size="small"
               margin="normal"
               label="Confirm Password"
               type={showConfirmPassword ? "text" : "password"}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              InputLabelProps={{ style: { color: theme.palette.text.secondary } }}
+              InputLabelProps={{ sx: inputLabelSx }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -190,11 +218,7 @@ const RegisterPage = () => {
                     </IconButton>
                   </InputAdornment>
                 ),
-                style: {
-                  color: theme.palette.text.primary,
-                  background: mode === 'dark' ? "#121212" : "#f5f5f5",
-                  borderRadius: "8px",
-                },
+                sx: inputFieldSx,
               }}
             />
 

@@ -7,8 +7,10 @@ import {
   Button,
   IconButton,
   Link,
+  Alert,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
+import { useState, type FormEvent } from "react";
 import {
   Facebook,
   Instagram,
@@ -24,9 +26,65 @@ import {
   COMPANY_PHONE,
   COMPANY_WHATSAPP_URL,
 } from "../config/company";
+import { toast } from "material-react-toastify";
+import { subscribeToNewsletter } from "../services/newsletterService";
+import { getApiErrorMessage } from "../utils/apiError";
 
 const Footer = () => {
   const { theme, mode } = useTheme();
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [subscribing, setSubscribing] = useState(false);
+  const [newsletterFeedback, setNewsletterFeedback] = useState<{
+    severity: "success" | "error" | "info";
+    message: string;
+  } | null>(null);
+  const contactIconSx = {
+    mr: 1,
+    color: theme.palette.secondary.main,
+    fontSize: 20,
+    flexShrink: 0,
+  };
+  const contactLinkSx = {
+    display: "flex",
+    alignItems: "center",
+    mb: 1.3,
+    fontFamily: "JUST Sans Regular",
+    color: theme.palette.text.secondary,
+    textDecoration: "none",
+    lineHeight: 1.7,
+    "&:hover": { color: theme.palette.primary.main },
+  };
+
+  const submitNewsletter = async () => {
+    const email = newsletterEmail.trim();
+    if (!email) {
+      const message = "Enter your email address.";
+      setNewsletterFeedback({ severity: "error", message });
+      toast.error(message);
+      return;
+    }
+
+    setSubscribing(true);
+    setNewsletterFeedback({ severity: "info", message: "Submitting your email..." });
+    try {
+      const response = await subscribeToNewsletter({ email });
+      const message = response.message || "Newsletter subscription successful.";
+      setNewsletterFeedback({ severity: "success", message });
+      toast.success(message);
+      setNewsletterEmail("");
+    } catch (error) {
+      const message = getApiErrorMessage(error, "Unable to subscribe right now.");
+      setNewsletterFeedback({ severity: "error", message });
+      toast.error(message);
+    } finally {
+      setSubscribing(false);
+    }
+  };
+
+  const handleNewsletterSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    await submitNewsletter();
+  };
   
   return (
     <Box
@@ -117,24 +175,20 @@ const Footer = () => {
               component="a"
               href={COMPANY_WHATSAPP_URL}
               target="_blank"
-              sx={{ 
-                display: "flex", 
-                alignItems: "center", 
-                mb: 1.3, 
-                fontFamily: "JUST Sans Regular", 
-                color: theme.palette.text.secondary,
-                textDecoration: "none",
-                lineHeight: 1.7,
-                "&:hover": { color: theme.palette.primary.main }
-              }}
+              sx={contactLinkSx}
             >
-              <FaWhatsapp style={{ marginRight: 8, color: theme.palette.secondary.main }} /> {COMPANY_PHONE}
+              <FaWhatsapp style={{ marginRight: 8, color: theme.palette.secondary.main, fontSize: 20, flexShrink: 0 }} /> {COMPANY_PHONE}
             </Typography>
-            <Typography variant="body2" sx={{ display: "flex", alignItems: "center", mb: 1.3, fontFamily: "JUST Sans Regular", color: theme.palette.text.secondary, lineHeight: 1.7 }}>
-              <Email sx={{ mr: 1, color: theme.palette.secondary.main }} /> {COMPANY_EMAIL}
+            <Typography
+              variant="body2"
+              component="a"
+              href={`mailto:${COMPANY_EMAIL}`}
+              sx={contactLinkSx}
+            >
+              <Email sx={contactIconSx} /> {COMPANY_EMAIL}
             </Typography>
             <Typography variant="body2" sx={{ display: "flex", alignItems: "center", fontFamily: "JUST Sans Regular", color: theme.palette.text.secondary, lineHeight: 1.7 }}>
-              <LocationOn sx={{ mr: 1, color: theme.palette.secondary.main }} /> {COMPANY_ADDRESS}
+              <LocationOn sx={contactIconSx} /> {COMPANY_ADDRESS}
             </Typography>
           </Grid>
 
@@ -199,12 +253,20 @@ const Footer = () => {
               Stay up to date with our latest offers and insights.
             </Typography>
 
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box component="form" onSubmit={handleNewsletterSubmit} sx={{ display: "flex", alignItems: "center" }}>
               <TextField
                 placeholder="Email Address"
                 size="small"
                 variant="outlined"
                 fullWidth
+                required
+                value={newsletterEmail}
+                onChange={(event) => {
+                  setNewsletterEmail(event.target.value);
+                  if (newsletterFeedback?.severity === "error") {
+                    setNewsletterFeedback(null);
+                  }
+                }}
                 sx={{
                   bgcolor: mode === 'dark' ? alpha("#08131D", 0.6) : alpha("#FFFFFF", 0.7),
                   borderRadius: "999px 0 0 999px",
@@ -221,7 +283,9 @@ const Footer = () => {
                 }}
               />
               <Button
+                type="submit"
                 variant="contained"
+                disabled={subscribing}
                 sx={{
                   bgcolor: theme.palette.secondary.main,
                   borderRadius: "0 999px 999px 0",
@@ -232,9 +296,22 @@ const Footer = () => {
                   },
                 }}
               >
-                Join
+                {subscribing ? "..." : "Join"}
               </Button>
             </Box>
+            {newsletterFeedback && (
+              <Alert
+                severity={newsletterFeedback.severity}
+                sx={{
+                  mt: 1.5,
+                  borderRadius: 2,
+                  alignItems: "center",
+                  fontFamily: "JUST Sans Regular",
+                }}
+              >
+                {newsletterFeedback.message}
+              </Alert>
+            )}
           </Grid>
           </Grid>
 

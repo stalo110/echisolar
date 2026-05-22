@@ -12,6 +12,8 @@ const formatDate = (value?: string) => {
 
 const AdminUsers = () => {
   const { theme, mode } = useTheme();
+  const adminHeadingColor = mode === "dark" ? theme.palette.text.primary : theme.palette.primary.main;
+  const adminSupportTextColor = mode === "dark" ? theme.palette.text.primary : theme.palette.text.secondary;
   const [users, setUsers] = useState<AdminUserRow[]>([]);
   const [pagination, setPagination] = useState<PaginationMeta>({
     page: 1,
@@ -36,7 +38,7 @@ const AdminUsers = () => {
   return (
     <AdminLayout>
       <Box sx={{ p: 3, bgcolor: theme.palette.background.default, color: theme.palette.text.primary, minHeight: "100vh" }}>
-        <Typography variant="h5" sx={{ color: theme.palette.primary.main, mb: 3, fontFamily: "JUST Sans ExBold" }}>
+        <Typography variant="h5" sx={{ color: adminHeadingColor, mb: 3, fontFamily: "JUST Sans ExBold" }}>
           Users
         </Typography>
 
@@ -54,10 +56,10 @@ const AdminUsers = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Name</TableCell>
-                <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Email</TableCell>
-                <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Country</TableCell>
-                <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Joined</TableCell>
+                <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Name</TableCell>
+                <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Email</TableCell>
+                <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Country</TableCell>
+                <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Joined</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -76,14 +78,14 @@ const AdminUsers = () => {
             </TableBody>
           </Table>
           {!users.length && (
-            <Typography sx={{ p: 2, color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+            <Typography sx={{ p: 2, color: adminSupportTextColor, fontFamily: "JUST Sans Regular" }}>
               No users found.
             </Typography>
           )}
         </Paper>
 
         <Box sx={{ mt: 2, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 2 }}>
-          <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+          <Typography sx={{ color: adminSupportTextColor, fontFamily: "JUST Sans Regular" }}>
             Page {pagination.page} of {pagination.totalPages} | {pagination.total} total users
           </Typography>
           <Box sx={{ display: "flex", gap: 1 }}>
@@ -115,4 +117,3 @@ const AdminUsers = () => {
 };
 
 export default AdminUsers;
-

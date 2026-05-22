@@ -31,10 +31,10 @@ export const ServicesSection = () => {
     <Box sx={{ py: 10, background: "transparent" }}>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: "center", mb: 6 }}>
-          <Typography variant="h6" sx={{ color: theme.palette.primary.main, fontWeight: 700, fontFamily: "JUST Sans ExBold", textTransform: "uppercase", letterSpacing: 2, fontSize: { xs: "0.82rem", md: "1.05rem" } }}>
+          <Typography variant="h6" sx={{ color: theme.palette.primary.main, fontWeight: 600, fontFamily: "JUST Sans ExBold", textTransform: "uppercase", letterSpacing: 2, fontSize: { xs: "0.82rem", md: "1.05rem" } }}>
             Our Services
           </Typography>
-          <Typography variant="h2" sx={{ fontWeight: 700, color: theme.palette.text.primary, mt: 1, fontFamily: "JUST Sans ExBold", fontSize: { xs: "1.95rem", md: "3.1rem" } }}>
+          <Typography variant="h2" sx={{ fontWeight: 600, color: theme.palette.text.primary, mt: 1, fontFamily: "JUST Sans ExBold", fontSize: { xs: "1.95rem", md: "3.1rem" } }}>
             Clean, reliable solar solutions
           </Typography>
           <Typography sx={{ color: theme.palette.text.secondary, maxWidth: 780, mx: "auto", mt: 2, fontFamily: "JUST Sans Regular", lineHeight: 1.8 }}>
@@ -79,7 +79,7 @@ export const ServicesSection = () => {
                   >
                     {s.icon}
                   </Box>
-                  <Typography variant="h6" sx={{ fontWeight: 700, fontFamily: "JUST Sans ExBold", lineHeight: 1.35 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600, fontFamily: "JUST Sans ExBold", lineHeight: 1.35 }}>
                     {s.title}
                   </Typography>
                 </Box>

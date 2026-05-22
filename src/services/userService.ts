@@ -4,6 +4,7 @@ export type UserProfile = {
   id: number;
   name: string;
   email: string;
+  phone?: string | null;
   role: 'admin' | 'user';
   address?: string | null;
   country?: string | null;
@@ -17,6 +18,7 @@ export const getProfile = async () => {
 
 export const updateProfile = async (payload: {
   name: string;
+  phone?: string | null;
   address?: string | null;
   country?: string | null;
 }) => {

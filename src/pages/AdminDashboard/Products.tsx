@@ -20,6 +20,7 @@ import {
   Alert,
   Checkbox,
   FormControlLabel,
+  CircularProgress,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 import { useEffect, useState, type ChangeEvent } from "react";
@@ -76,8 +77,10 @@ const getCategoryLabel = (categoryId?: number) => {
 
 const AdminProducts = () => {
   const { theme, mode } = useTheme();
+  const adminHeadingColor = mode === "dark" ? theme.palette.text.primary : theme.palette.primary.main;
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [open, setOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [selectedDeleteId, setSelectedDeleteId] = useState<string | null>(null);
@@ -168,6 +171,8 @@ const AdminProducts = () => {
   };
 
   const handleSave = async () => {
+    if (saving) return;
+
     if (!formData.name.trim() || !formData.price || !formData.stock) {
       setSnackbar({
         open: true,
@@ -177,6 +182,7 @@ const AdminProducts = () => {
       return;
     }
 
+    setSaving(true);
     try {
       const payload = {
         name: formData.name.trim(),
@@ -201,6 +207,8 @@ const AdminProducts = () => {
       await loadProducts();
     } catch {
       setSnackbar({ open: true, message: "Unable to save product.", severity: "error" });
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -234,7 +242,7 @@ const AdminProducts = () => {
   return (
     <AdminLayout>
       <Box sx={{ p: 3, color: theme.palette.text.primary, bgcolor: theme.palette.background.default, minHeight: "100vh" }}>
-        <Typography variant="h5" sx={{ fontWeight: "bold", color: theme.palette.primary.main, mb: 3, fontFamily: "JUST Sans ExBold" }}>
+        <Typography variant="h5" sx={{ fontWeight: "bold", color: adminHeadingColor, mb: 3, fontFamily: "JUST Sans ExBold" }}>
           Manage Products
         </Typography>
 
@@ -265,7 +273,7 @@ const AdminProducts = () => {
             <TableHead>
               <TableRow>
                 {["Image", "Name", "Category", "Price", "Stock", "Latest", "Actions"].map((header) => (
-                  <TableCell key={header} sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+                  <TableCell key={header} sx={{ color: adminHeadingColor, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
                     {header}
                   </TableCell>
                 ))}
@@ -332,7 +340,7 @@ const AdminProducts = () => {
             },
           }}
         >
-          <DialogTitle sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+          <DialogTitle sx={{ color: adminHeadingColor, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
             {editingProduct ? "Edit Product" : "Add Product"}
           </DialogTitle>
           <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
@@ -436,15 +444,29 @@ const AdminProducts = () => {
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} sx={{ color: theme.palette.text.secondary }}>
+            <Button onClick={handleClose} disabled={saving} sx={{ color: theme.palette.text.secondary }}>
               Cancel
             </Button>
             <Button
               variant="contained"
-              sx={{ bgcolor: theme.palette.primary.main, color: mode === "dark" ? "#000" : "#fff", fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}
+              disabled={saving}
+              startIcon={saving ? <CircularProgress size={18} color="inherit" /> : undefined}
+              sx={{
+                bgcolor: theme.palette.primary.main,
+                color: mode === "dark" ? "#000" : "#fff",
+                fontWeight: "bold",
+                fontFamily: "JUST Sans ExBold",
+                "&.Mui-disabled": { bgcolor: theme.palette.primary.main, opacity: 0.7, color: mode === "dark" ? "#000" : "#fff" },
+              }}
               onClick={handleSave}
             >
-              {editingProduct ? "Save Changes" : "Add Product"}
+              {saving
+                ? editingProduct
+                  ? "Saving..."
+                  : "Adding..."
+                : editingProduct
+                ? "Save Changes"
+                : "Add Product"}
             </Button>
           </DialogActions>
         </Dialog>
@@ -461,7 +483,7 @@ const AdminProducts = () => {
             },
           }}
         >
-          <DialogTitle sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+          <DialogTitle sx={{ color: adminHeadingColor, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
             Confirm Deletion
           </DialogTitle>
           <DialogContent>

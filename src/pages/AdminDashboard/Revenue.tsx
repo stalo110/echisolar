@@ -8,6 +8,8 @@ const formatCurrency = (value: number) => `₦${Number(value || 0).toLocaleStrin
 
 const Revenue = () => {
   const { theme, mode } = useTheme();
+  const adminHeadingColor = mode === "dark" ? theme.palette.text.primary : theme.palette.primary.main;
+  const adminSupportTextColor = mode === "dark" ? theme.palette.text.primary : theme.palette.text.secondary;
   const [data, setData] = useState<RevenueAnalytics | null>(null);
   const [error, setError] = useState("");
 
@@ -39,7 +41,7 @@ const Revenue = () => {
   return (
     <AdminLayout>
       <Box sx={{ p: 3, bgcolor: theme.palette.background.default, color: theme.palette.text.primary, minHeight: "100vh" }}>
-        <Typography variant="h5" sx={{ color: theme.palette.primary.main, mb: 3, fontFamily: "JUST Sans ExBold" }}>
+        <Typography variant="h5" sx={{ color: adminHeadingColor, mb: 3, fontFamily: "JUST Sans ExBold" }}>
           Revenue & Analytics
         </Typography>
 
@@ -63,10 +65,10 @@ const Revenue = () => {
               <Typography variant="h5" sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
                 {formatCurrency(data?.totalRevenue || 0)}
               </Typography>
-              <Typography variant="body2" sx={{ opacity: 0.8, color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+              <Typography variant="body2" sx={{ opacity: 0.8, color: adminSupportTextColor, fontFamily: "JUST Sans Regular" }}>
                 {growthLabel}
               </Typography>
-              <Typography variant="body2" sx={{ mt: 1, color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+              <Typography variant="body2" sx={{ mt: 1, color: adminSupportTextColor, fontFamily: "JUST Sans Regular" }}>
                 Paid orders: {Number(data?.paidOrders || 0).toLocaleString()} / Total orders:{" "}
                 {Number(data?.totalOrders || 0).toLocaleString()}
               </Typography>
@@ -82,7 +84,7 @@ const Revenue = () => {
                 border: `1px solid ${theme.palette.divider}`,
               }}
             >
-              <Typography variant="subtitle1" sx={{ mb: 1, color: theme.palette.text.primary, fontFamily: "JUST Sans ExBold" }}>
+              <Typography variant="subtitle1" sx={{ mb: 1, color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>
                 Monthly Revenue Trend
               </Typography>
               <LinearProgress
@@ -100,7 +102,7 @@ const Revenue = () => {
                 sx={{
                   mt: 1,
                   display: "block",
-                  color: mode === "dark" ? theme.palette.primary.main : theme.palette.text.primary,
+                  color: adminSupportTextColor,
                   fontFamily: "JUST Sans Regular",
                 }}
               >
@@ -119,15 +121,15 @@ const Revenue = () => {
             border: `1px solid ${theme.palette.divider}`,
           }}
         >
-          <Typography variant="h6" sx={{ mb: 2, color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>
+          <Typography variant="h6" sx={{ mb: 2, color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>
             Monthly Breakdown
           </Typography>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Month</TableCell>
-                <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Revenue</TableCell>
-                <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Orders</TableCell>
+                <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Month</TableCell>
+                <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Revenue</TableCell>
+                <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Orders</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -143,7 +145,7 @@ const Revenue = () => {
             </TableBody>
           </Table>
           {!data?.monthly?.length && (
-            <Typography sx={{ mt: 1, color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+            <Typography sx={{ mt: 1, color: adminSupportTextColor, fontFamily: "JUST Sans Regular" }}>
               No monthly revenue records yet.
             </Typography>
           )}
@@ -158,15 +160,15 @@ const Revenue = () => {
             border: `1px solid ${theme.palette.divider}`,
           }}
         >
-          <Typography variant="h6" sx={{ mb: 2, color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>
+          <Typography variant="h6" sx={{ mb: 2, color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>
             Recent Paid Orders
           </Typography>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Order ID</TableCell>
-                <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Customer</TableCell>
-                <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Amount</TableCell>
+                <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Order ID</TableCell>
+                <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Customer</TableCell>
+                <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Amount</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -184,7 +186,7 @@ const Revenue = () => {
             </TableBody>
           </Table>
           {!data?.recentPaidOrders?.length && (
-            <Typography sx={{ mt: 1, color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+            <Typography sx={{ mt: 1, color: adminSupportTextColor, fontFamily: "JUST Sans Regular" }}>
               No paid orders yet.
             </Typography>
           )}

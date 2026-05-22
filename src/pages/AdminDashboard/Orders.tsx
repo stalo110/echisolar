@@ -35,6 +35,8 @@ const formatDate = (value?: string) => {
 
 const AdminOrders = () => {
   const { theme, mode } = useTheme();
+  const adminHeadingColor = mode === "dark" ? theme.palette.text.primary : theme.palette.primary.main;
+  const adminSupportTextColor = mode === "dark" ? theme.palette.text.primary : theme.palette.text.secondary;
   const [orders, setOrders] = useState<AdminOrderRow[]>([]);
   const [pagination, setPagination] = useState<PaginationMeta>({
     page: 1,
@@ -112,7 +114,7 @@ const AdminOrders = () => {
         <Typography
           variant="h5"
           sx={{
-            color: theme.palette.primary.main,
+            color: adminHeadingColor,
             mb: 3,
             fontWeight: "bold",
             fontFamily: "JUST Sans ExBold",
@@ -164,13 +166,13 @@ const AdminOrders = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Order ID</TableCell>
-                  <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Customer</TableCell>
-                  <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Total</TableCell>
-                  <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Payment</TableCell>
-                  <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Status</TableCell>
-                  <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Date</TableCell>
-                  <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Actions</TableCell>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Order ID</TableCell>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Customer</TableCell>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Total</TableCell>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Payment</TableCell>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Status</TableCell>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Date</TableCell>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -226,7 +228,7 @@ const AdminOrders = () => {
             <Typography
               variant="h6"
               sx={{
-                color: theme.palette.text.secondary,
+                color: adminSupportTextColor,
                 fontWeight: 400,
                 fontSize: { xs: "1rem", sm: "1.25rem" },
                 fontFamily: "JUST Sans Regular",
@@ -238,7 +240,7 @@ const AdminOrders = () => {
         )}
 
         <Box sx={{ mt: 2, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 2 }}>
-          <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+          <Typography sx={{ color: adminSupportTextColor, fontFamily: "JUST Sans Regular" }}>
             Page {pagination.page} of {pagination.totalPages} | {pagination.total} total
           </Typography>
           <Box sx={{ display: "flex", gap: 1 }}>
@@ -267,7 +269,7 @@ const AdminOrders = () => {
       </Box>
 
       <Dialog open={Boolean(deleteTarget)} onClose={() => !deleting && setDeleteTarget(null)}>
-        <DialogTitle sx={{ fontFamily: "JUST Sans ExBold" }}>Delete Order</DialogTitle>
+        <DialogTitle sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Delete Order</DialogTitle>
         <DialogContent>
           <Typography sx={{ fontFamily: "JUST Sans Regular" }}>
             Are you sure you want to permanently delete order #{deleteTarget?.id}?

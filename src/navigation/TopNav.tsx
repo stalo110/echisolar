@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import {
   AppBar,
   Toolbar,
@@ -12,6 +12,10 @@ import {
   ListItemText,
   Badge,
   ListItemIcon,
+  Menu,
+  MenuItem,
+  Divider,
+  Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -30,17 +34,27 @@ const navLinks = [
   { label: "Products", href: "/products" },
   { label: "Packages", href: "/packages" },
   { label: "Projects", href: "/projects" },
-  { label: "About", href: "/about" },
+  { label: "About Us", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
 
 export default function TopNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [accountMenuAnchor, setAccountMenuAnchor] = useState<null | HTMLElement>(null);
   const { user, logout } = useAuth();
   const { items } = useCart();
   const { mode, toggleTheme, theme } = useTheme();
 
   const handleDrawerToggle = () => setMobileOpen((s) => !s);
+  const handleAccountMenuOpen = (event: MouseEvent<HTMLElement>) => {
+    setAccountMenuAnchor(event.currentTarget);
+  };
+  const handleAccountMenuClose = () => setAccountMenuAnchor(null);
+  const handleLogout = () => {
+    handleAccountMenuClose();
+    logout();
+  };
+  const isAccountMenuOpen = Boolean(accountMenuAnchor);
   const drawer = (
     <Box
       sx={{
@@ -322,30 +336,114 @@ export default function TopNav() {
             >
               Login
             </Button>
-          ) : (
-            <>
-              <Button
-                href="/user/profile"
-                sx={{ color: theme.palette.secondary.main, fontWeight: 600, fontFamily: "JUST Sans Regular" }}
-              >
-                {user.name}
-              </Button>
-              <Button
-                onClick={logout}
-                sx={{
-                  color: theme.palette.text.primary,
-                  fontWeight: 600,
-                  fontFamily: "JUST Sans Regular",
-                  "&:hover": { color: theme.palette.primary.main },
-                }}
-              >
-                Logout
-              </Button>
-            </>
-          )}
+          ) : null}
         </Box>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          {user ? (
+            <>
+              <IconButton
+                onClick={handleAccountMenuOpen}
+                aria-label="Open account menu"
+                aria-controls={isAccountMenuOpen ? "account-menu" : undefined}
+                aria-expanded={isAccountMenuOpen ? "true" : undefined}
+                aria-haspopup="true"
+                sx={{
+                  color: theme.palette.text.primary,
+                  border: `1px solid ${theme.palette.divider}`,
+                  background:
+                    mode === "dark"
+                      ? "rgba(255,255,255,0.04)"
+                      : "rgba(255,255,255,0.7)",
+                  "&:hover": {
+                    color: theme.palette.primary.main,
+                    background:
+                      mode === "dark"
+                        ? "rgba(255,255,255,0.08)"
+                        : "rgba(255,255,255,0.95)",
+                  },
+                }}
+              >
+                <AccountCircle />
+              </IconButton>
+
+              <Menu
+                id="account-menu"
+                anchorEl={accountMenuAnchor}
+                open={isAccountMenuOpen}
+                onClose={handleAccountMenuClose}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+                PaperProps={{
+                  sx: {
+                    mt: 1,
+                    minWidth: 220,
+                    borderRadius: 2.5,
+                    border: `1px solid ${theme.palette.divider}`,
+                    background:
+                      mode === "dark"
+                        ? "rgba(7,17,27,0.96)"
+                        : "rgba(255,255,255,0.98)",
+                    backdropFilter: "blur(18px)",
+                    boxShadow:
+                      mode === "dark"
+                        ? "0 18px 40px rgba(0,0,0,0.35)"
+                        : "0 18px 40px rgba(16,32,42,0.12)",
+                  },
+                }}
+              >
+                <MenuItem
+                  component="a"
+                  href="/user/profile"
+                  onClick={handleAccountMenuClose}
+                  sx={{
+                    gap: 1.25,
+                    py: 1.5,
+                    alignItems: "center",
+                  }}
+                >
+                  <AccountCircle sx={{ color: theme.palette.secondary.main }} />
+                  <Box sx={{ minWidth: 0 }}>
+                    <Typography
+                      sx={{
+                        fontFamily: "JUST Sans ExBold",
+                        color: theme.palette.text.primary,
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      {user.name}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: "JUST Sans Regular",
+                        color: theme.palette.text.secondary,
+                        fontSize: "0.8rem",
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      View profile
+                    </Typography>
+                  </Box>
+                </MenuItem>
+
+                <Divider />
+
+                <MenuItem
+                  onClick={handleLogout}
+                  sx={{
+                    gap: 1.25,
+                    py: 1.25,
+                    fontFamily: "JUST Sans Regular",
+                    color: theme.palette.text.primary,
+                  }}
+                >
+                  <LogoutIcon fontSize="small" />
+                  Logout
+                </MenuItem>
+              </Menu>
+            </>
+          ) : null}
+
           <IconButton
             onClick={toggleTheme}
             sx={{

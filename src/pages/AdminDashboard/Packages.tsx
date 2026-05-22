@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Checkbox,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -67,8 +68,10 @@ const revokeBlobUrls = (urls: string[]) => {
 
 const AdminPackages = () => {
   const { theme, mode } = useTheme();
+  const adminHeadingColor = mode === "dark" ? theme.palette.text.primary : theme.palette.primary.main;
   const [packages, setPackages] = useState<SolarPackage[]>([]);
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [open, setOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [selectedDeleteId, setSelectedDeleteId] = useState<number | null>(null);
@@ -173,6 +176,8 @@ const AdminPackages = () => {
   };
 
   const handleSave = async () => {
+    if (saving) return;
+
     if (!formData.name.trim()) {
       setSnackbar({
         open: true,
@@ -191,6 +196,7 @@ const AdminPackages = () => {
       return;
     }
 
+    setSaving(true);
     try {
       const payload = {
         name: formData.name.trim(),
@@ -214,6 +220,8 @@ const AdminPackages = () => {
       await loadPackages();
     } catch {
       setSnackbar({ open: true, message: "Unable to save package.", severity: "error" });
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -243,7 +251,7 @@ const AdminPackages = () => {
   return (
     <AdminLayout>
       <Box sx={{ p: 3, color: theme.palette.text.primary, bgcolor: theme.palette.background.default, minHeight: "100vh" }}>
-        <Typography variant="h5" sx={{ fontWeight: "bold", color: theme.palette.primary.main, mb: 3, fontFamily: "JUST Sans ExBold" }}>
+        <Typography variant="h5" sx={{ fontWeight: "bold", color: adminHeadingColor, mb: 3, fontFamily: "JUST Sans ExBold" }}>
           Manage Packages
         </Typography>
 
@@ -274,7 +282,7 @@ const AdminPackages = () => {
             <TableHead>
               <TableRow>
                 {["Images", "Package", "Pricing", "Status", "Actions"].map((header) => (
-                  <TableCell key={header} sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+                  <TableCell key={header} sx={{ color: adminHeadingColor, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
                     {header}
                   </TableCell>
                 ))}
@@ -318,7 +326,13 @@ const AdminPackages = () => {
                   </TableCell>
                   <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
                     <Typography sx={{ fontFamily: "JUST Sans ExBold" }}>{pkg.name}</Typography>
-                    <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular", fontSize: "0.85rem" }}>
+                    <Typography
+                      sx={{
+                        color: mode === "dark" ? theme.palette.text.primary : theme.palette.text.secondary,
+                        fontFamily: "JUST Sans Regular",
+                        fontSize: "0.85rem",
+                      }}
+                    >
                       {pkg.description || "No description"}
                     </Typography>
                   </TableCell>
@@ -361,7 +375,7 @@ const AdminPackages = () => {
             },
           }}
         >
-          <DialogTitle sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+          <DialogTitle sx={{ color: adminHeadingColor, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
             {editingPackage ? "Edit Package" : "Add Package"}
           </DialogTitle>
           <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
@@ -474,15 +488,29 @@ const AdminPackages = () => {
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} sx={{ color: theme.palette.text.secondary }}>
+            <Button onClick={handleClose} disabled={saving} sx={{ color: theme.palette.text.secondary }}>
               Cancel
             </Button>
             <Button
               variant="contained"
-              sx={{ bgcolor: theme.palette.primary.main, color: mode === "dark" ? "#000" : "#fff", fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}
+              disabled={saving}
+              startIcon={saving ? <CircularProgress size={18} color="inherit" /> : undefined}
+              sx={{
+                bgcolor: theme.palette.primary.main,
+                color: mode === "dark" ? "#000" : "#fff",
+                fontWeight: "bold",
+                fontFamily: "JUST Sans ExBold",
+                "&.Mui-disabled": { bgcolor: theme.palette.primary.main, opacity: 0.7, color: mode === "dark" ? "#000" : "#fff" },
+              }}
               onClick={handleSave}
             >
-              {editingPackage ? "Save Changes" : "Add Package"}
+              {saving
+                ? editingPackage
+                  ? "Saving..."
+                  : "Adding..."
+                : editingPackage
+                ? "Save Changes"
+                : "Add Package"}
             </Button>
           </DialogActions>
         </Dialog>
@@ -499,7 +527,7 @@ const AdminPackages = () => {
             },
           }}
         >
-          <DialogTitle sx={{ color: theme.palette.primary.main, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
+          <DialogTitle sx={{ color: adminHeadingColor, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
             Confirm Deletion
           </DialogTitle>
           <DialogContent>

@@ -11,17 +11,81 @@ const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const [qty, setQty] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [mainImage, setMainImage] = useState('/images/sample1.jpg');
+  const [related, setRelated] = useState<Product[]>([]);
   const { add, clear } = useCart();
   const navigate = useNavigate();
 
-  useEffect(()=>{
-    if (!id) return;
-    fetchProductById(id)
-      .then((p) => setProduct(p))
-      .catch(() => setProduct(null));
-  },[id])
+  useEffect(() => {
+    let active = true;
 
-  if(!product) return (
+    const loadProduct = async () => {
+      if (!id) {
+        navigate('/products', { replace: true });
+        return;
+      }
+
+      setLoading(true);
+      setProduct(null);
+      setRelated([]);
+      setQty(1);
+      setMainImage('/images/sample1.jpg');
+
+      try {
+        const nextProduct = await fetchProductById(id);
+
+        if (!active) return;
+
+        if (!nextProduct) {
+          navigate('/products', { replace: true });
+          return;
+        }
+
+        setProduct(nextProduct);
+        setMainImage(nextProduct.images?.[0] || '/images/sample1.jpg');
+      } catch {
+        if (active) {
+          navigate('/products', { replace: true });
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+
+    void loadProduct();
+
+    return () => {
+      active = false;
+    };
+  }, [id, navigate]);
+
+  useEffect(() => {
+    let active = true;
+
+    if (!product) {
+      setRelated([]);
+      return () => {
+        active = false;
+      };
+    }
+
+    fetchRelated(product.category, product.id)
+      .then((items) => {
+        if (active) setRelated(items);
+      })
+      .catch(() => {
+        if (active) setRelated([]);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [product]);
+
+  if (loading) return (
     <Box>
       <TopNav />
       <Container sx={{ py: 6 }}>
@@ -29,16 +93,11 @@ const ProductDetail = () => {
       </Container>
       <Footer />
     </Box>
-  )
+  );
 
-  const [mainImage, setMainImage] = useState(product.images?.[0] || '/images/sample1.jpg');
-  const [related, setRelated] = useState<typeof product[]>([]);
+  if (!product) return null;
 
-  useEffect(()=>{
-    fetchRelated(product.category, product.id)
-      .then(setRelated)
-      .catch(() => setRelated([]));
-  },[product])
+  const inStock = product.stock > 0;
 
   return (
     <Box>
@@ -59,12 +118,44 @@ const ProductDetail = () => {
             <Typography variant="h4" sx={{ fontWeight: 'bold', fontFamily: "JUST Sans ExBold" }}>{product.name}</Typography>
             <Typography color="text.secondary" sx={{ my: 2, fontFamily: "JUST Sans Regular" }}>{product.description}</Typography>
             <Typography variant="h6" sx={{ fontWeight: 'bold', fontFamily: "JUST Sans ExBold" }}>NGN {product.price.toLocaleString()}</Typography>
-            <Typography color="text.secondary" sx={{ fontFamily: "JUST Sans Regular" }}>Stock: {product.stock}</Typography>
+            <Typography
+              sx={{
+                mt: 0.5,
+                fontWeight: 'bold',
+                fontFamily: "JUST Sans ExBold",
+                color: inStock ? 'success.main' : 'error.main',
+              }}
+            >
+              {inStock ? `In Stock — ${product.stock} available` : 'Out of Stock'}
+            </Typography>
 
             <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mt: 2 }}>
-              <TextField type="number" size="small" value={qty} onChange={(e)=> setQty(Math.max(1, Number(e.target.value)))} sx={{ width: 100 }} />
-              <Button variant="contained" color="success" sx={{ fontFamily: "JUST Sans ExBold" }} onClick={()=> add({ itemType: "product", productId: product.id, name: product.name, price: product.price, quantity: qty })}>Add to Cart</Button>
-              <Button variant="outlined" sx={{ fontFamily: "JUST Sans ExBold" }} onClick={()=> { clear(); add({ itemType: "product", productId: product.id, name: product.name, price: product.price, quantity: qty }); navigate('/checkout'); }}>Buy Now</Button>
+              <TextField
+                type="number"
+                size="small"
+                value={qty}
+                disabled={!inStock}
+                onChange={(e)=> setQty(Math.min(Math.max(1, Number(e.target.value)), Math.max(1, product.stock)))}
+                inputProps={{ min: 1, max: Math.max(1, product.stock) }}
+                sx={{ width: 100 }}
+              />
+              <Button
+                variant="contained"
+                color="success"
+                disabled={!inStock}
+                sx={{ fontFamily: "JUST Sans ExBold" }}
+                onClick={()=> add({ itemType: "product", productId: product.id, name: product.name, price: product.price, quantity: qty })}
+              >
+                {inStock ? 'Add to Cart' : 'Out of Stock'}
+              </Button>
+              <Button
+                variant="outlined"
+                disabled={!inStock}
+                sx={{ fontFamily: "JUST Sans ExBold" }}
+                onClick={()=> { clear(); add({ itemType: "product", productId: product.id, name: product.name, price: product.price, quantity: qty }); navigate('/checkout'); }}
+              >
+                Buy Now
+              </Button>
             </Box>
           </Grid>
         </Grid>

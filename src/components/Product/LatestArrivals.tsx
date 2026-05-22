@@ -33,7 +33,7 @@ export const LatestArrivals = () => {
             textTransform: "uppercase",
             letterSpacing: 2,
             textAlign: "center",
-            fontWeight: 700,
+            fontWeight: 600,
             fontFamily: "JUST Sans ExBold",
             fontSize: { xs: "0.82rem", md: "1.05rem" },
           }}
@@ -43,7 +43,7 @@ export const LatestArrivals = () => {
         <Typography
           variant="h3"
           sx={{
-            fontWeight: 700,
+            fontWeight: 600,
             mt: 1,
             mb: 6,
             textAlign: "center",

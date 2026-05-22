@@ -6,6 +6,7 @@ export type AuthResponse = {
     id: number;
     name: string;
     email: string;
+    phone?: string | null;
     role: 'admin' | 'user';
     country?: string | null;
   };
@@ -18,6 +19,7 @@ export type LoginPayload = {
 
 export type RegisterPayload = LoginPayload & {
   name: string;
+  phone: string;
   country?: string;
 };
 

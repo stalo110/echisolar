@@ -39,6 +39,8 @@ const formatDateTime = (value?: string | null) => {
 
 const AdminMessages = () => {
   const { theme, mode } = useTheme();
+  const adminHeadingColor = mode === "dark" ? theme.palette.text.primary : theme.palette.primary.main;
+  const adminSupportTextColor = mode === "dark" ? theme.palette.text.primary : theme.palette.text.secondary;
   const [messages, setMessages] = useState<AdminMessageRow[]>([]);
   const [pagination, setPagination] = useState<PaginationMeta>({
     page: 1,
@@ -139,7 +141,7 @@ const AdminMessages = () => {
     <AdminLayout>
       <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: theme.palette.background.default, color: theme.palette.text.primary, minHeight: "100vh" }}>
         <Box sx={{ mb: 2, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 2, flexWrap: "wrap" }}>
-          <Typography variant="h5" sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>
+          <Typography variant="h5" sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>
             Messages
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
@@ -189,11 +191,11 @@ const AdminMessages = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Sender</TableCell>
-                  <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Subject</TableCell>
-                  <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Received</TableCell>
-                  <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Status</TableCell>
-                  <TableCell sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>Actions</TableCell>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Sender</TableCell>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Subject</TableCell>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Received</TableCell>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Status</TableCell>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -201,13 +203,13 @@ const AdminMessages = () => {
                   <TableRow key={row.id} sx={{ "&:hover": { background: mode === "dark" ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)" } }}>
                     <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
                       <Typography sx={{ fontFamily: "JUST Sans ExBold", fontSize: "0.9rem" }}>{row.name}</Typography>
-                      <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular", fontSize: "0.82rem" }}>
+                      <Typography sx={{ color: adminSupportTextColor, fontFamily: "JUST Sans Regular", fontSize: "0.82rem" }}>
                         {row.email}
                       </Typography>
                     </TableCell>
                     <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
                       <Typography sx={{ fontFamily: "JUST Sans ExBold", fontSize: "0.9rem" }}>{row.subject}</Typography>
-                      <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular", fontSize: "0.82rem" }}>
+                      <Typography sx={{ color: adminSupportTextColor, fontFamily: "JUST Sans Regular", fontSize: "0.82rem" }}>
                         {String(row.message || "").slice(0, 80)}
                         {String(row.message || "").length > 80 ? "..." : ""}
                       </Typography>
@@ -247,14 +249,14 @@ const AdminMessages = () => {
               background: theme.palette.background.paper,
             }}
           >
-            <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+            <Typography sx={{ color: adminSupportTextColor, fontFamily: "JUST Sans Regular" }}>
               {loading ? "Loading messages..." : "No messages found."}
             </Typography>
           </Paper>
         )}
 
         <Box sx={{ mt: 2, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 2 }}>
-          <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+          <Typography sx={{ color: adminSupportTextColor, fontFamily: "JUST Sans Regular" }}>
             Page {pagination.page} of {pagination.totalPages} | {pagination.total} total
           </Typography>
           <Box sx={{ display: "flex", gap: 1 }}>
@@ -279,7 +281,7 @@ const AdminMessages = () => {
       </Box>
 
       <Dialog open={replyOpen} onClose={() => !replying && setReplyOpen(false)} fullWidth maxWidth="md">
-        <DialogTitle sx={{ fontFamily: "JUST Sans ExBold" }}>
+        <DialogTitle sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>
           Reply to Message
         </DialogTitle>
         <DialogContent>
@@ -288,7 +290,7 @@ const AdminMessages = () => {
               <Typography sx={{ fontFamily: "JUST Sans ExBold", fontSize: "0.95rem" }}>
                 {selected.name} ({selected.email})
               </Typography>
-              <Typography sx={{ fontFamily: "JUST Sans Regular", color: "text.secondary", mb: 1 }}>
+              <Typography sx={{ fontFamily: "JUST Sans Regular", color: adminSupportTextColor, mb: 1 }}>
                 Subject: {selected.subject}
               </Typography>
               <Paper variant="outlined" sx={{ p: 2, borderRadius: 2, mb: 2 }}>

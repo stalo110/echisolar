@@ -5,6 +5,7 @@ export type Project = {
   title: string;
   description?: string | null;
   images: string[];
+  videos: string[];
   link?: string | null;
   isFeatured?: boolean;
   isActive?: boolean;
@@ -15,6 +16,7 @@ export type ProjectPayload = {
   title: string;
   description?: string;
   images?: Array<string | File>;
+  videos?: Array<string | File>;
   link?: string;
   isFeatured?: boolean;
   isActive?: boolean;
@@ -43,6 +45,7 @@ const normalizeProject = (payload: any): Project => ({
   title: String(payload.title || ''),
   description: payload.description ?? null,
   images: parseImages(payload.images),
+  videos: parseImages(payload.videos),
   link: payload.link ?? null,
   isFeatured: Boolean(payload.isFeatured),
   isActive: typeof payload.isActive === 'undefined' ? true : Boolean(payload.isActive),
@@ -69,6 +72,36 @@ const appendFormValue = (formData: FormData, key: string, value: unknown) => {
   formData.append(key, String(value));
 };
 
+// Append a media field as either new file uploads or, when no files were
+// chosen, a JSON list of the existing URLs to keep.
+const appendMediaField = (
+  formData: FormData,
+  field: string,
+  media?: Array<string | File>
+) => {
+  const files: File[] = [];
+  const urls: string[] = [];
+
+  for (const item of media || []) {
+    if (typeof File !== 'undefined' && item instanceof File) {
+      files.push(item);
+      continue;
+    }
+
+    if (typeof item === 'string' && item.trim()) {
+      urls.push(item.trim());
+    }
+  }
+
+  for (const file of files) {
+    formData.append(field, file);
+  }
+
+  if (!files.length) {
+    formData.append(field, JSON.stringify(urls));
+  }
+};
+
 const buildProjectFormData = (payload: ProjectPayload) => {
   const formData = new FormData();
 
@@ -78,27 +111,8 @@ const buildProjectFormData = (payload: ProjectPayload) => {
   appendFormValue(formData, 'isFeatured', payload.isFeatured);
   appendFormValue(formData, 'isActive', payload.isActive);
 
-  const files: File[] = [];
-  const imageUrls: string[] = [];
-
-  for (const image of payload.images || []) {
-    if (typeof File !== 'undefined' && image instanceof File) {
-      files.push(image);
-      continue;
-    }
-
-    if (typeof image === 'string' && image.trim()) {
-      imageUrls.push(image.trim());
-    }
-  }
-
-  for (const file of files) {
-    formData.append('images', file);
-  }
-
-  if (!files.length && imageUrls.length) {
-    formData.append('images', JSON.stringify(imageUrls));
-  }
+  appendMediaField(formData, 'images', payload.images);
+  appendMediaField(formData, 'videos', payload.videos);
 
   return formData;
 };

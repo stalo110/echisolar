@@ -34,10 +34,7 @@ export const HeroSection = () => {
                 sx={{
                   fontWeight: 800,
                   fontSize: isMobile ? "2.8rem" : "4rem",
-                  background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  textShadow: `0 0 15px ${theme.palette.primary.main}40`,
+                  color: theme.palette.primary.main,
                   fontFamily: "JUST Sans ExBold",
                 }}
               >

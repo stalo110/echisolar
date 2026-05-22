@@ -112,7 +112,7 @@ export default function Projects() {
                 >
                   {(p.images.length ? p.images : ["/images/solar.jpg"]).map((img, i) => (
                     <CardMedia
-                      key={i}
+                      key={`img-${i}`}
                       component="img"
                       image={img}
                       alt={`${p.title} image ${i + 1}`}
@@ -122,6 +122,26 @@ export default function Projects() {
                         height: 120,
                         borderRadius: 2,
                         objectFit: "cover",
+                        flexShrink: 0,
+                      }}
+                    />
+                  ))}
+                  {p.videos.map((video, i) => (
+                    <Box
+                      key={`video-${i}`}
+                      component="video"
+                      src={video}
+                      controls
+                      preload="none"
+                      poster={p.images[0] || "/images/solar.jpg"}
+                      sx={{
+                        width: "100%",
+                        maxWidth: 220,
+                        height: 120,
+                        borderRadius: 2,
+                        objectFit: "cover",
+                        bgcolor: "#000",
+                        flexShrink: 0,
                       }}
                     />
                   ))}

@@ -77,18 +77,21 @@ const normalize = (payload: any): Product => {
       ? isLatestArrival
       : payload.isLatestArrival === 1 || payload.isLatestArrival === true;
 
+  const stockCount = Number(stock ?? 0);
+
   return {
     id: String(id),
     name,
     description,
     price: Number(salePrice ?? price ?? 0),
     salePrice: salePrice ? Number(salePrice) : undefined,
-    stock: Number(stock ?? 0),
+    stock: Number.isFinite(stockCount) ? stockCount : 0,
     category: resolveCategory(categoryId, category),
     categoryId,
     images: parseImages(images),
     isActive: typeof isActive === 'undefined' ? true : Boolean(isActive),
     isLatestArrival: Boolean(latestFlag),
+    availability: (Number.isFinite(stockCount) ? stockCount : 0) > 0,
   };
 };
 

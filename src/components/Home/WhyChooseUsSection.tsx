@@ -28,10 +28,10 @@ export const WhyChooseUsSection = () => {
     <Box sx={{ py: 10, background: "transparent" }}>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: "center", mb: 6 }}>
-          <Typography variant="h6" sx={{ color: theme.palette.primary.main, fontWeight: 700, fontFamily: "JUST Sans ExBold", textTransform: "uppercase", letterSpacing: 2, fontSize: { xs: "0.82rem", md: "1.05rem" } }}>
+          <Typography variant="h6" sx={{ color: theme.palette.primary.main, fontWeight: 600, fontFamily: "JUST Sans ExBold", textTransform: "uppercase", letterSpacing: 2, fontSize: { xs: "0.82rem", md: "1.05rem" } }}>
             Why Choose EchiSolar
           </Typography>
-          <Typography variant="h2" sx={{ fontWeight: 700, color: theme.palette.text.primary, mt: 1, fontFamily: "JUST Sans ExBold", fontSize: { xs: "1.95rem", md: "3.1rem" } }}>
+          <Typography variant="h2" sx={{ fontWeight: 600, color: theme.palette.text.primary, mt: 1, fontFamily: "JUST Sans ExBold", fontSize: { xs: "1.95rem", md: "3.1rem" } }}>
             The smart choice for solar energy
           </Typography>
           <Typography sx={{ color: theme.palette.text.secondary, maxWidth: 760, mx: "auto", mt: 2, fontFamily: "JUST Sans Regular", lineHeight: 1.8 }}>
@@ -72,7 +72,7 @@ export const WhyChooseUsSection = () => {
                     color: theme.palette.primary.main,
                     border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
                   }}>{f.icon}</Box>
-                  <Typography variant="h6" sx={{ fontWeight: 700, mb: 1, fontFamily: "JUST Sans ExBold" }}>{f.title}</Typography>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 1, fontFamily: "JUST Sans ExBold" }}>{f.title}</Typography>
                   <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular", lineHeight: 1.7 }}>{f.desc}</Typography>
                 </CardContent>
               </Card>
@@ -126,7 +126,7 @@ export const WhyChooseUsSection = () => {
               <Typography
                 sx={{
                   color: theme.palette.primary.main,
-                  fontWeight: 700,
+                  fontWeight: 600,
                   fontFamily: "JUST Sans ExBold",
                   fontSize: { xs: "1.5rem", sm: "1.6rem", md: "1.7rem" },
                   lineHeight: 1.05,
@@ -206,7 +206,7 @@ export const WhyChooseUsSection = () => {
                         lineHeight: 1.45,
                       }}
                     >
-                      <Box component="span" sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold", fontWeight: 700 }}>
+                      <Box component="span" sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold", fontWeight: 600 }}>
                         {metric.label}:
                       </Box>{" "}
                       {metric.value}
