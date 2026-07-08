@@ -11,6 +11,7 @@ import {
   TableRow,
   Paper,
   IconButton,
+  Chip,
 } from "@mui/material";
 import TopNav from "../navigation/TopNav";
 import Footer from "../navigation/Footer";
@@ -20,6 +21,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useTheme } from "../contexts/ThemeContext";
+import { useEffect, useState } from "react";
+import { getMyReferral } from "../services/referralService";
 
 function formatNGN(n: number) {
   return `NGN ${n.toLocaleString()}`;
@@ -29,7 +32,17 @@ const Cart = () => {
   const { theme, mode } = useTheme();
   const { items, remove, clear, increaseQuantity, decreaseQuantity } = useCart();
   const { user } = useAuth();
+  const [walletBalance, setWalletBalance] = useState(0);
   const total = items.reduce((s, i) => s + i.price * i.quantity, 0);
+  const discount = Math.min(walletBalance, total);
+  const payable = total - discount;
+
+  useEffect(() => {
+    if (!user) return;
+    getMyReferral()
+      .then((d) => setWalletBalance(Number(d.referralBonus || 0)))
+      .catch(() => {});
+  }, [user]);
 
   return (
     <Box sx={{ bgcolor: theme.palette.background.default, minHeight: "100vh", color: theme.palette.text.primary }}>
@@ -60,6 +73,21 @@ const Cart = () => {
           >
             Sign in to persist your cart across devices and continue to checkout.
           </Typography>
+        )}
+
+        {walletBalance > 0 && items.length > 0 && (
+          <Box sx={{
+            mb: 3, p: 2, borderRadius: 2,
+            background: mode === "dark" ? "rgba(76,175,80,0.08)" : "rgba(76,175,80,0.1)",
+            border: "1px solid #4caf5040",
+            display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap"
+          }}>
+            <Typography sx={{ fontFamily: "JUST Sans Regular", color: theme.palette.text.primary, fontSize: "0.9rem" }}>
+              You have <strong style={{ color: "#4caf50" }}>₦{walletBalance.toLocaleString()}</strong> referral bonus —
+              <strong style={{ color: "#4caf50" }}> ₦{discount.toLocaleString()}</strong> will be applied at checkout.
+            </Typography>
+            <Chip label="Applied at Checkout" size="small" sx={{ bgcolor: "#4caf50", color: "#fff", fontFamily: "JUST Sans ExBold" }} />
+          </Box>
         )}
 
         {items.length === 0 ? (
@@ -184,27 +212,47 @@ const Cart = () => {
 
                 <TableRow>
                   <TableCell colSpan={3} align="right">
-                    <Typography
-                      sx={{
-                        color: theme.palette.primary.main,
-                        fontFamily: "JUST Sans ExBold",
-                      }}
-                    >
+                    <Typography sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>
                       Subtotal
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
-                    <Typography
-                      sx={{
-                        fontFamily: "JUST Sans ExBold",
-                        color: theme.palette.secondary.main,
-                      }}
-                    >
+                    <Typography sx={{ fontFamily: "JUST Sans ExBold", color: theme.palette.secondary.main }}>
                       {formatNGN(total)}
                     </Typography>
                   </TableCell>
                   <TableCell />
                 </TableRow>
+                {discount > 0 && (
+                  <TableRow>
+                    <TableCell colSpan={3} align="right">
+                      <Typography sx={{ fontFamily: "JUST Sans ExBold", color: "#4caf50" }}>
+                        Referral Wallet Discount
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography sx={{ fontFamily: "JUST Sans ExBold", color: "#4caf50" }}>
+                        − {formatNGN(discount)}
+                      </Typography>
+                    </TableCell>
+                    <TableCell />
+                  </TableRow>
+                )}
+                {discount > 0 && (
+                  <TableRow>
+                    <TableCell colSpan={3} align="right">
+                      <Typography sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>
+                        Total Payable
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography sx={{ fontFamily: "JUST Sans ExBold", color: theme.palette.primary.main, fontSize: "1.1rem" }}>
+                        {formatNGN(payable)}
+                      </Typography>
+                    </TableCell>
+                    <TableCell />
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>

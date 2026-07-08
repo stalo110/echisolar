@@ -25,6 +25,7 @@ import {
   type SolarPackage,
 } from "../services/packageService";
 import { buildWhatsAppMessageUrl } from "../config/company";
+import PackageModal from "../components/Product/PackageModal";
 
 const formatCurrency = (amount: number) => `₦${Number(amount).toLocaleString()}`;
 
@@ -42,6 +43,7 @@ const Packages = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [packages, setPackages] = useState<SolarPackage[]>([]);
+  const [selectedPkg, setSelectedPkg] = useState<SolarPackage | null>(null);
 
   useEffect(() => {
     fetchPackages()
@@ -205,7 +207,8 @@ const Packages = () => {
                   component="img"
                   image={pkg.images[0] || "/images/solar.jpg"}
                   alt={pkg.name}
-                  sx={{ height: 210, objectFit: "cover" }}
+                  sx={{ height: 210, objectFit: "cover", cursor: "pointer" }}
+                  onClick={() => setSelectedPkg(pkg)}
                 />
                 <CardContent>
                   <Typography variant="h5" sx={{ fontFamily: "JUST Sans ExBold" }}>
@@ -227,7 +230,14 @@ const Packages = () => {
                       : formatCurrency(Number(pkg.price))}
                   </Typography>
                 </CardContent>
-                <CardActions sx={{ p: 2, pt: 0 }}>
+                <CardActions sx={{ p: 2, pt: 0, gap: 1 }}>
+                  <Button
+                    variant="outlined"
+                    onClick={() => setSelectedPkg(pkg)}
+                    sx={{ textTransform: "none", fontFamily: "JUST Sans ExBold", borderColor: theme.palette.primary.main, color: theme.palette.primary.main }}
+                  >
+                    View
+                  </Button>
                   {pkg.requiresCustomPrice || pkg.price === null ? (
                     <Button
                       fullWidth
@@ -294,7 +304,8 @@ const Packages = () => {
                       component="img"
                       image={pkg.images[0] || "/images/solar.jpg"}
                       alt={pkg.name}
-                      sx={{ height: 190, objectFit: "cover" }}
+                      sx={{ height: 190, objectFit: "cover", cursor: "pointer" }}
+                      onClick={() => setSelectedPkg(pkg)}
                     />
                     <CardContent sx={{ flexGrow: 1 }}>
                       <Typography variant="h6" sx={{ fontFamily: "JUST Sans ExBold" }}>
@@ -309,7 +320,14 @@ const Packages = () => {
                           : formatCurrency(Number(pkg.price))}
                       </Typography>
                     </CardContent>
-                    <CardActions sx={{ p: 2, pt: 0 }}>
+                    <CardActions sx={{ p: 2, pt: 0, gap: 1 }}>
+                      <Button
+                        variant="outlined"
+                        onClick={() => setSelectedPkg(pkg)}
+                        sx={{ textTransform: "none", fontFamily: "JUST Sans ExBold", borderColor: theme.palette.primary.main, color: theme.palette.primary.main }}
+                      >
+                        View
+                      </Button>
                       {pkg.requiresCustomPrice || pkg.price === null ? (
                         <Button
                           fullWidth
@@ -345,6 +363,16 @@ const Packages = () => {
       </Container>
 
       <Footer />
+
+      {selectedPkg && (
+        <PackageModal
+          pkg={selectedPkg}
+          open={Boolean(selectedPkg)}
+          onClose={() => setSelectedPkg(null)}
+          onAddToCart={() => handleAddPackageToCart(selectedPkg)}
+          onCustomRequest={() => handleCustomRequest(selectedPkg)}
+        />
+      )}
     </Box>
   );
 };

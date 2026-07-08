@@ -1,12 +1,14 @@
 import {
   Box,
   Button,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   IconButton,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -14,6 +16,8 @@ import {
   TableRow,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme as useMuiTheme,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import { useEffect, useState } from "react";
@@ -35,6 +39,8 @@ const formatDate = (value?: string) => {
 
 const AdminOrders = () => {
   const { theme, mode } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
   const adminHeadingColor = mode === "dark" ? theme.palette.text.primary : theme.palette.primary.main;
   const adminSupportTextColor = mode === "dark" ? theme.palette.text.primary : theme.palette.text.secondary;
   const [orders, setOrders] = useState<AdminOrderRow[]>([]);
@@ -155,65 +161,58 @@ const AdminOrders = () => {
         )}
 
         {hasOrders ? (
-          <Paper
-            sx={{
-              background: theme.palette.background.paper,
-              borderRadius: 3,
-              border: `1px solid ${theme.palette.divider}`,
-              overflow: "hidden",
-            }}
-          >
+          isMobile ? (
+            <Stack spacing={2}>
+              {orders.map((order) => (
+                <Paper key={order.id} sx={{ p: 2, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper }}>
+                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                      <Typography sx={{ fontFamily: "JUST Sans ExBold", color: theme.palette.text.primary, fontSize: "0.95rem" }}>Order #{order.id}</Typography>
+                      <Typography sx={{ fontFamily: "JUST Sans Regular", color: theme.palette.text.secondary, fontSize: "0.8rem", mb: 0.5 }} noWrap>
+                        {order.customerName || "N/A"} · {order.customerEmail || "N/A"}
+                      </Typography>
+                      <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mt: 0.5 }}>
+                        <Chip label={`₦${Number(order.totalAmount || 0).toLocaleString()}`} size="small" sx={{ fontFamily: "JUST Sans ExBold", bgcolor: theme.palette.primary.main, color: mode === "dark" ? "#000" : "#fff", fontSize: "0.75rem" }} />
+                        <Chip label={order.paymentStatus || "pending"} size="small" sx={{ fontFamily: "JUST Sans Regular", fontSize: "0.75rem", bgcolor: order.paymentStatus === "paid" ? "#4caf50" : "#ff9800", color: "#fff" }} />
+                        <Chip label={order.status || "pending"} size="small" variant="outlined" sx={{ fontFamily: "JUST Sans Regular", fontSize: "0.75rem" }} />
+                      </Box>
+                      <Typography sx={{ fontFamily: "JUST Sans Regular", color: theme.palette.text.secondary, fontSize: "0.75rem", mt: 0.5 }}>{formatDate(order.placedAt)}</Typography>
+                    </Box>
+                    <IconButton onClick={() => setDeleteTarget(order)} size="small" sx={{ color: "#d9534f", ml: 1 }}>
+                      <Delete fontSize="small" />
+                    </IconButton>
+                  </Box>
+                </Paper>
+              ))}
+            </Stack>
+          ) : (
+          <Paper sx={{ background: theme.palette.background.paper, borderRadius: 3, border: `1px solid ${theme.palette.divider}`, overflow: "hidden" }}>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Order ID</TableCell>
-                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Customer</TableCell>
-                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Total</TableCell>
-                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Payment</TableCell>
-                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Status</TableCell>
-                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Date</TableCell>
-                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Actions</TableCell>
+                  {["Order ID", "Customer", "Total", "Payment", "Status", "Date", "Actions"].map((h) => (
+                    <TableCell key={h} sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>{h}</TableCell>
+                  ))}
                 </TableRow>
               </TableHead>
               <TableBody>
                 {orders.map((order) => (
-                  <TableRow
-                    key={order.id}
-                    sx={{
-                      "&:hover": {
-                        background: mode === "dark" ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.04)",
-                        transition: "0.3s",
-                      },
-                    }}
-                  >
-                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                      #{order.id}
-                    </TableCell>
-                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                      {order.customerName || "N/A"} ({order.customerEmail || "N/A"})
-                    </TableCell>
-                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                      ₦{Number(order.totalAmount || 0).toLocaleString()}
-                    </TableCell>
-                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                      {order.paymentStatus || "pending"}
-                    </TableCell>
-                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                      {order.status || "pending"}
-                    </TableCell>
-                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                      {formatDate(order.placedAt)}
-                    </TableCell>
+                  <TableRow key={order.id} sx={{ "&:hover": { background: mode === "dark" ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.04)", transition: "0.3s" } }}>
+                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>#{order.id}</TableCell>
+                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{order.customerName || "N/A"} ({order.customerEmail || "N/A"})</TableCell>
+                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>₦{Number(order.totalAmount || 0).toLocaleString()}</TableCell>
+                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{order.paymentStatus || "pending"}</TableCell>
+                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{order.status || "pending"}</TableCell>
+                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{formatDate(order.placedAt)}</TableCell>
                     <TableCell>
-                      <IconButton onClick={() => setDeleteTarget(order)} size="small" sx={{ color: "#d9534f" }}>
-                        <Delete />
-                      </IconButton>
+                      <IconButton onClick={() => setDeleteTarget(order)} size="small" sx={{ color: "#d9534f" }}><Delete /></IconButton>
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </Paper>
+          )
         ) : (
           <Box
             sx={{

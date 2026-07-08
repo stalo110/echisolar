@@ -21,6 +21,7 @@ export type RegisterPayload = LoginPayload & {
   name: string;
   phone: string;
   country?: string;
+  referralCode?: string;
 };
 
 export type ForgotPasswordPayload = {

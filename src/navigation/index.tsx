@@ -20,6 +20,7 @@ import UserDashboardPage from "../pages/UserDashboard/UserDashboard";
 import UserProducts from "../pages/UserDashboard/userProducts";
 import UserPackages from "../pages/UserDashboard/Packages";
 import UserSubscriptions from "../pages/UserDashboard/Subscriptions";
+import MyReferrals from "../pages/UserDashboard/MyReferrals";
 import AdminDashboard from "../pages/AdminDashboard/Dashboard";
 import AdminProducts from "../pages/AdminDashboard/Products";
 import AdminPackages from "../pages/AdminDashboard/Packages";
@@ -29,6 +30,7 @@ import AdminProjects from "../pages/AdminDashboard/Projects";
 import AdminOrders from "../pages/AdminDashboard/Orders";
 import AdminUsers from "../pages/AdminDashboard/AdminUsers";
 import AdminMessages from "../pages/AdminDashboard/Messages";
+import AdminReferrals from "../pages/AdminDashboard/Referrals";
 import NotFound from "../pages/NotFound";
 
 export const Navigation = () => (
@@ -62,6 +64,7 @@ export const Navigation = () => (
     <Route path="/admin/revenue" element={<Revenue />} />
       <Route path="/admin/projects" element={<AdminProjects />} />
     <Route path="/admin/messages" element={<AdminMessages />} />
+    <Route path="/admin/referrals" element={<AdminReferrals />} />
 
 
     {/* Auth Route */}
@@ -76,6 +79,7 @@ export const Navigation = () => (
     <Route path="/user/packages" element={<UserPackages />} />
     <Route path="/user/profile" element={<Profile />} />
     <Route path="/user/products" element={<UserProducts />} />
+    <Route path="/user/referrals" element={<MyReferrals />} />
 
     {/* Fallback Route if not found */}
     <Route path="*" element={<NotFound />} />

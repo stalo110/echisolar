@@ -9,6 +9,7 @@ import {
   MenuItem,
   Paper,
   Select,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -16,6 +17,8 @@ import {
   TableRow,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme as useMuiTheme,
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "material-react-toastify";
@@ -39,6 +42,8 @@ const formatDateTime = (value?: string | null) => {
 
 const AdminMessages = () => {
   const { theme, mode } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
   const adminHeadingColor = mode === "dark" ? theme.palette.text.primary : theme.palette.primary.main;
   const adminSupportTextColor = mode === "dark" ? theme.palette.text.primary : theme.palette.text.secondary;
   const [messages, setMessages] = useState<AdminMessageRow[]>([]);
@@ -180,6 +185,35 @@ const AdminMessages = () => {
         {error && <Typography sx={{ color: "#d9534f", mb: 2, fontFamily: "JUST Sans Regular" }}>{error}</Typography>}
 
         {hasMessages ? (
+          isMobile ? (
+            <Stack spacing={2}>
+              {messages.map((row) => (
+                <Paper key={row.id} sx={{ p: 2, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper }}>
+                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 0.5 }}>
+                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                      <Typography sx={{ fontFamily: "JUST Sans ExBold", fontSize: "0.9rem", color: theme.palette.text.primary }}>{row.name}</Typography>
+                      <Typography sx={{ fontFamily: "JUST Sans Regular", fontSize: "0.78rem", color: adminSupportTextColor }} noWrap>{row.email}</Typography>
+                    </Box>
+                    <Chip
+                      size="small"
+                      label={row.status === "read" ? "Read" : "Unread"}
+                      color={row.status === "read" ? "default" : "warning"}
+                      sx={{ fontFamily: "JUST Sans ExBold", ml: 1, flexShrink: 0, fontSize: "0.72rem" }}
+                    />
+                  </Box>
+                  <Typography sx={{ fontFamily: "JUST Sans ExBold", fontSize: "0.85rem", color: theme.palette.text.primary, mt: 0.5 }}>{row.subject}</Typography>
+                  <Typography sx={{ fontFamily: "JUST Sans Regular", fontSize: "0.78rem", color: adminSupportTextColor, mb: 1 }}>
+                    {String(row.message || "").slice(0, 100)}{String(row.message || "").length > 100 ? "..." : ""}
+                  </Typography>
+                  <Typography sx={{ fontFamily: "JUST Sans Regular", fontSize: "0.72rem", color: adminSupportTextColor, mb: 1 }}>{formatDateTime(row.createdAt)}</Typography>
+                  <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                    <Button size="small" variant="outlined" onClick={() => handleOpenReply(row)} sx={{ fontFamily: "JUST Sans ExBold", textTransform: "none", fontSize: "0.78rem" }}>Reply</Button>
+                    <Button size="small" variant="text" onClick={() => toggleStatus(row)} sx={{ fontFamily: "JUST Sans Regular", textTransform: "none", fontSize: "0.78rem" }}>Mark {row.status === "read" ? "Unread" : "Read"}</Button>
+                  </Box>
+                </Paper>
+              ))}
+            </Stack>
+          ) : (
           <Paper
             sx={{
               background: theme.palette.background.paper,
@@ -240,6 +274,7 @@ const AdminMessages = () => {
               </TableBody>
             </Table>
           </Paper>
+          )
         ) : (
           <Paper
             sx={{

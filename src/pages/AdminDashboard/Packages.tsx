@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Chip,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -13,6 +14,7 @@ import {
   IconButton,
   Paper,
   Snackbar,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -21,6 +23,8 @@ import {
   TableRow,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme as useMuiTheme,
 } from "@mui/material";
 import { Delete, Edit, Image } from "@mui/icons-material";
 import { useEffect, useState, type ChangeEvent } from "react";
@@ -68,6 +72,8 @@ const revokeBlobUrls = (urls: string[]) => {
 
 const AdminPackages = () => {
   const { theme, mode } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
   const adminHeadingColor = mode === "dark" ? theme.palette.text.primary : theme.palette.primary.main;
   const [packages, setPackages] = useState<SolarPackage[]>([]);
   const [loading, setLoading] = useState(false);
@@ -270,21 +276,46 @@ const AdminPackages = () => {
           Add Package
         </Button>
 
-        <TableContainer
-          component={Paper}
-          sx={{
-            background: theme.palette.background.paper,
-            borderRadius: 3,
-            border: `1px solid ${theme.palette.divider}`,
-          }}
-        >
+        {isMobile ? (
+          <Stack spacing={2}>
+            {packages.length === 0 && (
+              <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+                {loading ? "Loading packages..." : "No packages found."}
+              </Typography>
+            )}
+            {packages.map((pkg) => (
+              <Paper key={pkg.id} sx={{ p: 2, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper }}>
+                <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
+                  {pkg.images?.[0] ? (
+                    <img src={pkg.images[0]} alt={pkg.name} style={{ width: 56, height: 56, borderRadius: 8, objectFit: "cover", flexShrink: 0 }} />
+                  ) : (
+                    <Box sx={{ width: 56, height: 56, bgcolor: theme.palette.divider, borderRadius: 8, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <Image sx={{ color: theme.palette.text.secondary }} />
+                    </Box>
+                  )}
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography sx={{ fontFamily: "JUST Sans ExBold", color: theme.palette.text.primary, fontSize: "0.95rem" }}>{pkg.name}</Typography>
+                    <Typography sx={{ fontFamily: "JUST Sans Regular", color: theme.palette.text.secondary, fontSize: "0.78rem", mb: 0.5 }} noWrap>{pkg.description || "No description"}</Typography>
+                    <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                      <Chip label={pkg.requiresCustomPrice ? "Custom" : `₦${Number(pkg.price || 0).toLocaleString()}`} size="small" sx={{ fontFamily: "JUST Sans ExBold", bgcolor: theme.palette.primary.main, color: mode === "dark" ? "#000" : "#fff", fontSize: "0.75rem" }} />
+                      <Chip label={pkg.isActive ? "Active" : "Archived"} size="small" color={pkg.isActive ? "success" : "default"} sx={{ fontFamily: "JUST Sans Regular", fontSize: "0.75rem" }} />
+                    </Box>
+                  </Box>
+                  <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+                    <IconButton size="small" onClick={() => handleOpen(pkg)}><Edit sx={{ color: theme.palette.primary.main, fontSize: 18 }} /></IconButton>
+                    <IconButton size="small" onClick={() => confirmDelete(pkg.id)}><Delete sx={{ color: "red", fontSize: 18 }} /></IconButton>
+                  </Box>
+                </Box>
+              </Paper>
+            ))}
+          </Stack>
+        ) : (
+        <TableContainer component={Paper} sx={{ background: theme.palette.background.paper, borderRadius: 3, border: `1px solid ${theme.palette.divider}` }}>
           <Table>
             <TableHead>
               <TableRow>
                 {["Images", "Package", "Pricing", "Status", "Actions"].map((header) => (
-                  <TableCell key={header} sx={{ color: adminHeadingColor, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
-                    {header}
-                  </TableCell>
+                  <TableCell key={header} sx={{ color: adminHeadingColor, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>{header}</TableCell>
                 ))}
               </TableRow>
             </TableHead>
@@ -295,30 +326,10 @@ const AdminPackages = () => {
                     <Box sx={{ display: "flex", gap: 1 }}>
                       {pkg.images && pkg.images.length > 0 ? (
                         pkg.images.slice(0, 3).map((image, idx) => (
-                          <img
-                            key={idx}
-                            src={image}
-                            alt={pkg.name}
-                            style={{
-                              width: 48,
-                              height: 48,
-                              borderRadius: "8px",
-                              objectFit: "cover",
-                            }}
-                          />
+                          <img key={idx} src={image} alt={pkg.name} style={{ width: 48, height: 48, borderRadius: "8px", objectFit: "cover" }} />
                         ))
                       ) : (
-                        <Box
-                          sx={{
-                            width: 48,
-                            height: 48,
-                            bgcolor: theme.palette.divider,
-                            borderRadius: "8px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
+                        <Box sx={{ width: 48, height: 48, bgcolor: theme.palette.divider, borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                           <Image sx={{ color: theme.palette.text.secondary }} />
                         </Box>
                       )}
@@ -326,31 +337,13 @@ const AdminPackages = () => {
                   </TableCell>
                   <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
                     <Typography sx={{ fontFamily: "JUST Sans ExBold" }}>{pkg.name}</Typography>
-                    <Typography
-                      sx={{
-                        color: mode === "dark" ? theme.palette.text.primary : theme.palette.text.secondary,
-                        fontFamily: "JUST Sans Regular",
-                        fontSize: "0.85rem",
-                      }}
-                    >
-                      {pkg.description || "No description"}
-                    </Typography>
+                    <Typography sx={{ color: mode === "dark" ? theme.palette.text.primary : theme.palette.text.secondary, fontFamily: "JUST Sans Regular", fontSize: "0.85rem" }}>{pkg.description || "No description"}</Typography>
                   </TableCell>
-                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                    {pkg.requiresCustomPrice
-                      ? "Custom pricing"
-                      : `₦${Number(pkg.price || 0).toLocaleString()}`}
-                  </TableCell>
-                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                    {pkg.isActive ? "Active" : "Archived"}
-                  </TableCell>
+                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{pkg.requiresCustomPrice ? "Custom pricing" : `₦${Number(pkg.price || 0).toLocaleString()}`}</TableCell>
+                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{pkg.isActive ? "Active" : "Archived"}</TableCell>
                   <TableCell>
-                    <IconButton color="inherit" size="small" onClick={() => handleOpen(pkg)}>
-                      <Edit sx={{ color: theme.palette.primary.main }} />
-                    </IconButton>
-                    <IconButton color="inherit" size="small" onClick={() => confirmDelete(pkg.id)}>
-                      <Delete sx={{ color: "red" }} />
-                    </IconButton>
+                    <IconButton color="inherit" size="small" onClick={() => handleOpen(pkg)}><Edit sx={{ color: theme.palette.primary.main }} /></IconButton>
+                    <IconButton color="inherit" size="small" onClick={() => confirmDelete(pkg.id)}><Delete sx={{ color: "red" }} /></IconButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -362,6 +355,7 @@ const AdminPackages = () => {
             </Typography>
           )}
         </TableContainer>
+        )}
 
         <Dialog
           open={open}

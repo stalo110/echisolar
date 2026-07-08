@@ -21,6 +21,10 @@ import {
   Checkbox,
   FormControlLabel,
   CircularProgress,
+  useMediaQuery,
+  useTheme as useMuiTheme,
+  Stack,
+  Chip,
 } from "@mui/material";
 import { Edit, Delete, Image } from "@mui/icons-material";
 import { useEffect, useState, type ChangeEvent } from "react";
@@ -74,6 +78,8 @@ const revokeBlobUrls = (urls: string[]) => {
 
 const AdminProjects = () => {
   const { theme, mode } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
   const adminHeadingColor = mode === "dark" ? theme.palette.text.primary : theme.palette.primary.main;
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(false);
@@ -311,21 +317,47 @@ const AdminProjects = () => {
           Add Project
         </Button>
 
-        <TableContainer
-          component={Paper}
-          sx={{
-            background: theme.palette.background.paper,
-            borderRadius: 3,
-            border: `1px solid ${theme.palette.divider}`,
-          }}
-        >
+        {isMobile ? (
+          <Stack spacing={2}>
+            {projects.length === 0 && (
+              <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+                {loading ? "Loading projects..." : "No projects found."}
+              </Typography>
+            )}
+            {projects.map((project) => (
+              <Paper key={project.id} sx={{ p: 2, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper }}>
+                <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
+                  {project.images?.[0] ? (
+                    <img src={project.images[0]} alt={project.title} style={{ width: 56, height: 56, borderRadius: 8, objectFit: "cover", flexShrink: 0 }} />
+                  ) : (
+                    <Box sx={{ width: 56, height: 56, bgcolor: theme.palette.divider, borderRadius: 8, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <Image sx={{ color: theme.palette.text.secondary }} />
+                    </Box>
+                  )}
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography sx={{ fontFamily: "JUST Sans ExBold", color: theme.palette.text.primary, fontSize: "0.95rem" }}>{project.title}</Typography>
+                    <Typography sx={{ fontFamily: "JUST Sans Regular", color: theme.palette.text.secondary, fontSize: "0.78rem", mb: 0.5 }} noWrap>{project.description || "No description"}</Typography>
+                    <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                      {project.isFeatured && <Chip label="Featured" size="small" color="primary" sx={{ fontFamily: "JUST Sans Regular", fontSize: "0.72rem" }} />}
+                      {project.link && <Chip label="Has Link" size="small" variant="outlined" sx={{ fontFamily: "JUST Sans Regular", fontSize: "0.72rem" }} />}
+                      {(project.images?.length ?? 0) > 0 && <Chip label={`${project.images!.length} img`} size="small" variant="outlined" sx={{ fontFamily: "JUST Sans Regular", fontSize: "0.72rem" }} />}
+                    </Box>
+                  </Box>
+                  <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+                    <IconButton size="small" onClick={() => handleOpen(project)}><Edit sx={{ color: theme.palette.primary.main, fontSize: 18 }} /></IconButton>
+                    <IconButton size="small" onClick={() => confirmDelete(project.id)}><Delete sx={{ color: "red", fontSize: 18 }} /></IconButton>
+                  </Box>
+                </Box>
+              </Paper>
+            ))}
+          </Stack>
+        ) : (
+        <TableContainer component={Paper} sx={{ background: theme.palette.background.paper, borderRadius: 3, border: `1px solid ${theme.palette.divider}` }}>
           <Table>
             <TableHead>
               <TableRow>
                 {["Images", "Title", "Featured", "Link", "Description", "Actions"].map((header) => (
-                  <TableCell key={header} sx={{ color: adminHeadingColor, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>
-                    {header}
-                  </TableCell>
+                  <TableCell key={header} sx={{ color: adminHeadingColor, fontWeight: "bold", fontFamily: "JUST Sans ExBold" }}>{header}</TableCell>
                 ))}
               </TableRow>
             </TableHead>
@@ -336,58 +368,24 @@ const AdminProjects = () => {
                     <Box sx={{ display: "flex", gap: 1 }}>
                       {project.images && project.images.length > 0 ? (
                         project.images.slice(0, 3).map((image, idx) => (
-                          <img
-                            key={idx}
-                            src={image}
-                            alt={project.title}
-                            style={{
-                              width: 50,
-                              height: 50,
-                              borderRadius: "8px",
-                              objectFit: "cover",
-                            }}
-                          />
+                          <img key={idx} src={image} alt={project.title} style={{ width: 50, height: 50, borderRadius: "8px", objectFit: "cover" }} />
                         ))
                       ) : (
-                        <Box
-                          sx={{
-                            width: 50,
-                            height: 50,
-                            bgcolor: theme.palette.divider,
-                            borderRadius: "8px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
+                        <Box sx={{ width: 50, height: 50, bgcolor: theme.palette.divider, borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                           <Image sx={{ color: theme.palette.text.secondary }} />
                         </Box>
                       )}
                     </Box>
                   </TableCell>
                   <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{project.title}</TableCell>
+                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{project.isFeatured ? "Yes" : "No"}</TableCell>
                   <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                    {project.isFeatured ? "Yes" : "No"}
+                    {project.link ? <a href={project.link} target="_blank" rel="noreferrer" style={{ color: theme.palette.primary.main }}>{project.link}</a> : "N/A"}
                   </TableCell>
-                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                    {project.link ? (
-                      <a href={project.link} target="_blank" rel="noreferrer" style={{ color: theme.palette.primary.main }}>
-                        {project.link}
-                      </a>
-                    ) : (
-                      "N/A"
-                    )}
-                  </TableCell>
-                  <TableCell sx={{ color: mode === "dark" ? theme.palette.text.primary : theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
-                    {project.description || "N/A"}
-                  </TableCell>
+                  <TableCell sx={{ color: mode === "dark" ? theme.palette.text.primary : theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>{project.description || "N/A"}</TableCell>
                   <TableCell>
-                    <IconButton color="inherit" size="small" onClick={() => handleOpen(project)}>
-                      <Edit sx={{ color: theme.palette.primary.main }} />
-                    </IconButton>
-                    <IconButton color="inherit" size="small" onClick={() => confirmDelete(project.id)}>
-                      <Delete sx={{ color: "red" }} />
-                    </IconButton>
+                    <IconButton color="inherit" size="small" onClick={() => handleOpen(project)}><Edit sx={{ color: theme.palette.primary.main }} /></IconButton>
+                    <IconButton color="inherit" size="small" onClick={() => confirmDelete(project.id)}><Delete sx={{ color: "red" }} /></IconButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -399,6 +397,7 @@ const AdminProjects = () => {
             </Typography>
           )}
         </TableContainer>
+        )}
 
         <Dialog
           open={open}

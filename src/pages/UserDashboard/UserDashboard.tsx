@@ -2,6 +2,7 @@ import { Box, Typography, Paper, Grid } from "@mui/material";
 import { useAuth } from "../../contexts/AuthContext";
 import UserDashboardLayout from "../../components/User/UserDashboardLayout";
 import { useTheme } from "../../contexts/ThemeContext";
+import ReferralWidget from "../../components/User/ReferralWidget";
 import { useEffect, useMemo, useState } from "react";
 import { getOrderById, getUserOrders, type OrderDetail, type OrderSummary } from "../../services/orderService";
 import { getProfile } from "../../services/userService";
@@ -170,6 +171,11 @@ const UserDashboardPage = () => {
               <strong>Phone:</strong> {user?.phone || profileDetails.phone || "N/A"}
             </Typography>
           </Paper>
+        </Grid>
+
+        {/* Referral */}
+        <Grid size={{ xs: 12 }}>
+          <ReferralWidget />
         </Grid>
 
         {/* Order History */}

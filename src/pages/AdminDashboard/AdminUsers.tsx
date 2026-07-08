@@ -1,4 +1,4 @@
-import { Box, Typography, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button } from "@mui/material";
+import { Box, Typography, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button, Stack, Chip, useMediaQuery, useTheme as useMuiTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import AdminLayout from "../../components/Admin/AdminLayout";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -12,6 +12,8 @@ const formatDate = (value?: string) => {
 
 const AdminUsers = () => {
   const { theme, mode } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
   const adminHeadingColor = mode === "dark" ? theme.palette.text.primary : theme.palette.primary.main;
   const adminSupportTextColor = mode === "dark" ? theme.palette.text.primary : theme.palette.text.secondary;
   const [users, setUsers] = useState<AdminUserRow[]>([]);
@@ -46,13 +48,24 @@ const AdminUsers = () => {
           <Typography sx={{ color: "#d9534f", mb: 2, fontFamily: "JUST Sans Regular" }}>{error}</Typography>
         )}
 
-        <Paper
-          sx={{
-            background: theme.palette.background.paper,
-            borderRadius: 3,
-            border: `1px solid ${theme.palette.divider}`,
-          }}
-        >
+        {isMobile ? (
+          <Stack spacing={2}>
+            {users.length === 0 && (
+              <Typography sx={{ fontFamily: "JUST Sans Regular", color: adminSupportTextColor }}>No users found.</Typography>
+            )}
+            {users.map((user) => (
+              <Paper key={user.id} sx={{ p: 2, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper }}>
+                <Typography sx={{ fontFamily: "JUST Sans ExBold", color: theme.palette.text.primary, fontSize: "0.95rem" }}>{user.name}</Typography>
+                <Typography sx={{ fontFamily: "JUST Sans Regular", color: theme.palette.text.secondary, fontSize: "0.82rem" }}>{user.email}</Typography>
+                <Box sx={{ display: "flex", gap: 1, mt: 0.8, flexWrap: "wrap" }}>
+                  {user.country && <Chip label={user.country} size="small" variant="outlined" sx={{ fontFamily: "JUST Sans Regular", fontSize: "0.72rem" }} />}
+                  <Chip label={`Joined: ${formatDate(user.createdAt)}`} size="small" variant="outlined" sx={{ fontFamily: "JUST Sans Regular", fontSize: "0.72rem" }} />
+                </Box>
+              </Paper>
+            ))}
+          </Stack>
+        ) : (
+        <Paper sx={{ background: theme.palette.background.paper, borderRadius: 3, border: `1px solid ${theme.palette.divider}` }}>
           <Table>
             <TableHead>
               <TableRow>
@@ -67,22 +80,17 @@ const AdminUsers = () => {
                 <TableRow key={user.id}>
                   <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{user.name}</TableCell>
                   <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{user.email}</TableCell>
-                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                    {user.country || "N/A"}
-                  </TableCell>
-                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                    {formatDate(user.createdAt)}
-                  </TableCell>
+                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{user.country || "N/A"}</TableCell>
+                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{formatDate(user.createdAt)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
           {!users.length && (
-            <Typography sx={{ p: 2, color: adminSupportTextColor, fontFamily: "JUST Sans Regular" }}>
-              No users found.
-            </Typography>
+            <Typography sx={{ p: 2, color: adminSupportTextColor, fontFamily: "JUST Sans Regular" }}>No users found.</Typography>
           )}
         </Paper>
+        )}
 
         <Box sx={{ mt: 2, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 2 }}>
           <Typography sx={{ color: adminSupportTextColor, fontFamily: "JUST Sans Regular" }}>

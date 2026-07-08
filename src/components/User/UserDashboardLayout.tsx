@@ -22,6 +22,7 @@ import {
   AccountCircle,
   Menu as MenuIcon,
   Close as CloseIcon,
+  PeopleAlt,
 } from "@mui/icons-material";
 import { useTheme } from "../../contexts/ThemeContext";
 
@@ -56,6 +57,12 @@ const menuItems = [
     icon: <AccountCircle />,
     route: "/user/profile",
   },
+  {
+    id: "referrals",
+    text: "My Referrals",
+    icon: <PeopleAlt />,
+    route: "/user/referrals",
+  },
 ];
 
 interface UserDashboardLayoutProps {
@@ -72,6 +79,7 @@ const UserDashboardLayout = ({ children }: UserDashboardLayoutProps) => {
     if (location.pathname.includes("products")) return "products";
     if (location.pathname.includes("packages")) return "packages";
     if (location.pathname.includes("subscriptions")) return "subscriptions";
+    if (location.pathname.includes("referrals")) return "referrals";
     if (location.pathname.includes("profile")) return "profile";
     return "dashboard";
   };

@@ -328,7 +328,7 @@ const PaymentStatus = () => {
               Back to Home
             </Button>
           </Box>
-          {isCompleted && (
+          {(["successful", "paid"].includes(String(verifiedStatus || status).toLowerCase())) && (
             <Box sx={{ mt: 2 }}>
               <Button
                 component="a"

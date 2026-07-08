@@ -76,6 +76,7 @@ import {
   Typography,
   Rating,
   TextField,
+  Stack,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import type { Product } from "../../services/productService";
@@ -93,6 +94,7 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
   const { add } = useCart();
   const { theme, mode } = useTheme();
   const [quantity, setQuantity] = useState(1);
+  const [mainImage, setMainImage] = useState(product.images?.[0] || "./images/solar.jpg");
 
   if (!product) return null;
 
@@ -162,15 +164,31 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
           }}
         >
           <Box sx={{ flex: 1 }}>
-            <img
-              src={product.images?.[0] || "./images/solar.jpg"}
+            <Box
+              component="img"
+              src={mainImage}
               alt={product.name}
-              style={{
-                width: "100%",
-                borderRadius: 12,
-                boxShadow: "0 0 20px rgba(255,171,70,0.2)",
-              }}
+              sx={{ width: "100%", borderRadius: 2, boxShadow: "0 0 20px rgba(255,171,70,0.2)", maxHeight: 320, objectFit: "cover" }}
             />
+            {(product.images?.length ?? 0) > 1 && (
+              <Stack direction="row" spacing={1} sx={{ mt: 1.5, overflowX: "auto", "&::-webkit-scrollbar": { display: "none" } }}>
+                {product.images!.map((src, i) => (
+                  <Box
+                    key={i}
+                    component="img"
+                    src={src}
+                    alt={`thumb-${i}`}
+                    onClick={() => setMainImage(src)}
+                    sx={{
+                      width: 68, height: 52, objectFit: "cover", borderRadius: 1.5, flexShrink: 0, cursor: "pointer",
+                      border: src === mainImage ? `2px solid ${theme.palette.primary.main}` : `1px solid ${theme.palette.divider}`,
+                      opacity: src === mainImage ? 1 : 0.7,
+                      transition: "opacity 0.2s",
+                    }}
+                  />
+                ))}
+              </Stack>
+            )}
           </Box>
 
           <Box sx={{ flex: 1 }}>
@@ -204,7 +222,7 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
               }}
             >
               <strong>Availability:</strong>{" "}
-              {inStock ? `In Stock (${product.stock} available)` : "Out of Stock"}
+              {inStock ? "Available" : "Out of Stock"}
             </Typography>
 
             <Box sx={{ display: "flex", alignItems: "center", mt: 3 }}>

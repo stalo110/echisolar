@@ -12,7 +12,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import TopNav from "../../navigation/TopNav";
 import Footer from "../../navigation/Footer";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -21,6 +21,7 @@ import { getApiErrorMessage } from "../../utils/apiError";
 
 const RegisterPage = () => {
   const { theme, mode } = useTheme();
+  const [searchParams] = useSearchParams();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -29,6 +30,7 @@ const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [country, setCountry] = useState("NG");
+  const [referralCode, setReferralCode] = useState(searchParams.get("ref") || "");
   const { register } = useAuth();
   const navigate = useNavigate();
   const inputLabelSx = {
@@ -62,6 +64,7 @@ const RegisterPage = () => {
         phone: phone.trim(),
         password,
         country: country.trim(),
+        referralCode: referralCode.trim() || undefined,
       });
       navigate("/user/dashboard");
     } catch (err) {
@@ -166,6 +169,17 @@ const RegisterPage = () => {
               InputProps={{
                 sx: inputFieldSx,
               }}
+            />
+
+            <TextField
+              fullWidth
+              size="small"
+              margin="normal"
+              label="Referral Code (optional)"
+              value={referralCode}
+              onChange={(e) => setReferralCode(e.target.value)}
+              InputLabelProps={{ sx: inputLabelSx }}
+              InputProps={{ sx: inputFieldSx }}
             />
 
             <TextField

@@ -5,6 +5,7 @@ export type CheckoutPayload = {
   providerPreference?: 'paystack' | 'flutterwave';
   planOption?: string;
   currency?: string;
+  useWalletBonus?: boolean;
 };
 
 export type CheckoutResponse = {

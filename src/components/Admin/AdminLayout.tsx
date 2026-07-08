@@ -25,6 +25,7 @@ import {
   Brightness7,
   MailOutline,
   LocalOffer,
+  PeopleAlt,
 } from "@mui/icons-material";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -41,6 +42,7 @@ const menuItems = [
   { text: "Orders", icon: <ShoppingCart />, path: "/admin/orders" },
   { text: "Users", icon: <Group />, path: "/admin/users" },
   { text: "Messages", icon: <MailOutline />, path: "/admin/messages" },
+  { text: "Referrals", icon: <PeopleAlt />, path: "/admin/referrals" },
   { text: "Revenue", icon: <AttachMoney />, path: "/admin/revenue" },
 ];
 

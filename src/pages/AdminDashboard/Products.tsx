@@ -21,6 +21,10 @@ import {
   Checkbox,
   FormControlLabel,
   CircularProgress,
+  useMediaQuery,
+  useTheme as useMuiTheme,
+  Stack,
+  Chip,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 import { useEffect, useState, type ChangeEvent } from "react";
@@ -40,8 +44,8 @@ type ProductForm = {
   price: string;
   stock: string;
   categoryId: string;
-  imageFile: File | null;
-  imagePreview: string;
+  imageFiles: File[];
+  imagePreviews: string[];
   isLatestArrival: boolean;
 };
 
@@ -51,15 +55,15 @@ const createEmptyFormData = (): ProductForm => ({
   price: "",
   stock: "",
   categoryId: "1",
-  imageFile: null,
-  imagePreview: "",
+  imageFiles: [],
+  imagePreviews: [],
   isLatestArrival: false,
 });
 
-const revokeBlobUrl = (value?: string) => {
-  if (value?.startsWith("blob:")) {
-    URL.revokeObjectURL(value);
-  }
+const revokeBlobUrls = (urls: string[]) => {
+  urls.forEach((url) => {
+    if (url.startsWith("blob:")) URL.revokeObjectURL(url);
+  });
 };
 
 const CATEGORY_OPTIONS = [
@@ -77,6 +81,8 @@ const getCategoryLabel = (categoryId?: number) => {
 
 const AdminProducts = () => {
   const { theme, mode } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
   const adminHeadingColor = mode === "dark" ? theme.palette.text.primary : theme.palette.primary.main;
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
@@ -110,13 +116,13 @@ const AdminProducts = () => {
 
   useEffect(() => {
     return () => {
-      revokeBlobUrl(formData.imagePreview);
+      revokeBlobUrls(formData.imagePreviews);
     };
-  }, [formData.imagePreview]);
+  }, [formData.imagePreviews]);
 
   const handleOpen = (product?: Product) => {
     setFormData((prev) => {
-      revokeBlobUrl(prev.imagePreview);
+      revokeBlobUrls(prev.imagePreviews);
       if (product) {
         return {
           name: product.name || "",
@@ -124,12 +130,11 @@ const AdminProducts = () => {
           price: String(product.price || ""),
           stock: String(product.stock || ""),
           categoryId: String(product.categoryId || 1),
-          imageFile: null,
-          imagePreview: product.images?.[0] || "",
+          imageFiles: [],
+          imagePreviews: product.images || [],
           isLatestArrival: Boolean(product.isLatestArrival),
         };
       }
-
       return createEmptyFormData();
     });
 
@@ -145,7 +150,7 @@ const AdminProducts = () => {
     setOpen(false);
     setEditingProduct(null);
     setFormData((prev) => {
-      revokeBlobUrl(prev.imagePreview);
+      revokeBlobUrls(prev.imagePreviews.filter((u) => u.startsWith("blob:")));
       return createEmptyFormData();
     });
   };
@@ -160,13 +165,28 @@ const AdminProducts = () => {
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
 
-    const previewUrl = URL.createObjectURL(file);
+    const newPreviews = files.map((f) => URL.createObjectURL(f));
+    setFormData((prev) => ({
+      ...prev,
+      imageFiles: [...prev.imageFiles, ...files].slice(0, 6),
+      imagePreviews: [...prev.imagePreviews, ...newPreviews].slice(0, 6),
+    }));
+    // reset input so same files can be re-selected if removed
+    e.target.value = "";
+  };
+
+  const handleRemoveImage = (index: number) => {
     setFormData((prev) => {
-      revokeBlobUrl(prev.imagePreview);
-      return { ...prev, imageFile: file, imagePreview: previewUrl };
+      const preview = prev.imagePreviews[index];
+      if (preview.startsWith("blob:")) URL.revokeObjectURL(preview);
+      return {
+        ...prev,
+        imageFiles: prev.imageFiles.filter((_, i) => i !== index),
+        imagePreviews: prev.imagePreviews.filter((_, i) => i !== index),
+      };
     });
   };
 
@@ -190,7 +210,11 @@ const AdminProducts = () => {
         price: Number(formData.price),
         stock: Number(formData.stock),
         categoryId: Number(formData.categoryId),
-        images: formData.imageFile ? [formData.imageFile] : undefined,
+        images: formData.imageFiles.length
+          ? formData.imageFiles
+          : formData.imagePreviews.filter((u) => !u.startsWith("blob:")).length
+          ? formData.imagePreviews.filter((u) => !u.startsWith("blob:"))
+          : undefined,
         isLatestArrival: formData.isLatestArrival,
         isActive: true,
       };
@@ -261,6 +285,39 @@ const AdminProducts = () => {
           Add Product
         </Button>
 
+        {isMobile ? (
+          <Stack spacing={2}>
+            {products.length === 0 && (
+              <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>
+                {loading ? "Loading products..." : "No products found."}
+              </Typography>
+            )}
+            {products.map((product) => (
+              <Paper key={product.id} sx={{ p: 2, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper }}>
+                <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
+                  {product.images?.[0] ? (
+                    <img src={product.images[0]} alt={product.name} style={{ width: 56, height: 56, borderRadius: 8, objectFit: "cover", flexShrink: 0 }} />
+                  ) : (
+                    <Box sx={{ width: 56, height: 56, bgcolor: theme.palette.divider, borderRadius: 8, flexShrink: 0 }} />
+                  )}
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography sx={{ fontFamily: "JUST Sans ExBold", color: theme.palette.text.primary, fontSize: "0.95rem" }}>{product.name}</Typography>
+                    <Typography sx={{ fontFamily: "JUST Sans Regular", color: theme.palette.text.secondary, fontSize: "0.82rem" }}>{getCategoryLabel(product.categoryId)}</Typography>
+                    <Box sx={{ display: "flex", gap: 1, mt: 0.5, flexWrap: "wrap" }}>
+                      <Chip label={`₦${Number(product.price || 0).toLocaleString()}`} size="small" sx={{ fontFamily: "JUST Sans ExBold", bgcolor: theme.palette.primary.main, color: mode === "dark" ? "#000" : "#fff", fontSize: "0.75rem" }} />
+                      <Chip label={`Stock: ${product.stock}`} size="small" variant="outlined" sx={{ fontFamily: "JUST Sans Regular", fontSize: "0.75rem" }} />
+                      {product.isLatestArrival && <Chip label="Latest" size="small" color="success" sx={{ fontFamily: "JUST Sans Regular", fontSize: "0.75rem" }} />}
+                    </Box>
+                  </Box>
+                  <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+                    <IconButton size="small" onClick={() => handleOpen(product)}><Edit sx={{ color: theme.palette.primary.main, fontSize: 18 }} /></IconButton>
+                    <IconButton size="small" onClick={() => confirmDelete(product.id)}><Delete sx={{ color: "red", fontSize: 18 }} /></IconButton>
+                  </Box>
+                </Box>
+              </Paper>
+            ))}
+          </Stack>
+        ) : (
         <TableContainer
           component={Paper}
           sx={{
@@ -284,38 +341,19 @@ const AdminProducts = () => {
                 <TableRow key={product.id}>
                   <TableCell>
                     {product.images?.[0] ? (
-                      <img
-                        src={product.images[0]}
-                        alt={product.name}
-                        style={{
-                          width: 50,
-                          height: 50,
-                          borderRadius: "8px",
-                          objectFit: "cover",
-                        }}
-                      />
+                      <img src={product.images[0]} alt={product.name} style={{ width: 50, height: 50, borderRadius: "8px", objectFit: "cover" }} />
                     ) : (
                       <Box sx={{ width: 50, height: 50, bgcolor: theme.palette.divider, borderRadius: "8px" }} />
                     )}
                   </TableCell>
                   <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{product.name}</TableCell>
-                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                    {getCategoryLabel(product.categoryId)}
-                  </TableCell>
-                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                    ₦{Number(product.price || 0).toLocaleString()}
-                  </TableCell>
+                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{getCategoryLabel(product.categoryId)}</TableCell>
+                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>₦{Number(product.price || 0).toLocaleString()}</TableCell>
                   <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{product.stock}</TableCell>
-                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                    {product.isLatestArrival ? "Yes" : "No"}
-                  </TableCell>
+                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{product.isLatestArrival ? "Yes" : "No"}</TableCell>
                   <TableCell>
-                    <IconButton color="inherit" size="small" onClick={() => handleOpen(product)}>
-                      <Edit sx={{ color: theme.palette.primary.main }} />
-                    </IconButton>
-                    <IconButton color="inherit" size="small" onClick={() => confirmDelete(product.id)}>
-                      <Delete sx={{ color: "red" }} />
-                    </IconButton>
+                    <IconButton color="inherit" size="small" onClick={() => handleOpen(product)}><Edit sx={{ color: theme.palette.primary.main }} /></IconButton>
+                    <IconButton color="inherit" size="small" onClick={() => confirmDelete(product.id)}><Delete sx={{ color: "red" }} /></IconButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -327,6 +365,7 @@ const AdminProducts = () => {
             </Typography>
           )}
         </TableContainer>
+        )}
 
         <Dialog
           open={open}
@@ -418,27 +457,48 @@ const AdminProducts = () => {
 
             <Box>
               <Typography variant="body2" sx={{ mb: 1 }}>
-                Product Image
+                Product Images ({formData.imagePreviews.length}/6)
               </Typography>
               <Button
                 variant="outlined"
                 component="label"
+                disabled={formData.imagePreviews.length >= 6}
                 sx={{
                   borderColor: theme.palette.primary.main,
                   color: theme.palette.primary.main,
                   "&:hover": { borderColor: theme.palette.primary.dark },
                 }}
               >
-                Upload Image
-                <input hidden accept="image/*" type="file" onChange={handleImageChange} />
+                Upload Images
+                <input hidden accept="image/*" type="file" multiple onChange={handleImageChange} />
               </Button>
-              {formData.imagePreview && (
-                <Box sx={{ mt: 2 }}>
-                  <img
-                    src={formData.imagePreview}
-                    alt="preview"
-                    style={{ width: "100%", maxHeight: 200, borderRadius: 8, objectFit: "cover" }}
-                  />
+              {formData.imagePreviews.length > 0 && (
+                <Box sx={{ mt: 2, display: "flex", flexWrap: "wrap", gap: 1 }}>
+                  {formData.imagePreviews.map((src, idx) => (
+                    <Box key={idx} sx={{ position: "relative", width: 90, height: 80 }}>
+                      <img
+                        src={src}
+                        alt={`preview-${idx}`}
+                        style={{ width: "100%", height: "100%", borderRadius: 6, objectFit: "cover" }}
+                      />
+                      <IconButton
+                        size="small"
+                        onClick={() => handleRemoveImage(idx)}
+                        sx={{
+                          position: "absolute",
+                          top: -6,
+                          right: -6,
+                          bgcolor: "red",
+                          color: "#fff",
+                          width: 20,
+                          height: 20,
+                          "&:hover": { bgcolor: "darkred" },
+                        }}
+                      >
+                        ×
+                      </IconButton>
+                    </Box>
+                  ))}
                 </Box>
               )}
             </Box>

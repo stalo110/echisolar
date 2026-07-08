@@ -1,4 +1,4 @@
-import { Box, Typography, Paper, Grid, LinearProgress, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Box, Typography, Paper, Grid, LinearProgress, Table, TableBody, TableCell, TableHead, TableRow, Stack, Chip, useMediaQuery, useTheme as useMuiTheme } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import AdminLayout from "../../components/Admin/AdminLayout";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -8,6 +8,8 @@ const formatCurrency = (value: number) => `₦${Number(value || 0).toLocaleStrin
 
 const Revenue = () => {
   const { theme, mode } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
   const adminHeadingColor = mode === "dark" ? theme.palette.text.primary : theme.palette.primary.main;
   const adminSupportTextColor = mode === "dark" ? theme.palette.text.primary : theme.palette.text.secondary;
   const [data, setData] = useState<RevenueAnalytics | null>(null);
@@ -124,30 +126,41 @@ const Revenue = () => {
           <Typography variant="h6" sx={{ mb: 2, color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>
             Monthly Breakdown
           </Typography>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Month</TableCell>
-                <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Revenue</TableCell>
-                <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Orders</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {(data?.monthly || []).map((item) => (
-                <TableRow key={item.month}>
-                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{item.month}</TableCell>
-                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                    {formatCurrency(item.revenue)}
-                  </TableCell>
-                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{item.orders}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          {!data?.monthly?.length && (
+          {!data?.monthly?.length ? (
             <Typography sx={{ mt: 1, color: adminSupportTextColor, fontFamily: "JUST Sans Regular" }}>
               No monthly revenue records yet.
             </Typography>
+          ) : isMobile ? (
+            <Stack spacing={1.5}>
+              {(data?.monthly || []).map((item) => (
+                <Paper key={item.month} variant="outlined" sx={{ p: 1.5, borderRadius: 2, bgcolor: theme.palette.background.default }}>
+                  <Typography sx={{ fontFamily: "JUST Sans ExBold", fontSize: "0.9rem", color: theme.palette.text.primary }}>{item.month}</Typography>
+                  <Box sx={{ display: "flex", gap: 1, mt: 0.5, flexWrap: "wrap" }}>
+                    <Chip label={formatCurrency(item.revenue)} size="small" sx={{ fontFamily: "JUST Sans ExBold", bgcolor: theme.palette.primary.main, color: mode === "dark" ? "#000" : "#fff", fontSize: "0.75rem" }} />
+                    <Chip label={`${item.orders} orders`} size="small" variant="outlined" sx={{ fontFamily: "JUST Sans Regular", fontSize: "0.75rem" }} />
+                  </Box>
+                </Paper>
+              ))}
+            </Stack>
+          ) : (
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Month</TableCell>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Revenue</TableCell>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Orders</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(data?.monthly || []).map((item) => (
+                  <TableRow key={item.month}>
+                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{item.month}</TableCell>
+                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{formatCurrency(item.revenue)}</TableCell>
+                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>{item.orders}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
         </Paper>
 
@@ -163,32 +176,47 @@ const Revenue = () => {
           <Typography variant="h6" sx={{ mb: 2, color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>
             Recent Paid Orders
           </Typography>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Order ID</TableCell>
-                <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Customer</TableCell>
-                <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Amount</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {(data?.recentPaidOrders || []).map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>#{order.id}</TableCell>
-                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                    {order.customerName || "N/A"} ({order.customerEmail || "N/A"})
-                  </TableCell>
-                  <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
-                    {formatCurrency(order.totalAmount)}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          {!data?.recentPaidOrders?.length && (
+          {!data?.recentPaidOrders?.length ? (
             <Typography sx={{ mt: 1, color: adminSupportTextColor, fontFamily: "JUST Sans Regular" }}>
               No paid orders yet.
             </Typography>
+          ) : isMobile ? (
+            <Stack spacing={1.5}>
+              {(data?.recentPaidOrders || []).map((order) => (
+                <Paper key={order.id} variant="outlined" sx={{ p: 1.5, borderRadius: 2, bgcolor: theme.palette.background.default }}>
+                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <Typography sx={{ fontFamily: "JUST Sans ExBold", fontSize: "0.88rem", color: theme.palette.text.primary }}>Order #{order.id}</Typography>
+                    <Chip label={formatCurrency(order.totalAmount)} size="small" sx={{ fontFamily: "JUST Sans ExBold", bgcolor: theme.palette.primary.main, color: mode === "dark" ? "#000" : "#fff", fontSize: "0.75rem" }} />
+                  </Box>
+                  <Typography sx={{ fontFamily: "JUST Sans Regular", fontSize: "0.8rem", color: theme.palette.text.secondary, mt: 0.4 }}>
+                    {order.customerName || "N/A"} · {order.customerEmail || "N/A"}
+                  </Typography>
+                </Paper>
+              ))}
+            </Stack>
+          ) : (
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Order ID</TableCell>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Customer</TableCell>
+                  <TableCell sx={{ color: adminHeadingColor, fontFamily: "JUST Sans ExBold" }}>Amount</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(data?.recentPaidOrders || []).map((order) => (
+                  <TableRow key={order.id}>
+                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>#{order.id}</TableCell>
+                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
+                      {order.customerName || "N/A"} ({order.customerEmail || "N/A"})
+                    </TableCell>
+                    <TableCell sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans Regular" }}>
+                      {formatCurrency(order.totalAmount)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
         </Paper>
       </Box>

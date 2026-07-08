@@ -10,16 +10,18 @@ import {
   Select,
   MenuItem,
   Divider,
+  Chip,
 } from "@mui/material";
 import TopNav from "../navigation/TopNav";
 import Footer from "../navigation/Footer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "../contexts/CartContext";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
 import { initiateCheckout } from "../services/orderService";
 import { toast } from "material-react-toastify";
+import { getMyReferral } from "../services/referralService";
 
 // 🧮 Helper
 function scheduleInstallments(total: number, months: number) {
@@ -33,12 +35,27 @@ const Checkout = () => {
   const [provider, setProvider] = useState<"paystack" | "flutterwave">("flutterwave");
   const [installment, setInstallment] = useState("full");
   const [loading, setLoading] = useState(false);
+  const [walletBalance, setWalletBalance] = useState(0);
+  const [useWallet, setUseWallet] = useState(false);
   const { items } = useCart();
   const { user } = useAuth();
   const { theme, mode } = useTheme();
   const navigate = useNavigate();
 
-  const total = items.reduce((s, i) => s + i.price * i.quantity, 0);
+  useEffect(() => {
+    if (!user) return;
+    getMyReferral()
+      .then((d) => {
+        const balance = Number(d.referralBonus || 0);
+        setWalletBalance(balance);
+        if (balance > 0) setUseWallet(true); // auto-apply if balance exists
+      })
+      .catch(() => {});
+  }, [user]);
+
+  const rawTotal = items.reduce((s, i) => s + i.price * i.quantity, 0);
+  const walletDiscount = useWallet ? Math.min(walletBalance, rawTotal) : 0;
+  const total = rawTotal - walletDiscount;
   const months =
     installment === "2" ? 2 : installment === "4" ? 4 : installment === "6" ? 6 : 1;
   const schedule = scheduleInstallments(total, months);
@@ -61,6 +78,7 @@ const Checkout = () => {
         providerPreference: provider,
         planOption: installment,
         currency: "NGN",
+        useWalletBonus: useWallet && walletBalance > 0,
       });
 
       if (!data.authorization_url) {
@@ -104,6 +122,31 @@ const Checkout = () => {
         >
           Checkout
         </Typography>
+
+        {/* Referral Wallet */}
+        {walletBalance > 0 && (
+          <Paper
+            sx={{
+              p: 3, mb: 3, borderRadius: 3,
+              bgcolor: theme.palette.background.paper,
+              border: `1px solid ${theme.palette.divider}`,
+              boxShadow: mode === "dark" ? "0 0 20px rgba(0,0,0,0.4)" : "0 0 20px rgba(0,0,0,0.1)",
+            }}
+          >
+            <Typography variant="h6" sx={{ color: theme.palette.primary.main, mb: 1, fontFamily: "JUST Sans ExBold" }}>
+              Referral Wallet
+            </Typography>
+            <Typography sx={{ fontFamily: "JUST Sans Regular", color: theme.palette.text.secondary, mb: 1.5, fontSize: "0.9rem" }}>
+              You have <strong>₦{walletBalance.toLocaleString()}</strong> in referral bonus credit.
+            </Typography>
+            <Chip
+              label={useWallet ? `✓ Applying ₦${walletDiscount.toLocaleString()} discount — click to remove` : `Apply ₦${walletBalance.toLocaleString()} Referral Bonus`}
+              onClick={() => setUseWallet((v) => !v)}
+              color={useWallet ? "success" : "default"}
+              sx={{ fontFamily: "JUST Sans ExBold", cursor: "pointer" }}
+            />
+          </Paper>
+        )}
 
         {/* 💳 Payment Provider */}
         <Paper
@@ -192,6 +235,42 @@ const Checkout = () => {
           )}
         </Paper>
 
+        {/* 🧮 Total Summary */}
+        <Box
+          sx={{
+            mt: 3,
+            p: 3,
+            borderRadius: 2,
+            bgcolor: theme.palette.background.paper,
+            border: `1px solid ${theme.palette.divider}`,
+          }}
+        >
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: walletDiscount > 0 ? 1 : 0 }}>
+            <Typography sx={{ color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular" }}>Subtotal</Typography>
+            <Typography sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans ExBold" }}>₦{rawTotal.toLocaleString()}</Typography>
+          </Box>
+
+          {walletDiscount > 0 && (
+            <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+              <Typography sx={{ color: "#4caf50", fontFamily: "JUST Sans Regular" }}>Referral Wallet Discount</Typography>
+              <Typography sx={{ color: "#4caf50", fontFamily: "JUST Sans ExBold" }}>− ₦{walletDiscount.toLocaleString()}</Typography>
+            </Box>
+          )}
+
+          <Divider sx={{ my: 1.5, borderColor: theme.palette.divider }} />
+
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography variant="h6" sx={{ color: theme.palette.text.primary, fontFamily: "JUST Sans ExBold" }}>Total to Pay</Typography>
+            <Typography variant="h6" sx={{ color: theme.palette.primary.main, fontFamily: "JUST Sans ExBold" }}>₦{total.toLocaleString()}</Typography>
+          </Box>
+
+          {installment !== "full" && (
+            <Typography sx={{ mt: 1, color: theme.palette.text.secondary, fontFamily: "JUST Sans Regular", fontSize: "0.82rem", textAlign: "right" }}>
+              First payment: ₦{schedule[0]?.amount.toLocaleString()} today
+            </Typography>
+          )}
+        </Box>
+
         <Box sx={{ mt: 3 }}>
           <Button
             variant="contained"
@@ -212,26 +291,8 @@ const Checkout = () => {
               },
             }}
           >
-            {loading ? "Processing..." : "Confirm & Pay"}
+            {loading ? "Processing..." : `Confirm & Pay ₦${total.toLocaleString()}`}
           </Button>
-        </Box>
-
-        {/* 🧮 Total Summary */}
-        <Box
-          sx={{
-            mt: 5,
-            textAlign: "right",
-            p: 2,
-            borderRadius: 2,
-            bgcolor: "rgba(255,255,255,0.05)",
-          }}
-        >
-          <Typography variant="subtitle1" sx={{ color: "#ccc", fontFamily: "JUST Sans Regular" }}>
-            Total:{" "}
-            <span style={{ color: "#FFAB46", fontWeight: 700, fontFamily: "JUST Sans ExBold" }}>
-              NGN {total.toLocaleString()}
-            </span>
-          </Typography>
         </Box>
       </Container>
 
